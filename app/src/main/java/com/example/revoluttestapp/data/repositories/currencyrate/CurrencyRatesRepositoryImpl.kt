@@ -20,6 +20,7 @@ class CurrencyRatesRepositoryImpl(
         return currencyRatesService.getCurrencyRates(currency.getCode())
             .map { currencyRateMapper.map(it) }
             .doOnNext { savedCurrencyRates.accept(it) }
+            .switchMap { savedCurrencyRates }
             .subscribeOn(Schedulers.io())
     }
 

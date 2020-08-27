@@ -31,8 +31,24 @@ class CurrenciesViewModel(
 ) : ViewModel() {
     private val currencies = BehaviorRelay.create<List<UiCurrencyPlace>>()
     private var previousAmountOfMoney: String = ""
+    private lateinit var currencyToChange: Currency
+
     init {
+        subscribeOnCurrencies()
+    }
+
+    fun selectCurrency(uiCurrency: UiCurrencyPlace) {
+        val currency = codeToCurrencyMapper.map(uiCurrency.countryCode)
+        val amountOfMoney =
+            if (uiCurrency.amountOfMoney.isEmpty()) 0.0 else uiCurrency.amountOfMoney.toDouble()
+        val currencyWithAmount = currency.setAmount(amountOfMoney)
+        saveCurrencyToMemoryUseCase.execute(currencyWithAmount)
+            .subscribe({}, { Timber.e(it) })
+    }
+
+    private fun subscribeOnCurrencies() {
         getSelectedCurrencyUseCase.execute()
+            .doOnNext { currencyToChange = it }
             .switchMap { selectedCurrency ->
                 getCurrencyRatesUseCase.execute(selectedCurrency)
                     .map { currencyConverter.convert(selectedCurrency, it) }
@@ -40,39 +56,16 @@ class CurrenciesViewModel(
             }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
-                Log.i("HUI", it.toString())
                 currencies.accept(it)
             }, { Timber.e(it) })
     }
 
-    fun selectCurrency(uiCurrency: UiCurrencyPlace) {
-        Log.i("HUI", "selectCurrency")
-        val currency = codeToCurrencyMapper.map(uiCurrency.countryCode)
-        val amountOfMoney =
-            if (uiCurrency.amountOfMoney.isEmpty()) 0.0 else uiCurrency.amountOfMoney.toDouble()
-        val currencyWithAmount = currency.setAmount(amountOfMoney)
-            saveCurrencyToMemoryUseCase.execute(currencyWithAmount)
-                .subscribe({}, { Timber.e(it) })
-    }
-
     fun onAmountOfMoneyChanged(amountOfMoney: String) {
-       /* if (previousAmountOfMoney == amountOfMoney) return
-        val amountOfMoneyDouble = if (amountOfMoney.isEmpty()) 0.0 else amountOfMoney.toDouble()
+        if (previousAmountOfMoney == amountOfMoney) return
         previousAmountOfMoney = amountOfMoney
-        getSelectedCurrencyUseCase.execute()
-            .map { it.setAmount(amountOfMoneyDouble) }
-            .doOnNext { saveCurrencyToMemoryUseCase.execute(it) }
-            .flatMap { currencyToConvert ->
-                convertMoneyUseCase.execute(currencyToConvert)
-                    .map { currencyRateUiMapper.mapDomainToUi(currencyToConvert, it) }
-            }
-            .observeOn(AndroidSchedulers.mainThread())
-            .subscribe(
-                {
-                    Log.i("HUI", "UPDATE FROM onAmountOfMoneyChanged")
-                    currencies.accept(it)
-                },
-                { Timber.e(it) })*/
+        val newCurrencyToChange = currencyToChange.setAmount(amountOfMoney.toDouble())
+        saveCurrencyToMemoryUseCase.execute(newCurrencyToChange)
+            .subscribe()
     }
 
     fun getCurrencies(): Observable<List<UiCurrencyPlace>> = currencies
