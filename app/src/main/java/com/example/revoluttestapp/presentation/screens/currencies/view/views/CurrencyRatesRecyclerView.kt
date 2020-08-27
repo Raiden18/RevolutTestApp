@@ -18,7 +18,8 @@ class CurrencyRatesRecyclerView(
     }
 
     init {
-        layoutManager = LinearLayoutManager(context)
+        layoutManager =  LinearLayoutManager(context)
+
     }
 
     fun updateItems(items: List<UiCurrencyPlace>) {
@@ -29,6 +30,23 @@ class CurrencyRatesRecyclerView(
     private fun setAdapter() {
         if (adapter == null) {
             adapter = currencyRatesAdapter
+            currencyRatesAdapter.registerAdapterDataObserver(object: RecyclerView.AdapterDataObserver(){
+                override fun onItemRangeRemoved(positionStart: Int, itemCount: Int) {
+                    smoothScrollToPosition(0)
+                }
+
+                override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) {
+                    smoothScrollToPosition(0)
+                }
+
+                override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                    smoothScrollToPosition(0)
+                }
+
+                override fun onItemRangeChanged(positionStart: Int, itemCount: Int) {
+                    smoothScrollToPosition(0)
+                }
+            })
         }
     }
 }

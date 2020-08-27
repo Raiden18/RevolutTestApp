@@ -29,10 +29,13 @@ class CurrenciesActivity : AppCompatActivity() {
         initDagger()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        currency_rates_recycler_view.onCurrencyClick = viewModel::selectCurrency
-        currency_rates_recycler_view.onAmountOfMoneyChanged = viewModel::onAmountOfMoneyChanged
-        subscribeToViewModel()
-    }
+        currency_rates_recycler_view.onCurrencyClick = {
+            viewModel.selectCurrency(it)
+        }
+            currency_rates_recycler_view.onAmountOfMoneyChanged = viewModel::onAmountOfMoneyChanged
+            subscribeToViewModel()
+        }
+
 
     private fun subscribeToViewModel() {
         viewModel.getCurrencies()

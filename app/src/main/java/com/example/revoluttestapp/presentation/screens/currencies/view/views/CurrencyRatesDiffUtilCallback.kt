@@ -10,7 +10,6 @@ class CurrencyRatesDiffUtilCallback : DiffUtil.ItemCallback<UiCurrencyPlace>() {
         return oldItem.countryCode == newItem.countryCode
     }
 
-    //TODO: set up pay loads
     override fun getChangePayload(oldItem: UiCurrencyPlace, newItem: UiCurrencyPlace): Any? {
         val payloads = Bundle()
         if(oldItem.amountOfMoney != newItem.amountOfMoney){

@@ -1,5 +1,6 @@
 package com.example.revoluttestapp.presentation.screens.currencies.view.views
 
+import androidx.recyclerview.widget.RecyclerView
 import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrencyPlace
 import com.example.revoluttestapp.presentation.screens.currencies.view.views.adapterdelegates.convertedCurrencyAdapterDelegate
 import com.example.revoluttestapp.presentation.screens.currencies.view.views.adapterdelegates.currencyToConvertAdapterDelegate
@@ -18,5 +19,4 @@ class CurrencyRatesAdapter(
             .addDelegate(convertedCurrencyAdapterDelegate(onCurrencyClick))
             .addDelegate(currencyToConvertAdapterDelegate(onAmountOfMoneyChanged))
     }
-
 }
