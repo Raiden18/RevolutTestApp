@@ -1,11 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
 <LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="72dp"
-    xmlns:tools="http://schemas.android.com/tools"
-    android:orientation="horizontal"
     android:background="?android:attr/selectableItemBackground"
-    >
+    android:orientation="horizontal">
 
     <com.mikhaellopez.circularimageview.CircularImageView
         android:id="@+id/item_currency_rate_country_flag"
@@ -14,24 +13,23 @@
         android:layout_gravity="center"
         android:layout_marginStart="16dp"
         android:layout_marginEnd="16dp"
-        android:src="@drawable/ic_launcher_background"/>
+        android:src="@drawable/ic_launcher_background" />
+
     <LinearLayout
         android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_gravity="center"
         android:layout_weight="1"
-        android:orientation="vertical"
-        android:layout_gravity="center">
+        android:orientation="vertical">
 
         <TextView
             android:id="@+id/currency_rate_code"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:lineSpacingExtra="5sp"
-            android:textSize="16sp"
-            tools:text="USD"
             android:textColor="#191C1F"
-            >
-        </TextView>
+            android:textSize="16sp"
+            tools:text="USD"/>
 
         <TextView
             android:id="@+id/currency_rate_name"
@@ -39,19 +37,19 @@
             android:layout_height="wrap_content"
             android:layout_marginTop="4dp"
             android:textSize="14sp"
-            tools:text="US Dollar">
-        </TextView>
+            tools:text="US Dollar"/>
     </LinearLayout>
 
     <EditText
         android:id="@+id/currency_rate_amount_of_money"
-        android:layout_width="150dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
+        android:layout_marginEnd="16dp"
         android:gravity="center"
+        android:inputType="numberDecimal"
         android:lineSpacingExtra="5sp"
-        android:textColor="#191C1F"
         android:saveEnabled="false"
-        android:textSize="28sp"
-        android:inputType="numberDecimal"/>
+        android:textColor="#191C1F"
+        android:textSize="28sp" />
 </LinearLayout>

@@ -4,10 +4,8 @@ import com.example.revoluttestapp.domain.models.CodeToCurrencyMapper
 import com.example.revoluttestapp.domain.models.CurrencyConverter
 import com.example.revoluttestapp.domain.repositories.CurrencyRatesRepository
 import com.example.revoluttestapp.domain.repositories.CurrencyRepository
-import com.example.revoluttestapp.domain.usecases.ConvertMoneyUseCase
-import com.example.revoluttestapp.domain.usecases.GetCurrencyRatesUseCase
-import com.example.revoluttestapp.domain.usecases.GetSelectedCurrencyUseCase
-import com.example.revoluttestapp.domain.usecases.SaveCurrencyToMemoryUseCase
+import com.example.revoluttestapp.domain.usecases.*
+import com.example.revoluttestapp.domain.utils.RxSchedulers
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -43,5 +41,15 @@ class UseCaseModule {
         val codeToCurrencyMapper = CodeToCurrencyMapper()
         val currencyConverter = CurrencyConverter(codeToCurrencyMapper)
         return ConvertMoneyUseCase(currencyRepository, currencyConverter, currencyRatesRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideSubscribeOnCurrenciesRatesUseCase(
+        currencyRepository: CurrencyRepository,
+        currencyRatesRepository: CurrencyRatesRepository,
+        rxSchedulers: RxSchedulers
+    ): SubscribeOnCurrenciesRatesUseCase{
+        return SubscribeOnCurrenciesRatesUseCase(currencyRepository, currencyRatesRepository, rxSchedulers)
     }
 }

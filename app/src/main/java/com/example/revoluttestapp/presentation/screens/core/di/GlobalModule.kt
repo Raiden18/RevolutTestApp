@@ -5,6 +5,8 @@ import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.example.revoluttestapp.data.mappers.CurrencyRateMapper
 import com.example.revoluttestapp.data.mappers.CurrencyRateMapperImpl
 import com.example.revoluttestapp.domain.models.CodeToCurrencyMapper
+import com.example.revoluttestapp.domain.utils.RxSchedulers
+import com.example.revoluttestapp.presentation.screens.core.RxSchedulersImpl
 import dagger.Module
 import dagger.Provides
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
@@ -34,5 +36,11 @@ class GlobalModule {
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .build()
+    }
+
+    @Singleton
+    @Provides
+    fun provideRxSchedulers(): RxSchedulers{
+        return RxSchedulersImpl()
     }
 }

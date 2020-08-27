@@ -6,6 +6,7 @@ import com.example.revoluttestapp.data.repositories.currencyrate.CurrencyRatesRe
 import com.example.revoluttestapp.data.repositories.currencyrate.CurrencyRatesService
 import com.example.revoluttestapp.domain.repositories.CurrencyRatesRepository
 import com.example.revoluttestapp.domain.repositories.CurrencyRepository
+import com.example.revoluttestapp.domain.utils.RxSchedulers
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -17,11 +18,13 @@ class RepositoriesModule {
     @Provides
     fun provideCurrencyRatesRepository(
         currencyRateMapper: CurrencyRateMapper,
-        currencyRatesService: CurrencyRatesService
+        currencyRatesService: CurrencyRatesService,
+        rxSchedulers: RxSchedulers
     ): CurrencyRatesRepository {
         return CurrencyRatesRepositoryImpl(
             currencyRateMapper,
-            currencyRatesService
+            currencyRatesService,
+            rxSchedulers
         )
     }
 

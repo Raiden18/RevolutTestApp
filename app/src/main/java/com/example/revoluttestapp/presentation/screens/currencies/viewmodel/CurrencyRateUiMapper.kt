@@ -8,4 +8,6 @@ interface CurrencyRateUiMapper {
         currencyToConvert: Currency,
         currencyRates: List<Currency>
     ): List<UiCurrencyPlace>
+
+    fun mapAmountOfMoneyToDouble(amountOfMoney: String): Double
 }

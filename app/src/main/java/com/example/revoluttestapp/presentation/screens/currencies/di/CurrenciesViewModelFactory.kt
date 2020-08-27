@@ -5,33 +5,34 @@ import androidx.lifecycle.ViewModelProvider
 import com.example.revoluttestapp.domain.models.CodeToCurrencyMapper
 import com.example.revoluttestapp.domain.models.CurrencyConverter
 import com.example.revoluttestapp.domain.repositories.CurrencyRatesRepository
-import com.example.revoluttestapp.domain.usecases.ConvertMoneyUseCase
-import com.example.revoluttestapp.domain.usecases.GetCurrencyRatesUseCase
-import com.example.revoluttestapp.domain.usecases.GetSelectedCurrencyUseCase
-import com.example.revoluttestapp.domain.usecases.SaveCurrencyToMemoryUseCase
+import com.example.revoluttestapp.domain.usecases.*
+import com.example.revoluttestapp.domain.utils.RxSchedulers
 import com.example.revoluttestapp.presentation.screens.currencies.viewmodel.CurrenciesViewModel
 import com.example.revoluttestapp.presentation.screens.currencies.viewmodel.CurrencyRateUiMapper
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 
 class CurrenciesViewModelFactory(
     private val getCurrencyRatesUseCase: GetCurrencyRatesUseCase,
     private val getSelectedCurrencyUseCase: GetSelectedCurrencyUseCase,
     private val saveCurrencyToMemoryUseCase: SaveCurrencyToMemoryUseCase,
-    private val convertMoneyUseCase: ConvertMoneyUseCase,
     private val currencyRateUiMapper: CurrencyRateUiMapper,
     private val codeToCurrencyMapper: CodeToCurrencyMapper,
     private val currencyConverter: CurrencyConverter,
-    private val currencyRatesRepository: CurrencyRatesRepository
+    private val subscribeOnCurrenciesRatesUseCase: SubscribeOnCurrenciesRatesUseCase,
+    private val compositeDisposable: CompositeDisposable,
+    private val rxSchedulers: RxSchedulers
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return CurrenciesViewModel(
             getCurrencyRatesUseCase,
             getSelectedCurrencyUseCase,
             saveCurrencyToMemoryUseCase,
-            convertMoneyUseCase,
             currencyRateUiMapper,
             codeToCurrencyMapper,
             currencyConverter,
-            currencyRatesRepository
+            subscribeOnCurrenciesRatesUseCase,
+            compositeDisposable,
+            rxSchedulers
         ) as T
     }
 }

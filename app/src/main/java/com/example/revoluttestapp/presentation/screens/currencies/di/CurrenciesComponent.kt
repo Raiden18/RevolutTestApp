@@ -3,10 +3,8 @@ package com.example.revoluttestapp.presentation.screens.currencies.di
 import com.example.revoluttestapp.domain.models.CodeToCurrencyMapper
 import com.example.revoluttestapp.domain.models.CurrencyConverter
 import com.example.revoluttestapp.domain.repositories.CurrencyRatesRepository
-import com.example.revoluttestapp.domain.usecases.ConvertMoneyUseCase
-import com.example.revoluttestapp.domain.usecases.GetCurrencyRatesUseCase
-import com.example.revoluttestapp.domain.usecases.GetSelectedCurrencyUseCase
-import com.example.revoluttestapp.domain.usecases.SaveCurrencyToMemoryUseCase
+import com.example.revoluttestapp.domain.usecases.*
+import com.example.revoluttestapp.domain.utils.RxSchedulers
 import com.example.revoluttestapp.presentation.screens.core.di.ApplicationComponent
 import com.example.revoluttestapp.presentation.screens.currencies.view.CurrenciesActivity
 import com.example.revoluttestapp.presentation.screens.currencies.view.CurrencyRateUiMapperImpl
@@ -14,6 +12,7 @@ import com.example.revoluttestapp.presentation.screens.currencies.viewmodel.Curr
 import dagger.Component
 import dagger.Module
 import dagger.Provides
+import io.reactivex.rxjava3.disposables.CompositeDisposable
 import javax.inject.Scope
 
 @Scope
@@ -35,20 +34,22 @@ class CurrenciesModule {
                                           currencyRateUiMapper: CurrencyRateUiMapper,
                                           getSelectedCurrencyUseCase: GetSelectedCurrencyUseCase,
                                           saveCurrencyToMemoryUseCase: SaveCurrencyToMemoryUseCase,
-                                          convertMoneyUseCase: ConvertMoneyUseCase,
-                                          currencyRatesRepository: CurrencyRatesRepository
+                                          subscribeOnCurrenciesRatesUseCase: SubscribeOnCurrenciesRatesUseCase,
+                                          rxSchedulers: RxSchedulers
     ): CurrenciesViewModelFactory {
         val codeToCurrencyMapper =  CodeToCurrencyMapper()
         val currencyConverter = CurrencyConverter(codeToCurrencyMapper)
+        val compositeDisposable = CompositeDisposable()
         return CurrenciesViewModelFactory(
             getCurrencyRatesUseCase,
             getSelectedCurrencyUseCase,
             saveCurrencyToMemoryUseCase,
-            convertMoneyUseCase,
             currencyRateUiMapper,
             codeToCurrencyMapper,
             currencyConverter,
-            currencyRatesRepository
+            subscribeOnCurrenciesRatesUseCase,
+            compositeDisposable,
+            rxSchedulers
         )
     }
 

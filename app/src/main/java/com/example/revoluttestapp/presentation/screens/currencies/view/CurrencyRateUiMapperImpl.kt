@@ -32,5 +32,7 @@ class CurrencyRateUiMapperImpl : CurrencyRateUiMapper {
         return currencies
     }
 
-
+    override fun mapAmountOfMoneyToDouble(amountOfMoney: String): Double {
+        return if (amountOfMoney.isEmpty()) 0.0 else amountOfMoney.toDouble()
+    }
 }
