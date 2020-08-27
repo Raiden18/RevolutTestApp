@@ -8,6 +8,7 @@ import com.example.revoluttestapp.domain.repositories.CurrencyRatesRepository
 import com.jakewharton.rxrelay3.BehaviorRelay
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.schedulers.Schedulers
+import java.util.concurrent.TimeUnit
 
 class CurrencyRatesRepositoryImpl(
     private val currencyRateMapper: CurrencyRateMapper,
@@ -16,10 +17,13 @@ class CurrencyRatesRepositoryImpl(
     private val savedCurrencyRates = BehaviorRelay.create<List<CurrencyRate>>()
 
     override fun getCurrencyRateFromApiFor(currency: Currency): Observable<List<CurrencyRate>> {
-        return currencyRatesService.getCurrencyRates(currency.getCode())
-            .map { currencyRateMapper.map(it) }
-            .doOnNext { savedCurrencyRates.accept(it) }
-            .subscribeOn(Schedulers.io())
+        return Observable.interval(1, TimeUnit.SECONDS)
+            .flatMap {
+                currencyRatesService.getCurrencyRates(currency.getCode())
+                    .map { currencyRateMapper.map(it) }
+                    .doOnNext { savedCurrencyRates.accept(it) }
+                    .subscribeOn(Schedulers.io())
+            }
     }
 
     override fun getCurencyRateFromMemory(): Observable<List<CurrencyRate>> {

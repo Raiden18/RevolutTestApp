@@ -3,6 +3,7 @@ package com.example.revoluttestapp.domain.models
 import com.example.revoluttestapp.domain.models.currencies.Currency
 import com.example.revoluttestapp.domain.models.currencyrate.CurrencyRate
 import java.math.BigDecimal
+import java.math.RoundingMode
 
 class CurrencyConverter(
     private val codeToCurrencyMapper: CodeToCurrencyMapper
@@ -19,7 +20,7 @@ class CurrencyConverter(
             val currency = codeToCurrencyMapper.map(it.currency.getCode())
             val newAmount = baseCurrency.getAmount() * it.rate
             val formattedAmount =
-                BigDecimal(newAmount).setScale(DIGITS_AFTER_COMMA, BigDecimal.ROUND_HALF_UP)
+                BigDecimal(newAmount).setScale(DIGITS_AFTER_COMMA, RoundingMode.CEILING)
             currency.setAmount(formattedAmount.toDouble())
         }
     }
