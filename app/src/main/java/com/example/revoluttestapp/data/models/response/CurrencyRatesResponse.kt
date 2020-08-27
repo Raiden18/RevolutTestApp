@@ -64,5 +64,7 @@ data class CurrencyRatesResponse(
     @SerializedName("USD")
     val uSD: Double? = null,
     @SerializedName("ZAR")
-    val zAR: Double? = null
+    val zAR: Double? = null,
+    @SerializedName("EUR")
+    val eUR: Double? = null
 )

@@ -1,8 +1,7 @@
 package com.example.revoluttestapp.presentation.screens.currencies.di
 
-import com.example.revoluttestapp.domain.usecases.GetCurrenciesUseCase
+import com.example.revoluttestapp.domain.usecases.GetCurrencyRatesUseCase
 import com.example.revoluttestapp.presentation.screens.core.di.ApplicationComponent
-import com.example.revoluttestapp.presentation.screens.core.di.PerScreenScope
 import com.example.revoluttestapp.presentation.screens.currencies.CurrenciesViewModelFactory
 import com.example.revoluttestapp.presentation.screens.currencies.view.CurrenciesActivity
 import com.example.revoluttestapp.presentation.screens.currencies.view.CurrencyRateUiMapperImpl
@@ -27,9 +26,9 @@ class CurrenciesModule {
 
     @CurrenciesScope
     @Provides
-    fun provideCurrenciesViewModelFactory(getCurrenciesUseCase: GetCurrenciesUseCase,
+    fun provideCurrenciesViewModelFactory(getCurrencyRatesUseCase: GetCurrencyRatesUseCase,
                                           currencyRateUiMapper: CurrencyRateUiMapper): CurrenciesViewModelFactory {
-        return CurrenciesViewModelFactory(getCurrenciesUseCase, currencyRateUiMapper)
+        return CurrenciesViewModelFactory(getCurrencyRatesUseCase, currencyRateUiMapper)
     }
 
     @CurrenciesScope

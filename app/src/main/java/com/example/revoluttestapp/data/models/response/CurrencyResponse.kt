@@ -6,6 +6,6 @@ data class CurrencyResponse(
     @SerializedName("baseCurrency")
     val baseCurrency: String?,
     @SerializedName("rates")
-    val rates: CurrencyRatesResponse?
+    val rates: HashMap<String, Double>
 )
 

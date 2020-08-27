@@ -2,15 +2,14 @@ package com.example.revoluttestapp.data.mappers
 
 import com.example.revoluttestapp.data.models.response.CurrencyRatesResponse
 import com.example.revoluttestapp.data.models.response.CurrencyResponse
-import com.example.revoluttestapp.domain.models.currency.Currencies
-import com.example.revoluttestapp.domain.models.currency.CurrencyRate
-import com.example.revoluttestapp.domain.models.currency.CurrencyRates
+import com.example.revoluttestapp.domain.models.currencyrate.CurrencyRate
+import com.example.revoluttestapp.domain.models.currencyrate.CurrencyRates
 import org.junit.jupiter.api.Test
 
 import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.BeforeEach
 
-internal class CurrencyRateMapperImplTest {
+internal class CurrencyCodesRateMapperImplTest {
     private lateinit var currencyRateMapper: CurrencyRateMapperImpl
 
     @BeforeEach
@@ -48,7 +47,7 @@ internal class CurrencyRateMapperImplTest {
         )
         val expectedCurrencyRateMapper = CurrencyRates(
             listOf(
-                CurrencyRate(Currencies.AustralianDollar.SHORT_NAME, 1.toDouble())
+                CurrencyRate(CurrencyCodes.AustralianDollar.SHORT_NAME, 1.toDouble())
             )
         )
         assertNotEmptyCurrency(currencyResponse, expectedCurrencyRateMapper)
@@ -63,7 +62,7 @@ internal class CurrencyRateMapperImplTest {
         )
         val expectedCurrencyRateMapper = CurrencyRates(
             listOf(
-                CurrencyRate(Currencies.BulgarianLev.SHORT_NAME, 1.toDouble())
+                CurrencyRate(CurrencyCodes.BulgarianLev.SHORT_NAME, 1.toDouble())
             )
         )
         assertNotEmptyCurrency(currencyResponse, expectedCurrencyRateMapper)

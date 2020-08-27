@@ -1,7 +1,7 @@
 package com.example.revoluttestapp.presentation.screens.core.di
 
 import com.example.revoluttestapp.domain.repositories.CurrencyRatesRepository
-import com.example.revoluttestapp.domain.usecases.GetCurrenciesUseCase
+import com.example.revoluttestapp.domain.usecases.GetCurrencyRatesUseCase
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -12,7 +12,7 @@ class UseCaseModule {
     @Provides
     fun provideGetCurrenciesUseCase(
         currencyRatesRepository: CurrencyRatesRepository
-    ): GetCurrenciesUseCase {
-        return GetCurrenciesUseCase(currencyRatesRepository)
+    ): GetCurrencyRatesUseCase {
+        return GetCurrencyRatesUseCase(currencyRatesRepository)
     }
 }

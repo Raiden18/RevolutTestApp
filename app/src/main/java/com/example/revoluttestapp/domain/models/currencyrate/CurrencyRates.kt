@@ -1,4 +1,4 @@
-package com.example.revoluttestapp.domain.models.currency
+package com.example.revoluttestapp.domain.models.currencyrate
 
 data class CurrencyRates(
     val value: List<CurrencyRate>

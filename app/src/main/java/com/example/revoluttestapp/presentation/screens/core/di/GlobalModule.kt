@@ -2,6 +2,7 @@ package com.example.revoluttestapp.presentation.screens.core.di
 
 import com.example.revoluttestapp.data.mappers.CurrencyRateMapper
 import com.example.revoluttestapp.data.mappers.CurrencyRateMapperImpl
+import com.example.revoluttestapp.domain.models.CodeToCurrencyMapper
 import dagger.Module
 import dagger.Provides
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
@@ -14,7 +15,8 @@ class GlobalModule {
     @Singleton
     @Provides
     fun provideCurrencyRateMapper(): CurrencyRateMapper {
-        return CurrencyRateMapperImpl()
+        val codeToCurrencyMapper = CodeToCurrencyMapper()
+        return CurrencyRateMapperImpl(codeToCurrencyMapper)
     }
 
     @Singleton

@@ -1,9 +1,9 @@
-package com.example.revoluttestapp.domain.models.currency
+package com.example.revoluttestapp.domain.models.currencyrate
 
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
-internal class CurrencyRatesTest {
+internal class CurrencyCodesRatesTest {
 
    @Test
    fun `Should crete empty`(){

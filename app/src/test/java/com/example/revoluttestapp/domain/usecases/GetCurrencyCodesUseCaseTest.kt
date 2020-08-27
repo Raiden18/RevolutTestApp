@@ -5,22 +5,21 @@ import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
 
-import org.junit.jupiter.api.Assertions.*
 import org.junit.jupiter.api.Test
 
-internal class GetCurrenciesUseCaseTest {
+internal class GetCurrencyCodesUseCaseTest {
     private val currencyRatesRepository: CurrencyRatesRepository = mockk(relaxed = true)
 
-    private lateinit var getCurrenciesUseCase: GetCurrenciesUseCase
+    private lateinit var getCurrencyRatesUseCase: GetCurrencyRatesUseCase
 
     @BeforeEach
     fun setUp() {
-        getCurrenciesUseCase = GetCurrenciesUseCase(currencyRatesRepository)
+        getCurrencyRatesUseCase = GetCurrencyRatesUseCase(currencyRatesRepository)
     }
 
     @Test
     fun testExecute(){
-        getCurrenciesUseCase.execute().subscribe()
+        getCurrencyRatesUseCase.execute().subscribe()
         verify {
             currencyRatesRepository.getCurrencyFromApi()
         }

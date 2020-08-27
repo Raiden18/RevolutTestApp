@@ -4,7 +4,6 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.revoluttestapp.domain.models.currency.CurrencyRate
 import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrencyRate
 
 class CurrencyRatesRecyclerView(context: Context, attributeSet: AttributeSet): RecyclerView(context, attributeSet) {
