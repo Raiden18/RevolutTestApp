@@ -1,9 +1,9 @@
 package com.example.revoluttestapp.presentation.screens.currencies.view
 
-import android.content.Context
+import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
+import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.revoluttestapp.R
@@ -34,9 +34,12 @@ class CurrenciesActivity : AppCompatActivity() {
         currency_rates_recycler_view.onCurrencyClick = {
             viewModel.selectCurrency(it)
         }
-            currency_rates_recycler_view.onAmountOfMoneyChanged = viewModel::onAmountOfMoneyChanged
-            subscribeToViewModel()
+        currency_rates_recycler_view.onAmountOfMoneyChanged = viewModel::onAmountOfMoneyChanged
+        currency_rates_recycler_view.onHeaderHidden = {
+            hideKeyboard()
         }
+        subscribeToViewModel()
+    }
 
 
     private fun subscribeToViewModel() {
@@ -51,7 +54,7 @@ class CurrenciesActivity : AppCompatActivity() {
             .subscribe({
                 if (it) {
                     currency_rates_loader_view.visibility = View.VISIBLE
-                } else{
+                } else {
                     currency_rates_loader_view.visibility = View.GONE
                 }
             }, { Timber.e(it) })
@@ -65,5 +68,12 @@ class CurrenciesActivity : AppCompatActivity() {
             .applicationComponent(applicationComponent)
             .build()
             .inject(this)
+    }
+
+    private fun hideKeyboard(){
+        val imm =
+            getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(getWindow().getDecorView().getRootView().getWindowToken()   , 0)
+
     }
 }

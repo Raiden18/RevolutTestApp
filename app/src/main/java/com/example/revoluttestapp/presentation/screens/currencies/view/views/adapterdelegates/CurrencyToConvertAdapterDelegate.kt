@@ -8,11 +8,11 @@ import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateLayoutContainer
 import kotlinx.android.synthetic.main.item_currency_rate.view.*
 
 fun currencyToConvertAdapterDelegate(
-    onAmountOfMoneyChanged: (String) -> Unit
+    onAmountOfMoneyChanged: (text: String, cursorPosition: Int) -> Unit
 ) =
     adapterDelegateLayoutContainer<UiCurrencyToConvertPlace, UiCurrencyPlace>(R.layout.item_currency_rate) {
         itemView.currency_rate_amount_of_money.addTextChangedListener {
-            onAmountOfMoneyChanged.invoke(it.toString())
+            onAmountOfMoneyChanged.invoke(it.toString(), itemView.currency_rate_amount_of_money.selectionStart)
         }
         bind {
             itemView.currency_rate_code.text = item.countryCode
