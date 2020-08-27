@@ -1,11 +1,14 @@
 package com.example.revoluttestapp.presentation.screens.core.di
 
+import android.app.Application
+import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.example.revoluttestapp.data.mappers.CurrencyRateMapper
 import com.example.revoluttestapp.data.mappers.CurrencyRateMapperImpl
 import com.example.revoluttestapp.domain.models.CodeToCurrencyMapper
 import dagger.Module
 import dagger.Provides
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
+import okhttp3.OkHttpClient
 import retrofit2.Retrofit
 import retrofit2.converter.gson.GsonConverterFactory
 import javax.inject.Singleton
@@ -21,8 +24,12 @@ class GlobalModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(): Retrofit{
+    fun provideRetrofit(application: Application): Retrofit{
+        val httpClient = OkHttpClient.Builder()
+            .addInterceptor(ChuckerInterceptor(application))
+            .build()
         return Retrofit.Builder()
+            .client(httpClient)
             .baseUrl("https://hiring.revolut.codes/api/android/") //TODO: MOVE TO build.gradle
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())

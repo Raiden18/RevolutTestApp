@@ -11,6 +11,7 @@ import com.example.revoluttestapp.presentation.screens.currencies.di.DaggerCurre
 import com.example.revoluttestapp.presentation.screens.currencies.viewmodel.CurrenciesViewModel
 import com.trello.lifecycle4.android.lifecycle.AndroidLifecycle
 import kotlinx.android.synthetic.main.activity_main.*
+import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -28,6 +29,7 @@ class CurrenciesActivity : AppCompatActivity() {
         initDagger()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        currency_rates_recycler_view.onCurrencyClick = viewModel::selectCurrency
         subscribeToViewModel()
     }
 
@@ -36,7 +38,7 @@ class CurrenciesActivity : AppCompatActivity() {
             .compose(provider.bindToLifecycle())
             .subscribe({
                 currency_rates_recycler_view.updateItems(it)
-            }, { Log.i("HUI", it.message.toString()) })
+            }, { Timber.e(it) })
 
     }
 

@@ -20,19 +20,16 @@ internal class GetCurrencyCodesUseCaseTest {
     @BeforeEach
     fun setUp() {
         getCurrencyRatesUseCase =
-            GetCurrencyRatesUseCase(currencyRatesRepository, currencyRepository)
+            GetCurrencyRatesUseCase(currencyRatesRepository)
     }
 
     @Test
     fun testExecute() {
         //Given
         val savedCurrency: Currency = mockk(relaxed = true)
-        every {
-            currencyRepository.getCurrentCurrencyFromMemory()
-        } returns Observable.just(savedCurrency)
 
         //When
-        getCurrencyRatesUseCase.execute().subscribe()
+        getCurrencyRatesUseCase.execute(savedCurrency).subscribe()
 
         //Then
         verify {

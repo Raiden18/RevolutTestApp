@@ -7,13 +7,15 @@ import com.example.revoluttestapp.R
 import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrencyRate
 
 //TODO: Payloads for updating data
-class CurrencyRatesAdapter : RecyclerView.Adapter<CurrencyRatesViewHolder>(){
+class CurrencyRatesAdapter(
+    private val onCurrencyClick: (UiCurrencyRate) -> Unit
+) : RecyclerView.Adapter<CurrencyRatesViewHolder>(){
     private val items = arrayListOf<UiCurrencyRate>()
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyRatesViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val itemView = inflater.inflate(R.layout.item_currency_rate, parent, false)
-        return CurrencyRatesViewHolder(itemView)
+        return CurrencyRatesViewHolder(itemView, onCurrencyClick)
     }
 
     override fun getItemCount(): Int = items.size

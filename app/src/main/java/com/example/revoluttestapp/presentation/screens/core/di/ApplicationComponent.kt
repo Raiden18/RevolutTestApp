@@ -4,9 +4,13 @@ import android.app.Application
 import com.example.revoluttestapp.data.mappers.CurrencyRateMapper
 import com.example.revoluttestapp.data.repositories.currencyrate.CurrencyRatesService
 import com.example.revoluttestapp.domain.repositories.CurrencyRatesRepository
+import com.example.revoluttestapp.domain.repositories.CurrencyRepository
 import com.example.revoluttestapp.domain.usecases.GetCurrencyRatesUseCase
+import com.example.revoluttestapp.domain.usecases.GetSelectedCurrencyUseCase
+import com.example.revoluttestapp.domain.usecases.SaveCurrencyToMemoryUseCase
 import dagger.BindsInstance
 import dagger.Component
+import retrofit2.Retrofit
 import javax.inject.Singleton
 
 @Singleton
@@ -26,4 +30,8 @@ interface ApplicationComponent {
     fun provideCurrencyRateMapper(): CurrencyRateMapper
     fun provideCurrencyRatesService(): CurrencyRatesService
     fun provideGetCurrenciesUseCase(): GetCurrencyRatesUseCase
+    fun provideGetSelectedCurrencyUseCase(): GetSelectedCurrencyUseCase
+    fun provideCurrencyRepository(): CurrencyRepository
+    fun provideSaveCurrencyToMemoryUseCase(): SaveCurrencyToMemoryUseCase
+    fun provideRetrofit(): Retrofit
 }

@@ -1,6 +1,6 @@
-package com.example.revoluttestapp.domain.models.currencies
+package com.example.revoluttestapp.domain.models
 
-import com.example.revoluttestapp.domain.models.CodeToCurrencyMapper
+import com.example.revoluttestapp.domain.models.currencies.Currency
 import com.example.revoluttestapp.domain.models.currencyrate.CurrencyRate
 import java.math.BigDecimal
 
@@ -10,6 +10,7 @@ class CurrencyConverter(
     private val codeToCurrencyMapper: CodeToCurrencyMapper
 ) {
 
+    //TODO: add constant for 2
     fun convert(): List<Currency> {
         return currenciesRates.map {
             val currency = codeToCurrencyMapper.map(it.currency.getCode())

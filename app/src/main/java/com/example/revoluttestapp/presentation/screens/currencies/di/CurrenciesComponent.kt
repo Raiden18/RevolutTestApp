@@ -1,6 +1,9 @@
 package com.example.revoluttestapp.presentation.screens.currencies.di
 
+import com.example.revoluttestapp.domain.models.CodeToCurrencyMapper
 import com.example.revoluttestapp.domain.usecases.GetCurrencyRatesUseCase
+import com.example.revoluttestapp.domain.usecases.GetSelectedCurrencyUseCase
+import com.example.revoluttestapp.domain.usecases.SaveCurrencyToMemoryUseCase
 import com.example.revoluttestapp.presentation.screens.core.di.ApplicationComponent
 import com.example.revoluttestapp.presentation.screens.currencies.view.CurrenciesActivity
 import com.example.revoluttestapp.presentation.screens.currencies.view.CurrencyRateUiMapperImpl
@@ -26,10 +29,17 @@ class CurrenciesModule {
     @CurrenciesScope
     @Provides
     fun provideCurrenciesViewModelFactory(getCurrencyRatesUseCase: GetCurrencyRatesUseCase,
-                                          currencyRateUiMapper: CurrencyRateUiMapper): CurrenciesViewModelFactory {
+                                          currencyRateUiMapper: CurrencyRateUiMapper,
+                                          getSelectedCurrencyUseCase: GetSelectedCurrencyUseCase,
+                                          saveCurrencyToMemoryUseCase: SaveCurrencyToMemoryUseCase
+    ): CurrenciesViewModelFactory {
+        val codeToCurrencyMapper =  CodeToCurrencyMapper()
         return CurrenciesViewModelFactory(
             getCurrencyRatesUseCase,
-            currencyRateUiMapper
+            getSelectedCurrencyUseCase,
+            saveCurrencyToMemoryUseCase,
+            currencyRateUiMapper,
+            codeToCurrencyMapper
         )
     }
 

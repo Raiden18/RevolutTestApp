@@ -3,6 +3,7 @@ package com.example.revoluttestapp.domain.models
 import com.example.revoluttestapp.domain.models.currencies.*
 import java.lang.IllegalStateException
 
+//TODO: add constant for 0.0
 class CodeToCurrencyMapper {
     fun map(code: String): Currency {
         return when (code) {

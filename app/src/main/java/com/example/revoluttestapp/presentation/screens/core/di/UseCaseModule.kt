@@ -3,6 +3,8 @@ package com.example.revoluttestapp.presentation.screens.core.di
 import com.example.revoluttestapp.domain.repositories.CurrencyRatesRepository
 import com.example.revoluttestapp.domain.repositories.CurrencyRepository
 import com.example.revoluttestapp.domain.usecases.GetCurrencyRatesUseCase
+import com.example.revoluttestapp.domain.usecases.GetSelectedCurrencyUseCase
+import com.example.revoluttestapp.domain.usecases.SaveCurrencyToMemoryUseCase
 import dagger.Module
 import dagger.Provides
 import javax.inject.Singleton
@@ -12,9 +14,20 @@ class UseCaseModule {
     @Singleton
     @Provides
     fun provideGetCurrenciesUseCase(
-        currencyRatesRepository: CurrencyRatesRepository,
-        currencyRepository: CurrencyRepository
+        currencyRatesRepository: CurrencyRatesRepository
     ): GetCurrencyRatesUseCase {
-        return GetCurrencyRatesUseCase(currencyRatesRepository, currencyRepository)
+        return GetCurrencyRatesUseCase(currencyRatesRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideGetSelectedCurrencyUseCase(currencyRepository: CurrencyRepository): GetSelectedCurrencyUseCase {
+        return GetSelectedCurrencyUseCase(currencyRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideSaveCurrencyToMemoryUseCase(currencyRepository: CurrencyRepository): SaveCurrencyToMemoryUseCase {
+        return SaveCurrencyToMemoryUseCase(currencyRepository)
     }
 }
