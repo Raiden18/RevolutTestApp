@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">RevolutTestApp</string>
+    <string name="currency_converter_title">Rates</string>
 </resources>

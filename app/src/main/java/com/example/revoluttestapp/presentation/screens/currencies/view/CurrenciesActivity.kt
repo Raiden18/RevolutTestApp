@@ -1,7 +1,9 @@
 package com.example.revoluttestapp.presentation.screens.currencies.view
 
+import android.content.Context
 import android.os.Bundle
 import android.util.Log
+import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.revoluttestapp.R
@@ -42,6 +44,16 @@ class CurrenciesActivity : AppCompatActivity() {
             .compose(provider.bindToLifecycle())
             .subscribe({
                 currency_rates_recycler_view.updateItems(it)
+            }, { Timber.e(it) })
+
+        viewModel.isShowLoader()
+            .compose(provider.bindToLifecycle())
+            .subscribe({
+                if (it) {
+                    currency_rates_loader_view.visibility = View.VISIBLE
+                } else{
+                    currency_rates_loader_view.visibility = View.GONE
+                }
             }, { Timber.e(it) })
 
     }

@@ -21,6 +21,10 @@ fun convertedCurrencyAdapterDelegate(
             itemView.currency_rate_code.text = item.countryCode
             itemView.currency_rate_name.text = item.countryName
             itemView.currency_rate_amount_of_money.setText(item.amountOfMoney)
+            itemView.currency_rate_amount_of_money.isEnabled = false
+            itemView.currency_rate_amount_of_money.isFocusable = false
+            itemView.currency_rate_amount_of_money.movementMethod = null
+            itemView.currency_rate_amount_of_money.keyListener = null
         } else{
             val bundlePayload = payload.first() as Bundle
             if (bundlePayload.getString(AMOUNT_OF_MONEY_PAYLOAD_KEY) != null){

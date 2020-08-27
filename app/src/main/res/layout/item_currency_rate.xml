@@ -40,7 +40,7 @@
             tools:text="US Dollar"/>
     </LinearLayout>
 
-    <EditText
+    <androidx.appcompat.widget.AppCompatEditText
         android:id="@+id/currency_rate_amount_of_money"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
@@ -51,5 +51,6 @@
         android:lineSpacingExtra="5sp"
         android:saveEnabled="false"
         android:textColor="#191C1F"
+        android:backgroundTint="#CED5DB"
         android:textSize="28sp" />
 </LinearLayout>

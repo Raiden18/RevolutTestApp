@@ -31,9 +31,11 @@ class CurrenciesViewModel(
     private val rxSchedulers: RxSchedulers
 ) : ViewModel() {
     private val currencies = BehaviorRelay.create<List<UiCurrencyPlace>>()
+    private val isShowLoader = BehaviorRelay.create<Boolean>()
     private lateinit var currencyToChange: Currency
 
     init {
+        isShowLoader.accept(true)
         subscribeOnRates()
         subscribeOnCurrencies()
     }
@@ -56,6 +58,7 @@ class CurrenciesViewModel(
     }
 
     fun getCurrencies(): Observable<List<UiCurrencyPlace>> = currencies
+    fun isShowLoader(): Observable<Boolean> = isShowLoader
 
     private fun subscribeOnCurrencies() {
         getCurrencyRatesUseCase.execute()
@@ -68,6 +71,7 @@ class CurrenciesViewModel(
                     }
             }
             .observeOn(rxSchedulers.main)
+            .doOnNext { isShowLoader.accept(false) }
             .subscribe({
                 currencies.accept(it)
             }, { })
