@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.revoluttestapp.domain.models.CodeToCurrencyMapper
 import com.example.revoluttestapp.domain.models.CurrencyConverter
+import com.example.revoluttestapp.domain.repositories.CurrencyRatesRepository
 import com.example.revoluttestapp.domain.usecases.ConvertMoneyUseCase
 import com.example.revoluttestapp.domain.usecases.GetCurrencyRatesUseCase
 import com.example.revoluttestapp.domain.usecases.GetSelectedCurrencyUseCase
@@ -18,7 +19,8 @@ class CurrenciesViewModelFactory(
     private val convertMoneyUseCase: ConvertMoneyUseCase,
     private val currencyRateUiMapper: CurrencyRateUiMapper,
     private val codeToCurrencyMapper: CodeToCurrencyMapper,
-    private val currencyConverter: CurrencyConverter
+    private val currencyConverter: CurrencyConverter,
+    private val currencyRatesRepository: CurrencyRatesRepository
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return CurrenciesViewModel(
@@ -28,7 +30,8 @@ class CurrenciesViewModelFactory(
             convertMoneyUseCase,
             currencyRateUiMapper,
             codeToCurrencyMapper,
-            currencyConverter
+            currencyConverter,
+            currencyRatesRepository
         ) as T
     }
 }

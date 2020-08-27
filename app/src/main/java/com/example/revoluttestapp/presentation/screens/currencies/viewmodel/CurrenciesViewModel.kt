@@ -5,6 +5,7 @@ import androidx.lifecycle.ViewModel
 import com.example.revoluttestapp.domain.models.CodeToCurrencyMapper
 import com.example.revoluttestapp.domain.models.CurrencyConverter
 import com.example.revoluttestapp.domain.models.currencies.Currency
+import com.example.revoluttestapp.domain.repositories.CurrencyRatesRepository
 import com.example.revoluttestapp.domain.usecases.ConvertMoneyUseCase
 import com.example.revoluttestapp.domain.usecases.GetCurrencyRatesUseCase
 import com.example.revoluttestapp.domain.usecases.GetSelectedCurrencyUseCase
@@ -14,6 +15,7 @@ import com.jakewharton.rxrelay3.BehaviorRelay
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import timber.log.Timber
+import java.util.concurrent.TimeUnit
 
 //TODO: Write tests
 //TODO: Add error handling
@@ -27,13 +29,15 @@ class CurrenciesViewModel(
     private val convertMoneyUseCase: ConvertMoneyUseCase,
     private val currencyRateUiMapper: CurrencyRateUiMapper,
     private val codeToCurrencyMapper: CodeToCurrencyMapper,
-    private val currencyConverter: CurrencyConverter
+    private val currencyConverter: CurrencyConverter,
+    private val currencyRatesRepositor: CurrencyRatesRepository
 ) : ViewModel() {
     private val currencies = BehaviorRelay.create<List<UiCurrencyPlace>>()
     private var previousAmountOfMoney: String = ""
     private lateinit var currencyToChange: Currency
 
     init {
+        subscribeOnRates()
         subscribeOnCurrencies()
     }
 
@@ -46,13 +50,24 @@ class CurrenciesViewModel(
             .subscribe({}, { Timber.e(it) })
     }
 
+    private fun subscribeOnRates() {
+        getSelectedCurrencyUseCase.execute().switchMap { currency ->
+            Observable.interval(1, TimeUnit.SECONDS).flatMap {
+                currencyRatesRepositor.getCurrencyRateFromApiFor(currency)
+            }
+        }.subscribe()
+
+    }
+
     private fun subscribeOnCurrencies() {
-        getSelectedCurrencyUseCase.execute()
-            .doOnNext { currencyToChange = it }
-            .switchMap { selectedCurrency ->
-                getCurrencyRatesUseCase.execute(selectedCurrency)
-                    .map { currencyConverter.convert(selectedCurrency, it) }
-                    .map { currencyRateUiMapper.mapDomainToUi(selectedCurrency, it) }
+        getCurrencyRatesUseCase.execute()
+            .flatMap { rates ->
+                getSelectedCurrencyUseCase.execute()
+                    .doOnNext { currencyToChange = it }
+                    .map { selectedCurrency ->
+                        val convertedCurrencies = currencyConverter.convert(selectedCurrency, rates)
+                        currencyRateUiMapper.mapDomainToUi(selectedCurrency, convertedCurrencies)
+                    }
             }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
