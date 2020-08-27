@@ -17,7 +17,7 @@ class CurrencyRatesRecyclerView(
     attributeSet: AttributeSet
 ) : RecyclerView(context, attributeSet) {
     lateinit var onCurrencyClick: (UiCurrencyPlace) -> Unit
-    lateinit var onAmountOfMoneyChanged: (text: String, cursorPosition: Int) -> Unit
+    lateinit var onAmountOfMoneyChanged: (text: String) -> Unit
     lateinit var onHeaderHidden: () -> Unit
     private val currencyRatesAdapter: CurrencyRatesAdapter by lazy {
         CurrencyRatesAdapter(onCurrencyClick, onAmountOfMoneyChanged)

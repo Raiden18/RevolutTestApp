@@ -6,8 +6,7 @@ import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurre
 interface CurrencyRateUiMapper {
     fun mapDomainToUi(
         currencyToConvert: Currency,
-        currencyRates: List<Currency>,
-        cursorPosition: Int
+        currencyRates: List<Currency>
     ): List<UiCurrencyPlace>
 
     fun mapAmountOfMoneyToDouble(amountOfMoney: String): Double

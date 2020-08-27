@@ -11,8 +11,7 @@ class CurrencyRateUiMapperImpl : CurrencyRateUiMapper {
 
     override fun mapDomainToUi(
         currencyToConvert: Currency,
-        currencyRates: List<Currency>,
-        cursorPosition: Int
+        currencyRates: List<Currency>
     ): List<UiCurrencyPlace> {
         val currencies = LinkedList<UiCurrencyPlace>()
         val amountWithoutDot = currencyToConvert.getAmount().toString().replaceAfter(".", "").replace(".", "")
@@ -21,7 +20,6 @@ class CurrencyRateUiMapperImpl : CurrencyRateUiMapper {
             currencyToConvert.getFullName(),
             amountWithoutDot
         )
-        uiCurrencyToConvert.cursorIndex = cursorPosition
         currencies.add(uiCurrencyToConvert)
         currencyRates.forEach {
             val uiConvertedCurrency = UiConvertedCurrency(

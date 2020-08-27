@@ -33,7 +33,6 @@ class CurrenciesViewModel(
     private val currencies = BehaviorRelay.create<List<UiCurrencyPlace>>()
     private val isShowLoader = BehaviorRelay.create<Boolean>()
     private lateinit var currencyToChange: Currency
-    private var cursorPosition = 0
 
     init {
         isShowLoader.accept(true)
@@ -50,8 +49,7 @@ class CurrenciesViewModel(
             .also { compositeDisposable.add(it) }
     }
 
-    fun onAmountOfMoneyChanged(amountOfMoney: String, cursorPosition: Int) {
-        this.cursorPosition = cursorPosition
+    fun onAmountOfMoneyChanged(amountOfMoney: String) {
         val amountOfMoneyDouble = currencyRateUiMapper.mapAmountOfMoneyToDouble(amountOfMoney)
         val newCurrencyToChange = currencyToChange.setAmount(amountOfMoneyDouble)
         saveCurrencyToMemoryUseCase.execute(newCurrencyToChange)
@@ -69,7 +67,7 @@ class CurrenciesViewModel(
                     .doOnNext { currencyToChange = it }
                     .map { selectedCurrency ->
                         val convertedCurrencies = currencyConverter.convert(selectedCurrency, rates)
-                        currencyRateUiMapper.mapDomainToUi(selectedCurrency, convertedCurrencies, cursorPosition)
+                        currencyRateUiMapper.mapDomainToUi(selectedCurrency, convertedCurrencies)
                     }
             }
             .observeOn(rxSchedulers.main)
