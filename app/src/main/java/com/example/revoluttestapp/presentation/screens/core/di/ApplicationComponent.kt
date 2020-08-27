@@ -2,7 +2,7 @@ package com.example.revoluttestapp.presentation.screens.core.di
 
 import android.app.Application
 import com.example.revoluttestapp.data.mappers.CurrencyRateMapper
-import com.example.revoluttestapp.data.repositories.CurrencyRatesService
+import com.example.revoluttestapp.data.repositories.currencyrate.CurrencyRatesService
 import com.example.revoluttestapp.domain.repositories.CurrencyRatesRepository
 import com.example.revoluttestapp.domain.usecases.GetCurrencyRatesUseCase
 import dagger.BindsInstance

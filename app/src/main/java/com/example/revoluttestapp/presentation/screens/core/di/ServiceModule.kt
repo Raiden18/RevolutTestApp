@@ -1,6 +1,6 @@
 package com.example.revoluttestapp.presentation.screens.core.di
 
-import com.example.revoluttestapp.data.repositories.CurrencyRatesService
+import com.example.revoluttestapp.data.repositories.currencyrate.CurrencyRatesService
 import dagger.Module
 import dagger.Provides
 import retrofit2.Retrofit

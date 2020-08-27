@@ -1,4 +1,4 @@
-package com.example.revoluttestapp.presentation.screens.currencies
+package com.example.revoluttestapp.presentation.screens.currencies.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider

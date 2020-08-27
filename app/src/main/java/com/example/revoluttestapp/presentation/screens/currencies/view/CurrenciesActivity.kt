@@ -4,14 +4,12 @@ import android.os.Bundle
 import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Lifecycle
 import com.example.revoluttestapp.R
 import com.example.revoluttestapp.presentation.screens.core.AppComponentProvider
-import com.example.revoluttestapp.presentation.screens.currencies.CurrenciesViewModelFactory
+import com.example.revoluttestapp.presentation.screens.currencies.di.CurrenciesViewModelFactory
 import com.example.revoluttestapp.presentation.screens.currencies.di.DaggerCurrenciesComponent
 import com.example.revoluttestapp.presentation.screens.currencies.viewmodel.CurrenciesViewModel
 import com.trello.lifecycle4.android.lifecycle.AndroidLifecycle
-import com.trello.rxlifecycle4.LifecycleProvider
 import kotlinx.android.synthetic.main.activity_main.*
 import javax.inject.Inject
 
