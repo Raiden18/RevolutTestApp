@@ -5,6 +5,7 @@ import com.example.revoluttestapp.data.mappers.CurrencyRateMapper
 import com.example.revoluttestapp.data.repositories.currencyrate.CurrencyRatesService
 import com.example.revoluttestapp.domain.repositories.CurrencyRatesRepository
 import com.example.revoluttestapp.domain.repositories.CurrencyRepository
+import com.example.revoluttestapp.domain.usecases.ConvertMoneyUseCase
 import com.example.revoluttestapp.domain.usecases.GetCurrencyRatesUseCase
 import com.example.revoluttestapp.domain.usecases.GetSelectedCurrencyUseCase
 import com.example.revoluttestapp.domain.usecases.SaveCurrencyToMemoryUseCase
@@ -34,4 +35,5 @@ interface ApplicationComponent {
     fun provideCurrencyRepository(): CurrencyRepository
     fun provideSaveCurrencyToMemoryUseCase(): SaveCurrencyToMemoryUseCase
     fun provideRetrofit(): Retrofit
+    fun provideConvertMoneyUseCase(): ConvertMoneyUseCase
 }

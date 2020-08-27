@@ -14,10 +14,11 @@ class CurrencyRateUiMapperImpl : CurrencyRateUiMapper {
         currencyRates: List<Currency>
     ): List<UiCurrencyPlace> {
         val currencies = LinkedList<UiCurrencyPlace>()
+        val amountWithoutDot = currencyToConvert.getAmount().toString().replaceAfter(".", "").replace(".", "")
         val uiCurrencyToConvert = UiCurrencyToConvertPlace(
             currencyToConvert.getCode(),
             currencyToConvert.getFullName(),
-            currencyToConvert.getAmount().toString()
+            amountWithoutDot
         )
         currencies.add(uiCurrencyToConvert)
         currencyRates.forEach {

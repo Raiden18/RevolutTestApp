@@ -7,4 +7,5 @@ import io.reactivex.rxjava3.core.Observable
 
 interface CurrencyRatesRepository {
     fun getCurrencyRateFromApiFor(currency: Currency): Observable<List<CurrencyRate>>
+    fun getCurencyRateFromMemory(): Observable<List<CurrencyRate>>
 }

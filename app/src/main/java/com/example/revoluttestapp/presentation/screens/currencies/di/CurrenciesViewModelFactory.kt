@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.revoluttestapp.domain.models.CodeToCurrencyMapper
 import com.example.revoluttestapp.domain.models.CurrencyConverter
+import com.example.revoluttestapp.domain.usecases.ConvertMoneyUseCase
 import com.example.revoluttestapp.domain.usecases.GetCurrencyRatesUseCase
 import com.example.revoluttestapp.domain.usecases.GetSelectedCurrencyUseCase
 import com.example.revoluttestapp.domain.usecases.SaveCurrencyToMemoryUseCase
@@ -14,6 +15,7 @@ class CurrenciesViewModelFactory(
     private val getCurrencyRatesUseCase: GetCurrencyRatesUseCase,
     private val getSelectedCurrencyUseCase: GetSelectedCurrencyUseCase,
     private val saveCurrencyToMemoryUseCase: SaveCurrencyToMemoryUseCase,
+    private val convertMoneyUseCase: ConvertMoneyUseCase,
     private val currencyRateUiMapper: CurrencyRateUiMapper,
     private val codeToCurrencyMapper: CodeToCurrencyMapper,
     private val currencyConverter: CurrencyConverter
@@ -23,6 +25,7 @@ class CurrenciesViewModelFactory(
             getCurrencyRatesUseCase,
             getSelectedCurrencyUseCase,
             saveCurrencyToMemoryUseCase,
+            convertMoneyUseCase,
             currencyRateUiMapper,
             codeToCurrencyMapper,
             currencyConverter

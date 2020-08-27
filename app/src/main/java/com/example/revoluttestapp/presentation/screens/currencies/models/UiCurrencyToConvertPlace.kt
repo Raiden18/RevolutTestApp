@@ -4,4 +4,6 @@ data class UiCurrencyToConvertPlace(
     override val countryCode: String,
     override val countryName: String,
     override val amountOfMoney: String
-) : UiCurrencyPlace
+) : UiCurrencyPlace{
+    val cursorIndex = amountOfMoney.length
+}

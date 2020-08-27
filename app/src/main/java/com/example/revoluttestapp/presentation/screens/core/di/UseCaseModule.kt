@@ -1,7 +1,10 @@
 package com.example.revoluttestapp.presentation.screens.core.di
 
+import com.example.revoluttestapp.domain.models.CodeToCurrencyMapper
+import com.example.revoluttestapp.domain.models.CurrencyConverter
 import com.example.revoluttestapp.domain.repositories.CurrencyRatesRepository
 import com.example.revoluttestapp.domain.repositories.CurrencyRepository
+import com.example.revoluttestapp.domain.usecases.ConvertMoneyUseCase
 import com.example.revoluttestapp.domain.usecases.GetCurrencyRatesUseCase
 import com.example.revoluttestapp.domain.usecases.GetSelectedCurrencyUseCase
 import com.example.revoluttestapp.domain.usecases.SaveCurrencyToMemoryUseCase
@@ -29,5 +32,16 @@ class UseCaseModule {
     @Provides
     fun provideSaveCurrencyToMemoryUseCase(currencyRepository: CurrencyRepository): SaveCurrencyToMemoryUseCase {
         return SaveCurrencyToMemoryUseCase(currencyRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideConvertMoneyUseCase(
+        currencyRepository: CurrencyRepository,
+        currencyRatesRepository: CurrencyRatesRepository
+    ): ConvertMoneyUseCase {
+        val codeToCurrencyMapper = CodeToCurrencyMapper()
+        val currencyConverter = CurrencyConverter(codeToCurrencyMapper)
+        return ConvertMoneyUseCase(currencyRepository, currencyConverter, currencyRatesRepository)
     }
 }

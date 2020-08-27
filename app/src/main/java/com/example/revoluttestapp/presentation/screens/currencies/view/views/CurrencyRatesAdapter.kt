@@ -7,12 +7,13 @@ import com.hannesdorfmann.adapterdelegates4.AsyncListDifferDelegationAdapter
 
 //TODO: Payloads for updating data
 class CurrencyRatesAdapter(
-    private val onCurrencyClick: (UiCurrencyPlace) -> Unit
+    onCurrencyClick: (UiCurrencyPlace) -> Unit,
+    onAmountOfMoneyChanged: (String) -> Unit
 ) : AsyncListDifferDelegationAdapter<UiCurrencyPlace>(CurrencyRatesDiffUtilCallback()){
 
     init{
         delegatesManager
             .addDelegate(convertedCurrencyAdapterDelegate(onCurrencyClick))
-            .addDelegate(currencyToConvertAdapterDelegate())
+            .addDelegate(currencyToConvertAdapterDelegate(onAmountOfMoneyChanged))
     }
 }

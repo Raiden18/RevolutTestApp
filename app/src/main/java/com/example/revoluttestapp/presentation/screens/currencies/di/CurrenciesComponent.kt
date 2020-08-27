@@ -2,6 +2,7 @@ package com.example.revoluttestapp.presentation.screens.currencies.di
 
 import com.example.revoluttestapp.domain.models.CodeToCurrencyMapper
 import com.example.revoluttestapp.domain.models.CurrencyConverter
+import com.example.revoluttestapp.domain.usecases.ConvertMoneyUseCase
 import com.example.revoluttestapp.domain.usecases.GetCurrencyRatesUseCase
 import com.example.revoluttestapp.domain.usecases.GetSelectedCurrencyUseCase
 import com.example.revoluttestapp.domain.usecases.SaveCurrencyToMemoryUseCase
@@ -32,7 +33,8 @@ class CurrenciesModule {
     fun provideCurrenciesViewModelFactory(getCurrencyRatesUseCase: GetCurrencyRatesUseCase,
                                           currencyRateUiMapper: CurrencyRateUiMapper,
                                           getSelectedCurrencyUseCase: GetSelectedCurrencyUseCase,
-                                          saveCurrencyToMemoryUseCase: SaveCurrencyToMemoryUseCase
+                                          saveCurrencyToMemoryUseCase: SaveCurrencyToMemoryUseCase,
+                                          convertMoneyUseCase: ConvertMoneyUseCase
     ): CurrenciesViewModelFactory {
         val codeToCurrencyMapper =  CodeToCurrencyMapper()
         val currencyConverter = CurrencyConverter(codeToCurrencyMapper)
@@ -40,6 +42,7 @@ class CurrenciesModule {
             getCurrencyRatesUseCase,
             getSelectedCurrencyUseCase,
             saveCurrencyToMemoryUseCase,
+            convertMoneyUseCase,
             currencyRateUiMapper,
             codeToCurrencyMapper,
             currencyConverter
