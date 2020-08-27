@@ -78,4 +78,8 @@ dependencies {
 
     debugImplementation "com.github.chuckerteam.chucker:library:3.2.0"
     releaseImplementation "com.github.chuckerteam.chucker:library-no-op:3.2.0"
+
+    implementation 'com.hannesdorfmann:adapterdelegates4-kotlin-dsl:4.3.0'
+    implementation 'com.hannesdorfmann:adapterdelegates4-kotlin-dsl-layoutcontainer:4.3.0'
+    implementation 'com.hannesdorfmann:adapterdelegates4:4.3.0'
 }

@@ -1,16 +1,15 @@
 package com.example.revoluttestapp.presentation.screens.currencies.viewmodel
 
-import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.revoluttestapp.domain.models.CodeToCurrencyMapper
 import com.example.revoluttestapp.domain.usecases.GetCurrencyRatesUseCase
 import com.example.revoluttestapp.domain.usecases.GetSelectedCurrencyUseCase
 import com.example.revoluttestapp.domain.usecases.SaveCurrencyToMemoryUseCase
-import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrencyRate
+import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrency
+import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrencyPlace
 import com.jakewharton.rxrelay3.BehaviorRelay
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
-import io.reactivex.rxjava3.schedulers.Schedulers
 import timber.log.Timber
 
 //TODO: Write tests
@@ -23,24 +22,26 @@ class CurrenciesViewModel(
     private val currencyRateUiMapper: CurrencyRateUiMapper,
     private val codeToCurrencyMapper: CodeToCurrencyMapper
 ) : ViewModel() {
-    private val currencies = BehaviorRelay.create<List<UiCurrencyRate>>()
+    private val currencies = BehaviorRelay.create<List<UiCurrencyPlace>>()
 
     init {
         getSelectedCurrencyUseCase.execute()
-            .flatMap { getCurrencyRatesUseCase.execute(it) }
-            .map { currencyRateUiMapper.map(it) }
+            .flatMap { selectedCurrency ->
+                getCurrencyRatesUseCase.execute(selectedCurrency)
+                    .map { currencyRateUiMapper.mapDomainToUi(selectedCurrency, it)}
+            }
             .observeOn(AndroidSchedulers.mainThread())
             .subscribe({
                 currencies.accept(it)
             }, { Timber.e(it) })
     }
 
-    fun selectCurrency(uiCurrencyRate: UiCurrencyRate) {
+    fun selectCurrency(uiCurrency: UiCurrency) {
         //TODO: Add amount converting
-        val currency = codeToCurrencyMapper.map(uiCurrencyRate.countryCode)
+        val currency = codeToCurrencyMapper.map(uiCurrency.countryCode)
         saveCurrencyToMemoryUseCase.execute(currency)
-            .subscribe({},{Timber.e(it)})
+            .subscribe({}, { Timber.e(it) })
     }
 
-    fun getCurrencies(): Observable<List<UiCurrencyRate>> = currencies
+    fun getCurrencies(): Observable<List<UiCurrencyPlace>> = currencies
 }
