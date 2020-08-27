@@ -1,22 +1,17 @@
 package com.example.revoluttestapp.domain.models.currency
 
+import java.util.*
+
 data class CurrencyRate(
     val code: String,
     val rate: Double
 ) {
-    companion object {
-        fun createEmpty(): CurrencyRate {
-            return CurrencyRate("", 0.toDouble())
-        }
+    private val currency = Currency.getInstance(code)
 
-        fun createWithoutImage(
-            shortName: String,
-            rate: Double
-        ) = CurrencyRate(shortName, rate)
+    val fullName: String
+        get() = currency.displayName
+
+    init{
+
     }
-
-    fun isEmpty(): Boolean {
-        return code.isEmpty() && rate == 0.toDouble()
-    }
-
 }

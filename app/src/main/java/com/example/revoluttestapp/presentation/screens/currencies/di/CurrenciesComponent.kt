@@ -5,6 +5,8 @@ import com.example.revoluttestapp.presentation.screens.core.di.ApplicationCompon
 import com.example.revoluttestapp.presentation.screens.core.di.PerScreenScope
 import com.example.revoluttestapp.presentation.screens.currencies.CurrenciesViewModelFactory
 import com.example.revoluttestapp.presentation.screens.currencies.view.CurrenciesActivity
+import com.example.revoluttestapp.presentation.screens.currencies.view.CurrencyRateUiMapperImpl
+import com.example.revoluttestapp.presentation.screens.currencies.viewmodel.CurrencyRateUiMapper
 import dagger.Component
 import dagger.Module
 import dagger.Provides
@@ -25,7 +27,14 @@ class CurrenciesModule {
 
     @CurrenciesScope
     @Provides
-    fun provideCurrenciesViewModelFactory(getCurrenciesUseCase: GetCurrenciesUseCase): CurrenciesViewModelFactory {
-        return CurrenciesViewModelFactory(getCurrenciesUseCase)
+    fun provideCurrenciesViewModelFactory(getCurrenciesUseCase: GetCurrenciesUseCase,
+                                          currencyRateUiMapper: CurrencyRateUiMapper): CurrenciesViewModelFactory {
+        return CurrenciesViewModelFactory(getCurrenciesUseCase, currencyRateUiMapper)
+    }
+
+    @CurrenciesScope
+    @Provides
+    fun provideCurrencyRateUiMapper(): CurrencyRateUiMapper {
+        return CurrencyRateUiMapperImpl()
     }
 }

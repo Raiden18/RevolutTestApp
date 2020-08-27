@@ -7,7 +7,7 @@
     tools:context=".presentation.screens.currencies.view.CurrenciesActivity">
 
     <com.example.revoluttestapp.presentation.screens.currencies.view.views.CurrencyRatesRecyclerView
-        android:layout_width="0dp"
+        android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/currency_rates_recycler_view"
         app:layout_constraintBottom_toBottomOf="parent"

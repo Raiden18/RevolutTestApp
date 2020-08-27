@@ -5,6 +5,7 @@ import android.util.AttributeSet
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.revoluttestapp.domain.models.currency.CurrencyRate
+import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrencyRate
 
 class CurrencyRatesRecyclerView(context: Context, attributeSet: AttributeSet): RecyclerView(context, attributeSet) {
     private val currencyRatesAdapter: CurrencyRatesAdapter by lazy {
@@ -14,7 +15,7 @@ class CurrencyRatesRecyclerView(context: Context, attributeSet: AttributeSet): R
         layoutManager = LinearLayoutManager(context)
     }
 
-    fun updateItems(items: List<CurrencyRate>){
+    fun updateItems(items: List<UiCurrencyRate>){
         setAdapter()
         currencyRatesAdapter.updateItems(items)
     }
