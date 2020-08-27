@@ -46,6 +46,15 @@ dependencies {
 
     implementation "io.reactivex.rxjava3:rxjava:3.0.6"
     implementation 'io.reactivex.rxjava3:rxandroid:3.0.0'
+    implementation 'com.trello.rxlifecycle4:rxlifecycle:4.0.0'
+    implementation 'com.trello.rxlifecycle4:rxlifecycle-android:4.0.0'
+    implementation 'com.trello.rxlifecycle4:rxlifecycle-components:4.0.0'
+    implementation 'com.trello.rxlifecycle4:rxlifecycle-components-preference:4.0.0'
+    implementation 'com.trello.rxlifecycle4:rxlifecycle-android-lifecycle:4.0.0'
+    implementation 'com.trello.rxlifecycle4:rxlifecycle-kotlin:4.0.0'
+    implementation 'com.trello.rxlifecycle4:rxlifecycle-android-lifecycle-kotlin:4.0.0'
+
+
     implementation "com.github.akarnokd:rxjava3-retrofit-adapter:3.0.0"
 
     implementation 'com.squareup.retrofit2:retrofit:2.6.2'
@@ -60,4 +69,6 @@ dependencies {
     kapt "com.google.dagger:dagger-android-processor:2.27"
 
     implementation 'androidx.fragment:fragment-ktx:1.2.5'
+
+    implementation "androidx.recyclerview:recyclerview:1.1.0"
 }

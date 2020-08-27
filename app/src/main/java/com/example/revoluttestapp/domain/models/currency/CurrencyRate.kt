@@ -1,7 +1,7 @@
 package com.example.revoluttestapp.domain.models.currency
 
 data class CurrencyRate(
-    val shortName: String,
+    val code: String,
     val rate: Double
 ) {
     companion object {
@@ -16,7 +16,7 @@ data class CurrencyRate(
     }
 
     fun isEmpty(): Boolean {
-        return shortName.isEmpty() && rate == 0.toDouble()
+        return code.isEmpty() && rate == 0.toDouble()
     }
 
 }
