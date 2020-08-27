@@ -11,11 +11,10 @@ fun currencyToConvertAdapterDelegate(
     onAmountOfMoneyChanged: (String) -> Unit
 ) =
     adapterDelegateLayoutContainer<UiCurrencyToConvertPlace, UiCurrencyPlace>(R.layout.item_currency_rate) {
-
+        itemView.currency_rate_amount_of_money.addTextChangedListener {
+            onAmountOfMoneyChanged.invoke(it.toString())
+        }
         bind {
-            itemView.currency_rate_amount_of_money.addTextChangedListener {
-                onAmountOfMoneyChanged.invoke(it.toString())
-            }
             itemView.currency_rate_code.text = item.countryCode
             itemView.currency_rate_name.text = item.countryName
             itemView.currency_rate_amount_of_money.setText(item.amountOfMoney)

@@ -10,10 +10,13 @@ class CurrencyRatesAdapter(
     onCurrencyClick: (UiCurrencyPlace) -> Unit,
     onAmountOfMoneyChanged: (String) -> Unit
 ) : AsyncListDifferDelegationAdapter<UiCurrencyPlace>(CurrencyRatesDiffUtilCallback()){
-
+    companion object{
+        const val AMOUNT_OF_MONEY_PAYLOAD_KEY = "AMOUNT_OF_MONEY_PAYLOAD_KEY"
+    }
     init{
         delegatesManager
             .addDelegate(convertedCurrencyAdapterDelegate(onCurrencyClick))
             .addDelegate(currencyToConvertAdapterDelegate(onAmountOfMoneyChanged))
     }
+
 }

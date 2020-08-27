@@ -1,8 +1,10 @@
 package com.example.revoluttestapp.presentation.screens.currencies.view.views.adapterdelegates
 
+import android.os.Bundle
 import com.example.revoluttestapp.R
 import com.example.revoluttestapp.presentation.screens.currencies.models.UiConvertedCurrency
 import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrencyPlace
+import com.example.revoluttestapp.presentation.screens.currencies.view.views.CurrencyRatesAdapter.Companion.AMOUNT_OF_MONEY_PAYLOAD_KEY
 import com.hannesdorfmann.adapterdelegates4.dsl.adapterDelegateLayoutContainer
 import kotlinx.android.synthetic.main.item_currency_rate.view.*
 
@@ -11,13 +13,21 @@ fun convertedCurrencyAdapterDelegate(
 ) = adapterDelegateLayoutContainer<UiConvertedCurrency, UiCurrencyPlace>(
     R.layout.item_currency_rate
 ) {
+    itemView.setOnClickListener {
+        onCurrencyClick.invoke(item)
+    }
+    bind { payload ->
+        if (payload.isEmpty()){
+            itemView.currency_rate_code.text = item.countryCode
+            itemView.currency_rate_name.text = item.countryName
+            itemView.currency_rate_amount_of_money.setText(item.amountOfMoney)
+        } else{
+            val bundlePayload = payload.first() as Bundle
+            if (bundlePayload.getString(AMOUNT_OF_MONEY_PAYLOAD_KEY) != null){
+                itemView.currency_rate_amount_of_money.setText(bundlePayload.getString(AMOUNT_OF_MONEY_PAYLOAD_KEY))
+            }
 
-    bind {
-        itemView.setOnClickListener {
-            onCurrencyClick.invoke(item)
         }
-        itemView.currency_rate_code.text = item.countryCode
-        itemView.currency_rate_name.text = item.countryName
-        itemView.currency_rate_amount_of_money.setText(item.amountOfMoney)
+
     }
 }
