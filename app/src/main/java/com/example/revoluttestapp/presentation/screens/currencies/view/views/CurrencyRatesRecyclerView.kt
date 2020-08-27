@@ -4,14 +4,13 @@ import android.content.Context
 import android.util.AttributeSet
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrency
 import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrencyPlace
 
 class CurrencyRatesRecyclerView(
     context: Context,
     attributeSet: AttributeSet
 ) : RecyclerView(context, attributeSet) {
-    lateinit var onCurrencyClick: (UiCurrency) -> Unit
+    lateinit var onCurrencyClick: (UiCurrencyPlace) -> Unit
     private val currencyRatesAdapter: CurrencyRatesAdapter by lazy {
         CurrencyRatesAdapter(onCurrencyClick)
     }

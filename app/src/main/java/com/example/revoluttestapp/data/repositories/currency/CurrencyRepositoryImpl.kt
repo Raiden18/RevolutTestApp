@@ -10,7 +10,7 @@ import io.reactivex.rxjava3.core.Observable
 
 class CurrencyRepositoryImpl : CurrencyRepository {
     private companion object {
-        val DEFAULT_CURRENCY = RussianRouble(0.0)
+        val DEFAULT_CURRENCY = RussianRouble(100.0)
     }
 
     private val savedCurrency = BehaviorRelay.create<Currency>()

@@ -44,12 +44,14 @@
     </LinearLayout>
 
     <EditText
-        android:layout_width="93dp"
+        android:id="@+id/currency_rate_amount_of_money"
+        android:layout_width="150dp"
         android:layout_height="wrap_content"
         android:layout_gravity="center"
         android:gravity="center"
         android:lineSpacingExtra="5sp"
         android:textColor="#191C1F"
+        android:saveEnabled="false"
         android:textSize="28sp"
         android:inputType="numberDecimal"/>
 </LinearLayout>

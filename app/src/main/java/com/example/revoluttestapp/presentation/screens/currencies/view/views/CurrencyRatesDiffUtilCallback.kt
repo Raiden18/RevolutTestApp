@@ -9,6 +9,11 @@ class CurrencyRatesDiffUtilCallback : DiffUtil.ItemCallback<UiCurrencyPlace>() {
         return oldItem == newItem
     }
 
+    //TODO: set up pay loads
+    override fun getChangePayload(oldItem: UiCurrencyPlace, newItem: UiCurrencyPlace): Any? {
+        return Any()
+    }
+
     override fun areContentsTheSame(oldItem: UiCurrencyPlace, newItem: UiCurrencyPlace): Boolean {
         return false
     }
