@@ -1,7 +1,8 @@
 package com.example.revoluttestapp.presentation.screens.core.di
 
+import android.app.Application
 import com.example.revoluttestapp.data.mappers.CurrencyRateMapper
-import com.example.revoluttestapp.data.repositories.country.FlagRepositoryImpl
+import com.example.revoluttestapp.data.repositories.flag.FlagRepositoryImpl
 import com.example.revoluttestapp.data.repositories.currency.CurrencyRepositoryImpl
 import com.example.revoluttestapp.data.repositories.currencyrate.CurrencyRatesRepositoryImpl
 import com.example.revoluttestapp.data.repositories.currencyrate.CurrencyRatesService
@@ -38,7 +39,7 @@ class RepositoriesModule {
 
     @Singleton
     @Provides
-    fun provideCountryRepository(): FlagRepository {
-        return FlagRepositoryImpl()
+    fun provideCountryRepository(application: Application): FlagRepository {
+        return FlagRepositoryImpl(application)
     }
 }

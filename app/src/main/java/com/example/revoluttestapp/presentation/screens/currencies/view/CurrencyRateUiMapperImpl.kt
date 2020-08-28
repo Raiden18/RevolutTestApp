@@ -19,7 +19,7 @@ class CurrencyRateUiMapperImpl : CurrencyRateUiMapper {
             currencyToConvert.getCode(),
             currencyToConvert.getFullName(),
             amountWithoutDot,
-            flag.imageUrl
+            flag.resId
         )
     }
 
@@ -32,7 +32,7 @@ class CurrencyRateUiMapperImpl : CurrencyRateUiMapper {
             currency.getCode(),
             currency.getFullName(),
             currency.getAmount().toString(),
-            flag.imageUrl
+            flag.resId
         )
     }
 }

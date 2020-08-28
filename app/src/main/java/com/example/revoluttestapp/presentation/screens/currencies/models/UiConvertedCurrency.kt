@@ -4,5 +4,5 @@ data class UiConvertedCurrency(
     override val currencyCode: String,
     override val countryName: String,
     override val amountOfMoney: String,
-    override val imageFlagUrl: String
+    override val imageFlagId: Int
 ) : UiCurrencyPlace

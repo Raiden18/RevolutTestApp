@@ -30,8 +30,6 @@ fun currencyToConvertAdapterDelegate(
             itemView.currency_rate_name.text = item.countryName
             amountOfMoneyEditText.setText(item.amountOfMoney)
             amountOfMoneyEditText.setSelection(item.cursorIndex)
-            Glide.with(itemView)
-                .load(item.imageFlagUrl)
-                .into(itemView.item_currency_rate_country_flag)
+            itemView.item_currency_rate_country_flag.setImageResource(item.imageFlagId)
         }
     }

@@ -2,6 +2,7 @@ package com.example.revoluttestapp.presentation.screens.currencies.view.views.ad
 
 import android.os.Bundle
 import com.bumptech.glide.Glide
+import com.bumptech.glide.request.RequestOptions
 import com.example.revoluttestapp.R
 import com.example.revoluttestapp.presentation.screens.currencies.models.UiConvertedCurrency
 import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrencyPlace
@@ -23,9 +24,7 @@ fun convertedCurrencyAdapterDelegate(
             itemView.currency_rate_code.text = item.currencyCode
             itemView.currency_rate_name.text = item.countryName
             amountOfMoneyEditText.setText(item.amountOfMoney)
-            Glide.with(itemView)
-                .load(item.imageFlagUrl)
-                .into(itemView.item_currency_rate_country_flag)
+            itemView.item_currency_rate_country_flag.setImageResource(item.imageFlagId)
             amountOfMoneyEditText.isEnabled = false
             amountOfMoneyEditText.isFocusable = false
             amountOfMoneyEditText.movementMethod = null

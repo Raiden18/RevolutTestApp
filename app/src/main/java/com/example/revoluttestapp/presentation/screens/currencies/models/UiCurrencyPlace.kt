@@ -4,5 +4,5 @@ interface UiCurrencyPlace{
     val currencyCode: String
     val countryName: String
     val amountOfMoney: String
-    val imageFlagUrl: String
+    val imageFlagId: Int
 }
