@@ -62,25 +62,25 @@ class CurrenciesViewModel(
     fun isShowLoader(): Observable<Boolean> = isShowLoader
 
     private fun subscribeOnCurrencies() {
-        getCurrencyRatesUseCase.execute()
-            .flatMap { rates ->
-                getSelectedCurrencyUseCase.execute()
-                    .doOnNext { currencyToChange = it }
-                    .map { currencyConverter.convert(it, rates) }
-                    .flatMap { convertedCurrencies ->
-                        loadFlagsForConvertedCurrenciesAndMapToUi(convertedCurrencies)
-                    }
-                    .flatMap { uiConvertedCurrencies ->
-                        loadFlagForSelectedCurrencyAndMapToUi()
-                            .map { setCurrencyToConvertToTopOfList(it, uiConvertedCurrencies) }
-                    }
-            }
-            .observeOn(rxSchedulers.main)
-            .doOnNext { isShowLoader.accept(false) }
-            .subscribe({
-                currencies.accept(it)
-            }, { Timber.e(it) })
-            .also { compositeDisposable.add(it) }
+         getCurrencyRatesUseCase.execute()
+             .flatMap { rates ->
+                 getSelectedCurrencyUseCase.execute()
+                     .doOnNext { currencyToChange = it }
+                     .map { currencyConverter.convert(it, rates) }
+                     .flatMap { convertedCurrencies ->
+                         loadFlagsForConvertedCurrenciesAndMapToUi(convertedCurrencies)
+                     }
+                     .flatMap { uiConvertedCurrencies ->
+                         loadFlagForSelectedCurrencyAndMapToUi()
+                             .map { setCurrencyToConvertToTopOfList(it, uiConvertedCurrencies) }
+                     }
+             }
+             .observeOn(rxSchedulers.main)
+             .doOnNext { isShowLoader.accept(false) }
+             .subscribe({
+                 currencies.accept(it)
+             }, { Timber.e(it) })
+             .also { compositeDisposable.add(it) }
     }
 
     private fun loadFlagsForConvertedCurrenciesAndMapToUi(convertedCurrencies: List<Currency>): Observable<ArrayList<UiConvertedCurrency>> {

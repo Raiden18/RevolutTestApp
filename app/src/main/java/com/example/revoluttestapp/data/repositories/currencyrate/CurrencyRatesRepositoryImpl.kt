@@ -16,8 +16,8 @@ class CurrencyRatesRepositoryImpl(
 ) : CurrencyRatesRepository {
     private val savedCurrencyRates = BehaviorRelay.create<List<CurrencyRate>>()
 
-    override fun getCurrencyRateFromApiFor(currency: Currency): Observable<List<CurrencyRate>> {
-        return currencyRatesService.getCurrencyRates(currency.getCode())
+    override fun getCurrencyRateFromApiFor(currencyCode: String): Observable<List<CurrencyRate>> {
+        return currencyRatesService.getCurrencyRates(currencyCode)
             .map { currencyRateMapper.map(it) }
             .doOnNext { savedCurrencyRates.accept(it) }
             .subscribeOn(rxSchedulers.io)
