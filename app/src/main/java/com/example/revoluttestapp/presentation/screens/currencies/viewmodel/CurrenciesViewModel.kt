@@ -11,6 +11,7 @@ import com.example.revoluttestapp.presentation.screens.currencies.models.UiConve
 import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrencyPlace
 import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrencyToConvertPlace
 import com.jakewharton.rxrelay3.BehaviorRelay
+import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import timber.log.Timber
@@ -42,18 +43,30 @@ class CurrenciesViewModel(
     }
 
     fun selectCurrency(uiCurrency: UiCurrencyPlace) {
-        val currency = codeToCurrencyMapper.map(uiCurrency.currencyCode)
-        val amountOfMoney = currencyRateUiMapper.mapAmountOfMoneyToDouble(uiCurrency.amountOfMoney)
-        val currencyWithAmount = currency.setAmount(amountOfMoney)
-        saveCurrencyToMemoryUseCase.execute(currencyWithAmount)
-            .subscribe({}, {})
+        Log.i("HUI", "selectCurrency")
+        Observable.create<Currency> {
+            val currency = codeToCurrencyMapper.map(uiCurrency.currencyCode)
+            val amountOfMoney = currencyRateUiMapper.mapAmountOfMoneyToDouble(
+                uiCurrency.amountOfMoney
+            )
+            val currencyWithAmount = currency.setAmount(amountOfMoney)
+            it.onNext(currencyWithAmount)
+            it.onComplete()
+        }.flatMapCompletable { saveCurrencyToMemoryUseCase.execute(it) }
+            .subscribeOn(rxSchedulers.io)
+            .subscribe()
             .also { compositeDisposable.add(it) }
     }
 
     fun onAmountOfMoneyChanged(amountOfMoney: String) {
-        val amountOfMoneyDouble = currencyRateUiMapper.mapAmountOfMoneyToDouble(amountOfMoney)
-        val newCurrencyToChange = currencyToChange.setAmount(amountOfMoneyDouble)
-        saveCurrencyToMemoryUseCase.execute(newCurrencyToChange)
+        Log.i("HUI", "onAmountOfMoneyChanged")
+        Observable.create<Currency> {
+            val amountOfMoneyDouble = currencyRateUiMapper.mapAmountOfMoneyToDouble(amountOfMoney)
+            val newCurrencyToChange = currencyToChange.setAmount(amountOfMoneyDouble)
+            it.onNext(newCurrencyToChange)
+            it.onComplete()
+        }.flatMapCompletable { saveCurrencyToMemoryUseCase.execute(it) }
+            .subscribeOn(rxSchedulers.io)
             .subscribe()
             .also { compositeDisposable.add(it) }
     }
@@ -62,25 +75,25 @@ class CurrenciesViewModel(
     fun isShowLoader(): Observable<Boolean> = isShowLoader
 
     private fun subscribeOnCurrencies() {
-         getCurrencyRatesUseCase.execute()
-             .flatMap { rates ->
-                 getSelectedCurrencyUseCase.execute()
-                     .doOnNext { currencyToChange = it }
-                     .map { currencyConverter.convert(it, rates) }
-                     .flatMap { convertedCurrencies ->
-                         loadFlagsForConvertedCurrenciesAndMapToUi(convertedCurrencies)
-                     }
-                     .flatMap { uiConvertedCurrencies ->
-                         loadFlagForSelectedCurrencyAndMapToUi()
-                             .map { setCurrencyToConvertToTopOfList(it, uiConvertedCurrencies) }
-                     }
-             }
-             .observeOn(rxSchedulers.main)
-             .doOnNext { isShowLoader.accept(false) }
-             .subscribe({
-                 currencies.accept(it)
-             }, { Timber.e(it) })
-             .also { compositeDisposable.add(it) }
+        getCurrencyRatesUseCase.execute()
+            .flatMap { rates ->
+                getSelectedCurrencyUseCase.execute()
+                    .doOnNext { currencyToChange = it }
+                    .map { currencyConverter.convert(it, rates) }
+                    .flatMap { convertedCurrencies ->
+                        loadFlagsForConvertedCurrenciesAndMapToUi(convertedCurrencies)
+                    }
+                    .flatMap { uiConvertedCurrencies ->
+                        loadFlagForSelectedCurrencyAndMapToUi()
+                            .map { setCurrencyToConvertToTopOfList(it, uiConvertedCurrencies) }
+                    }
+            }
+            .observeOn(rxSchedulers.main)
+            .doOnNext { isShowLoader.accept(false) }
+            .subscribe({
+                currencies.accept(it)
+            }, { Timber.e(it) })
+            .also { compositeDisposable.add(it) }
     }
 
     private fun loadFlagsForConvertedCurrenciesAndMapToUi(convertedCurrencies: List<Currency>): Observable<ArrayList<UiConvertedCurrency>> {

@@ -7,7 +7,6 @@ import io.reactivex.rxjava3.core.Observable
 class GetSelectedCurrencyUseCase(
     private val currencyRepository: CurrencyRepository
 ) {
-
     fun execute(): Observable<Currency> {
         return currencyRepository.getCurrentCurrencyFromMemory()
     }
