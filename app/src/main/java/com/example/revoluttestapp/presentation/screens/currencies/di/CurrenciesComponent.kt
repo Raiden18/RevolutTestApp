@@ -29,24 +29,23 @@ class CurrenciesModule {
 
     @CurrenciesScope
     @Provides
-    fun provideCurrenciesViewModelFactory(getCurrencyRatesUseCase: GetCurrencyRatesUseCase,
-                                          currencyRateUiMapper: CurrencyRateUiMapper,
-                                          getSelectedCurrencyUseCase: GetSelectedCurrencyUseCase,
-                                          saveCurrencyToMemoryUseCase: SaveCurrencyToMemoryUseCase,
-                                          subscribeOnCurrenciesRatesUseCase: SubscribeOnCurrenciesRatesUseCase,
-                                          rxSchedulers: RxSchedulers
+    fun provideCurrenciesViewModelFactory(
+        getCurrencyRatesUseCase: GetCurrencyRatesUseCase,
+        currencyRateUiMapper: CurrencyRateUiMapper,
+        getSelectedCurrencyUseCase: GetSelectedCurrencyUseCase,
+        saveCurrencyToMemoryUseCase: SaveCurrencyToMemoryUseCase,
+        subscribeOnCurrenciesRatesUseCase: SubscribeOnCurrenciesRatesUseCase,
+        getFlagForCurrencyUseCase: GetFlagForCurrencyUseCase,
+        rxSchedulers: RxSchedulers
     ): CurrenciesViewModelFactory {
-        val codeToCurrencyMapper =
-            CodeToCurrencyMapper()
-        val currencyConverter =
-            CurrencyConverter(
-                codeToCurrencyMapper
-            )
+        val codeToCurrencyMapper = CodeToCurrencyMapper()
+        val currencyConverter = CurrencyConverter(codeToCurrencyMapper)
         val compositeDisposable = CompositeDisposable()
         return CurrenciesViewModelFactory(
             getCurrencyRatesUseCase,
             getSelectedCurrencyUseCase,
             saveCurrencyToMemoryUseCase,
+            getFlagForCurrencyUseCase,
             currencyRateUiMapper,
             codeToCurrencyMapper,
             currencyConverter,

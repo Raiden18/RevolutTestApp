@@ -29,7 +29,7 @@ internal class GetCurrencyCodesUseCaseTest {
         val savedCurrency: Currency = mockk(relaxed = true)
 
         //When
-        getCurrencyRatesUseCase.execute(savedCurrency).subscribe()
+        getCurrencyRatesUseCase.execute().subscribe()
 
         //Then
         verify {

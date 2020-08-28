@@ -18,14 +18,10 @@ import javax.inject.Inject
 
 
 class CurrenciesActivity : AppCompatActivity() {
-    private val provider = AndroidLifecycle.createLifecycleProvider(this)
-
     @Inject
     lateinit var currenciesViewModelFactory: CurrenciesViewModelFactory
-
-    private val viewModel: CurrenciesViewModel by viewModels {
-        currenciesViewModelFactory
-    }
+    private val provider = AndroidLifecycle.createLifecycleProvider(this)
+    private val viewModel: CurrenciesViewModel by viewModels { currenciesViewModelFactory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
         initDagger()
@@ -39,29 +35,17 @@ class CurrenciesActivity : AppCompatActivity() {
         subscribeToViewModel()
     }
 
-
     private fun subscribeToViewModel() {
         viewModel.getCurrencies()
             .compose(provider.bindToLifecycle())
             .subscribe({
                 currency_rates_recycler_view.updateItems(it)
-            }, { Timber.e(it) })
-
+            }, Timber::e)
         viewModel.isShowLoader()
             .compose(provider.bindToLifecycle())
             .subscribe({
                 isVisibleLoader(it)
-            }, { Timber.e(it) })
-
-    }
-
-    private fun initDagger() {
-        val applicationComponent =
-            (application as AppComponentProvider).provideApplicationComponent()
-        DaggerCurrenciesComponent.builder()
-            .applicationComponent(applicationComponent)
-            .build()
-            .inject(this)
+            }, Timber::e)
     }
 
     private fun hideKeyboard() {
@@ -75,5 +59,14 @@ class CurrenciesActivity : AppCompatActivity() {
         } else {
             currency_rates_loader_view.visibility = View.GONE
         }
+    }
+
+    private fun initDagger() {
+        val applicationComponent =
+            (application as AppComponentProvider).provideApplicationComponent()
+        DaggerCurrenciesComponent.builder()
+            .applicationComponent(applicationComponent)
+            .build()
+            .inject(this)
     }
 }

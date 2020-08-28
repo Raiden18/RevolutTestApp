@@ -2,6 +2,7 @@ package com.example.revoluttestapp.presentation.screens.currencies.view.views.ad
 
 import android.annotation.SuppressLint
 import androidx.core.widget.addTextChangedListener
+import com.bumptech.glide.Glide
 import com.example.revoluttestapp.R
 import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrencyPlace
 import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrencyToConvertPlace
@@ -29,5 +30,8 @@ fun currencyToConvertAdapterDelegate(
             itemView.currency_rate_name.text = item.countryName
             amountOfMoneyEditText.setText(item.amountOfMoney)
             amountOfMoneyEditText.setSelection(item.cursorIndex)
+            Glide.with(itemView)
+                .load(item.imageFlagUrl)
+                .into(itemView.item_currency_rate_country_flag)
         }
     }

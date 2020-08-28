@@ -1,18 +1,22 @@
 package com.example.revoluttestapp.presentation.screens.currencies.viewmodel
 
+import android.util.Log
 import androidx.lifecycle.ViewModel
 import com.example.revoluttestapp.domain.CodeToCurrencyMapper
 import com.example.revoluttestapp.domain.CurrencyConverter
 import com.example.revoluttestapp.domain.models.currencies.Currency
-import com.example.revoluttestapp.domain.usecases.GetCurrencyRatesUseCase
-import com.example.revoluttestapp.domain.usecases.GetSelectedCurrencyUseCase
-import com.example.revoluttestapp.domain.usecases.SaveCurrencyToMemoryUseCase
-import com.example.revoluttestapp.domain.usecases.SubscribeOnCurrenciesRatesUseCase
+import com.example.revoluttestapp.domain.models.currencyrate.CurrencyRate
+import com.example.revoluttestapp.domain.usecases.*
 import com.example.revoluttestapp.domain.utils.RxSchedulers
+import com.example.revoluttestapp.presentation.screens.currencies.models.UiConvertedCurrency
 import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrencyPlace
+import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrencyToConvertPlace
 import com.jakewharton.rxrelay3.BehaviorRelay
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import timber.log.Timber
+import java.util.*
+import kotlin.collections.ArrayList
 
 //TODO: Write tests
 //TODO: Add error handling
@@ -21,6 +25,7 @@ class CurrenciesViewModel(
     private val getCurrencyRatesUseCase: GetCurrencyRatesUseCase,
     private val getSelectedCurrencyUseCase: GetSelectedCurrencyUseCase,
     private val saveCurrencyToMemoryUseCase: SaveCurrencyToMemoryUseCase,
+    private val getFlagForCurrencyUseCase: GetFlagForCurrencyUseCase,
     private val currencyRateUiMapper: CurrencyRateUiMapper,
     private val codeToCurrencyMapper: CodeToCurrencyMapper,
     private val currencyConverter: CurrencyConverter,
@@ -63,17 +68,50 @@ class CurrenciesViewModel(
             .flatMap { rates ->
                 getSelectedCurrencyUseCase.execute()
                     .doOnNext { currencyToChange = it }
-                    .map { selectedCurrency ->
-                        val convertedCurrencies = currencyConverter.convert(selectedCurrency, rates)
-                        currencyRateUiMapper.mapDomainToUi(selectedCurrency, convertedCurrencies)
+                    .map { currencyConverter.convert(it, rates) }
+                    .flatMap { convertedCurrencies ->
+                        loadFlagsForConvertedCurrencies(convertedCurrencies)
                     }
+                    .flatMap { uiConvertedCurrencies ->
+                        getSelectedCurrencyUseCase.execute()
+                            .flatMap {selectedCurrency->
+                                getFlagForCurrencyUseCase.execute(selectedCurrency)
+                                    .map { currencyRateUiMapper.mapCurrencyToConvert(selectedCurrency, it) }
+                            }.map {
+                                val linkedList = LinkedList<UiCurrencyPlace>()
+                                linkedList.add(it)
+                                linkedList.addAll(uiConvertedCurrencies)
+                                return@map linkedList
+                            }
+                    }
+
+
             }
             .observeOn(rxSchedulers.main)
             .doOnNext { isShowLoader.accept(false) }
             .subscribe({
                 currencies.accept(it)
-            }, { })
+            }, { Timber.e(it) })
             .also { compositeDisposable.add(it) }
+    }
+
+    private fun loadFlagsForConvertedCurrencies(list: List<Currency>): Observable<ArrayList<UiConvertedCurrency>> {
+        return Observable.fromIterable(list)
+            .flatMap { currency ->
+                getFlagForCurrencyUseCase.execute(currency)
+                    .map { flag ->
+                        currencyRateUiMapper.mapConvertedCurrencies(
+                            currency,
+                            flag
+                        )
+                    }
+            }.collect({ ArrayList<UiConvertedCurrency>() },
+                { collection, item -> collection.add(item) })
+            .toObservable()
+    }
+
+    private fun addSelectedCurrencyToTop() {
+
     }
 
     private fun subscribeOnRates() {
