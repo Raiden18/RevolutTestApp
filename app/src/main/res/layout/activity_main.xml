@@ -13,12 +13,12 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        android:background="@android:color/white"
         app:title="@string/currency_converter_title"
+        android:background="@android:color/white"
         app:titleMarginStart="70dp"
         android:elevation="3dp"/>
 
-    <com.example.revoluttestapp.presentation.screens.currencies.view.views.CurrencyRatesRecyclerView
+    <com.example.revoluttestapp.presentation.screens.currencies.view.views.recycler.CurrencyRatesRecyclerView
         android:id="@+id/currency_rates_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"
@@ -26,7 +26,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        android:background="@android:color/white"/>
+        />
 
     <ProgressBar
         android:id="@+id/currency_rates_loader_view"

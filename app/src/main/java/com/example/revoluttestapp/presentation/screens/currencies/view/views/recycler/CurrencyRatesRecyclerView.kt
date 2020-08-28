@@ -1,17 +1,12 @@
-package com.example.revoluttestapp.presentation.screens.currencies.view.views
+package com.example.revoluttestapp.presentation.screens.currencies.view.views.recycler
 
-import android.app.Activity
 import android.content.Context
 import android.util.AttributeSet
-import android.util.Log
-import android.view.View
-import android.view.inputmethod.InputMethodManager
-import androidx.appcompat.widget.AppCompatEditText
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import com.example.revoluttestapp.R
 import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrencyPlace
 import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrencyToConvertPlace
+import com.example.revoluttestapp.presentation.screens.currencies.view.views.recycler.CurrencyRatesAdapter
 
 class CurrencyRatesRecyclerView(
     context: Context,
@@ -21,7 +16,10 @@ class CurrencyRatesRecyclerView(
     lateinit var onAmountOfMoneyChanged: (text: String) -> Unit
     lateinit var onHeaderHidden: () -> Unit
     private val currencyRatesAdapter: CurrencyRatesAdapter by lazy {
-        CurrencyRatesAdapter(onCurrencyClick, onAmountOfMoneyChanged)
+        CurrencyRatesAdapter(
+            onCurrencyClick,
+            onAmountOfMoneyChanged
+        )
     }
     private val linearLayoutManager = LinearLayoutManager(context)
 

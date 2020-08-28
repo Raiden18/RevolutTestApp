@@ -1,9 +1,9 @@
-package com.example.revoluttestapp.presentation.screens.currencies.view.views
+package com.example.revoluttestapp.presentation.screens.currencies.view.views.recycler
 
 import android.os.Bundle
 import androidx.recyclerview.widget.DiffUtil
-import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrencyPlace
 import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrencyToConvertPlace
+import com.example.revoluttestapp.presentation.screens.currencies.view.views.recycler.CurrencyRatesAdapter
 
 class CurrencyRatesDiffUtilCallback : DiffUtil.ItemCallback<UiCurrencyToConvertPlace>() {
     override fun areItemsTheSame(oldItem: UiCurrencyToConvertPlace, newItem: UiCurrencyToConvertPlace): Boolean {
