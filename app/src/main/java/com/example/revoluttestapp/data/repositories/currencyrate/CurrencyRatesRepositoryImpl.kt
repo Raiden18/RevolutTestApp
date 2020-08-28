@@ -26,6 +26,6 @@ class CurrencyRatesRepositoryImpl(
     }
 
     override fun saveToMemory(currencyRates: List<CurrencyRate>): Completable {
-        return Completable.fromAction { savedCurrencyRates.accept(currencyRates) }
+        return Completable.fromAction { savedCurrencyRates.accept(ArrayList(currencyRates)) }
     }
 }

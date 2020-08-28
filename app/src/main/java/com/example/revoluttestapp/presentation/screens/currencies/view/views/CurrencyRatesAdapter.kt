@@ -6,8 +6,6 @@ import androidx.recyclerview.widget.ListAdapter
 import com.example.revoluttestapp.R
 import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrencyPlace
 import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrencyToConvertPlace
-import com.example.revoluttestapp.presentation.screens.currencies.view.views.adapterdelegates.convertedCurrencyAdapterDelegate
-import com.example.revoluttestapp.presentation.screens.currencies.view.views.adapterdelegates.currencyToConvertAdapterDelegate
 import com.hannesdorfmann.adapterdelegates4.AsyncListDifferDelegationAdapter
 
 class CurrencyRatesAdapter(

@@ -20,6 +20,6 @@ class CurrencyRatesDiffUtilCallback : DiffUtil.ItemCallback<UiCurrencyToConvertP
 
 
     override fun areContentsTheSame(oldItem: UiCurrencyToConvertPlace, newItem: UiCurrencyToConvertPlace): Boolean {
-        return oldItem.hashCode() == newItem.hashCode()
+        return false
     }
 }

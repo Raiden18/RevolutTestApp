@@ -1,23 +1,19 @@
 package com.example.revoluttestapp.presentation.screens.currencies.viewmodel
 
-import android.util.Log
-import androidx.lifecycle.LiveData
-import androidx.lifecycle.MutableLiveData
-import androidx.lifecycle.ViewModel
 import com.example.revoluttestapp.domain.CodeToCurrencyMapper
 import com.example.revoluttestapp.domain.CurrencyConverter
 import com.example.revoluttestapp.domain.models.currencies.Currency
 import com.example.revoluttestapp.domain.usecases.*
 import com.example.revoluttestapp.domain.utils.RxSchedulers
-import com.example.revoluttestapp.presentation.screens.currencies.models.UiConvertedCurrency
-import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrencyPlace
+import com.example.revoluttestapp.presentation.screens.core.mvi.CoreMviViewModel
+import com.example.revoluttestapp.presentation.screens.core.mvi.Reducer
 import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrencyToConvertPlace
-import com.jakewharton.rxrelay3.BehaviorRelay
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
+import io.reactivex.rxjava3.kotlin.ofType
+import io.reactivex.rxjava3.kotlin.plusAssign
 import timber.log.Timber
 import java.util.*
-import java.util.concurrent.TimeUnit
 import kotlin.collections.ArrayList
 
 //TODO: Write tests
@@ -35,62 +31,73 @@ class CurrenciesViewModel(
     private val updateCurrencyRateEverySecondUseCase: UpdateCurrencyRateEverySecondUseCase,
     private val compositeDisposable: CompositeDisposable,
     private val rxSchedulers: RxSchedulers
-) : ViewModel() {
-    private val currencies =MutableLiveData<List<UiCurrencyToConvertPlace>>()
-    private val isShowLoader = BehaviorRelay.create<Boolean>()
-    private val currentAmountOfMoney = BehaviorRelay.create<String>()
+) : CoreMviViewModel<Action, State>() {
 
-    init {
-        isShowLoader.accept(true)
-        subscribeOnRates()
-        subscribeOnCurrencies()
-
+    private val reducer: Reducer<State, Change> = { state, change ->
+        when (change) {
+            is Change.ShowLoading -> state.copy(isLoaderShown = true)
+            is Change.ShowCurrencies -> state.copy(
+                isLoaderShown = false,
+                currencies = change.uiCurrencies
+            )
+            is Change.DoNothing -> state
+        }
     }
 
-    fun selectCurrency(uiCurrency: UiCurrencyPlace) {
-        getSelectedCurrencyUseCase.execute()
-            .map {
+    init {
+        bindActions()
+    }
+
+    override val initialState: State
+        get() = State(isLoaderShown = false, currencies = emptyList())
+
+    override fun bindActions() {
+        val updateCurrencyRateEverySecond = updateCurrencyRateEverySecondUseCase.execute()
+            .startWith(Observable.just(Change.DoNothing))
+
+        val currencies = actions.ofType<Action.LoadCurrencies>()
+            .switchMap {
+                getCurrencyRatesUseCase.execute()
+                    .flatMap { rates ->
+                        getSelectedCurrencyUseCase.execute()
+                            .map { currencyConverter.convert(it, rates) }
+                            .flatMap { convertedCurrencies ->
+                                loadFlagsForConvertedCurrenciesAndMapToUi(convertedCurrencies)
+                            }.flatMap { uiConvertedCurrencies ->
+                                loadFlagForSelectedCurrencyAndMapToUi()
+                                    .map {
+                                        setCurrencyToConvertToTopOfList(
+                                            it,
+                                            uiConvertedCurrencies
+                                        )
+                                    }
+                            }
+                    }
+                    .map<Change> { Change.ShowCurrencies(it) }
+                    .startWith(Observable.just(Change.ShowLoading))
+            }
+
+        val selectCurrency = actions.ofType<Action.SelectCurrency>()
+            .map { it.uiCurrencyPlace }
+            .map { uiCurrency ->
                 val currency = codeToCurrencyMapper.map(uiCurrency.currencyCode)
                 val amountOfMoney = currencyRateUiMapper.mapAmountOfMoneyToDouble(
                     uiCurrency.amountOfMoney
                 )
                 currency.setAmount(amountOfMoney)
-            }.concatMapCompletable { saveCurrencyToMemoryUseCase.execute(it) }
-            .subscribeOn(rxSchedulers.io)
-            .subscribe()
-            .also { compositeDisposable.add(it) }
-    }
-
-    fun onAmountOfMoneyChanged(amountOfMoney: String) {
-        currentAmountOfMoney.accept(amountOfMoney)
-    }
-
-    fun getCurrencies(): LiveData<List<UiCurrencyToConvertPlace>> = currencies
-
-
-
-
-    fun isShowLoader(): Observable<Boolean> = isShowLoader
-
-    private fun subscribeOnCurrencies() {
-        getCurrencyRatesUseCase.execute()
-            .flatMap { rates ->
-                getSelectedCurrencyUseCase.execute()
-                    .distinctUntilChanged()
-                    .map { currencyConverter.convert(it, rates) }
-                    .flatMap { convertedCurrencies ->
-                        loadFlagsForConvertedCurrenciesAndMapToUi(convertedCurrencies)
-                    }.flatMap { uiConvertedCurrencies ->
-                        loadFlagForSelectedCurrencyAndMapToUi()
-                            .map { setCurrencyToConvertToTopOfList(it, uiConvertedCurrencies) }
-                    }
             }
-            .observeOn(rxSchedulers.main)
-            .doOnNext { isShowLoader.accept(false) }
-            .subscribe({
-                currencies.value = it
-            }, { Timber.e(it) })
-            .also { compositeDisposable.add(it) }
+            .switchMapCompletable { saveCurrencyToMemoryUseCase.execute(it)}
+            .andThen(Observable.just(Change.DoNothing))
+
+
+        disposables += Observable.merge(
+            currencies,
+            updateCurrencyRateEverySecond,
+            selectCurrency
+        ).scan(initialState, reducer)
+            .subscribeOn(rxSchedulers.io)
+            .subscribe(state::accept, Timber::e)
+
     }
 
     private fun loadFlagsForConvertedCurrenciesAndMapToUi(convertedCurrencies: List<Currency>): Observable<ArrayList<UiCurrencyToConvertPlace>> {
@@ -116,19 +123,17 @@ class CurrenciesViewModel(
             }
     }
 
-    private fun subscribeOnRates() {
-        updateCurrencyRateEverySecondUseCase.execute()
-            .subscribe()
-            .also { compositeDisposable.add(it) }
-    }
-
     private fun setCurrencyToConvertToTopOfList(
         currencyToConvertPlace: UiCurrencyToConvertPlace,
         uiConvertedCurrencies: List<UiCurrencyToConvertPlace>
     ): List<UiCurrencyToConvertPlace> {
         val linkedList = LinkedList<UiCurrencyToConvertPlace>()
         linkedList.add(currencyToConvertPlace)
-        linkedList.addAll(uiConvertedCurrencies)
+        uiConvertedCurrencies.forEach {
+            if (currencyToConvertPlace.currencyCode != it.currencyCode) {
+                linkedList.add(it)
+            }
+        }
         return linkedList
     }
 

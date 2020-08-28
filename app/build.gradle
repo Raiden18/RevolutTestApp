@@ -56,6 +56,7 @@ dependencies {
     implementation 'com.trello.rxlifecycle4:rxlifecycle-kotlin:4.0.0'
     implementation 'com.trello.rxlifecycle4:rxlifecycle-android-lifecycle-kotlin:4.0.0'
     implementation 'com.jakewharton.rxrelay3:rxrelay:3.0.0'
+    implementation "io.reactivex.rxjava3:rxkotlin:3.0.0"
 
     implementation "com.github.akarnokd:rxjava3-retrofit-adapter:3.0.0"
 
