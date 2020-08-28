@@ -2,24 +2,26 @@ package com.example.revoluttestapp.presentation.screens.currencies.view.views.re
 
 import android.os.Bundle
 import androidx.recyclerview.widget.DiffUtil
-import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrencyToConvertPlace
-import com.example.revoluttestapp.presentation.screens.currencies.view.views.recycler.CurrencyRatesAdapter
+import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrency
 
-class CurrencyRatesDiffUtilCallback : DiffUtil.ItemCallback<UiCurrencyToConvertPlace>() {
-    override fun areItemsTheSame(oldItem: UiCurrencyToConvertPlace, newItem: UiCurrencyToConvertPlace): Boolean {
+class CurrencyRatesDiffUtilCallback : DiffUtil.ItemCallback<UiCurrency>() {
+    override fun areItemsTheSame(oldItem: UiCurrency, newItem: UiCurrency): Boolean {
         return oldItem.currencyCode == newItem.currencyCode
     }
 
-    override fun getChangePayload(oldItem: UiCurrencyToConvertPlace, newItem: UiCurrencyToConvertPlace): Any? {
+    override fun getChangePayload(oldItem: UiCurrency, newItem: UiCurrency): Any? {
         val payloads = Bundle()
-        if(oldItem.amountOfMoney != newItem.amountOfMoney){
-            payloads.putString(CurrencyRatesAdapter.AMOUNT_OF_MONEY_PAYLOAD_KEY, newItem.amountOfMoney)
+        if (oldItem.amountOfMoney != newItem.amountOfMoney) {
+            payloads.putString(
+                CurrencyRatesAdapter.AMOUNT_OF_MONEY_PAYLOAD_KEY,
+                newItem.amountOfMoney
+            )
         }
         return payloads
     }
 
 
-    override fun areContentsTheSame(oldItem: UiCurrencyToConvertPlace, newItem: UiCurrencyToConvertPlace): Boolean {
-        return false
+    override fun areContentsTheSame(oldItem: UiCurrency, newItem: UiCurrency): Boolean {
+        return oldItem.hashCode() == newItem.hashCode()
     }
 }

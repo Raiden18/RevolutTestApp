@@ -7,7 +7,7 @@ import com.example.revoluttestapp.domain.usecases.*
 import com.example.revoluttestapp.domain.utils.RxSchedulers
 import com.example.revoluttestapp.presentation.screens.core.mvi.CoreMviViewModel
 import com.example.revoluttestapp.presentation.screens.core.mvi.Reducer
-import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrencyToConvertPlace
+import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrency
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.ofType
@@ -52,8 +52,9 @@ class CurrenciesViewModel(
         get() = State(isLoaderShown = false, currencies = emptyList())
 
     override fun bindActions() {
-        val updateCurrencyRateEverySecond = updateCurrencyRateEverySecondUseCase.execute()
-            .startWith(Observable.just(Change.DoNothing))
+        updateCurrencyRateEverySecondUseCase.execute()
+            .subscribeOn(rxSchedulers.io)
+            .subscribe()
 
         val currencies = actions.ofType<Action.LoadCurrencies>()
             .switchMap {
@@ -92,7 +93,6 @@ class CurrenciesViewModel(
 
         disposables += Observable.merge(
             currencies,
-            updateCurrencyRateEverySecond,
             selectCurrency
         ).scan(initialState, reducer)
             .subscribeOn(rxSchedulers.io)
@@ -100,34 +100,34 @@ class CurrenciesViewModel(
 
     }
 
-    private fun loadFlagsForConvertedCurrenciesAndMapToUi(convertedCurrencies: List<Currency>): Observable<ArrayList<UiCurrencyToConvertPlace>> {
+    private fun loadFlagsForConvertedCurrenciesAndMapToUi(convertedCurrencies: List<Currency>): Observable<ArrayList<UiCurrency>> {
         return Observable.fromIterable(convertedCurrencies)
             .flatMap { currency ->
                 getFlagForCurrencyUseCase.execute(currency)
                     .map { flag ->
-                        currencyRateUiMapper.mapCurrencyToConvert(
+                        currencyRateUiMapper.mapToUiCurrency(
                             currency,
                             flag
                         )
                     }
-            }.collect({ ArrayList<UiCurrencyToConvertPlace>() },
+            }.collect({ ArrayList<UiCurrency>() },
                 { collection, item -> collection.add(item) })
             .toObservable()
     }
 
-    private fun loadFlagForSelectedCurrencyAndMapToUi(): Observable<UiCurrencyToConvertPlace> {
+    private fun loadFlagForSelectedCurrencyAndMapToUi(): Observable<UiCurrency> {
         return getSelectedCurrencyUseCase.execute()
             .flatMap { selectedCurrency ->
                 getFlagForCurrencyUseCase.execute(selectedCurrency)
-                    .map { currencyRateUiMapper.mapCurrencyToConvert(selectedCurrency, it) }
+                    .map { currencyRateUiMapper.mapToUiCurrency(selectedCurrency, it) }
             }
     }
 
     private fun setCurrencyToConvertToTopOfList(
-        currencyToConvertPlace: UiCurrencyToConvertPlace,
-        uiConvertedCurrencies: List<UiCurrencyToConvertPlace>
-    ): List<UiCurrencyToConvertPlace> {
-        val linkedList = LinkedList<UiCurrencyToConvertPlace>()
+        currencyToConvertPlace: UiCurrency,
+        uiConvertedCurrencies: List<UiCurrency>
+    ): List<UiCurrency> {
+        val linkedList = LinkedList<UiCurrency>()
         linkedList.add(currencyToConvertPlace)
         uiConvertedCurrencies.forEach {
             if (currencyToConvertPlace.currencyCode != it.currencyCode) {
