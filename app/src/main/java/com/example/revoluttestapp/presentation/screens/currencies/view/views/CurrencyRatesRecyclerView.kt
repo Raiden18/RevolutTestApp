@@ -23,25 +23,43 @@ class CurrencyRatesRecyclerView(
         CurrencyRatesAdapter(onCurrencyClick, onAmountOfMoneyChanged)
     }
     private val linearLayoutManager = LinearLayoutManager(context)
+
     init {
         layoutManager = linearLayoutManager
-        addOnScrollListener(object: RecyclerView.OnScrollListener(){
+        addOnScrollListener(object : RecyclerView.OnScrollListener() {
             override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                if (linearLayoutManager.findFirstVisibleItemPosition() != 0){
+                val isHeaderOutOfScreen = linearLayoutManager.findFirstVisibleItemPosition() != 0
+                if (isHeaderOutOfScreen) {
                     onHeaderHidden.invoke()
                 }
             }
         })
+
     }
 
     fun updateItems(items: List<UiCurrencyPlace>) {
         setAdapter()
-        currencyRatesAdapter.items = ArrayList<UiCurrencyPlace>(items)
+        currencyRatesAdapter.items = items
     }
 
     private fun setAdapter() {
         if (adapter == null) {
             adapter = currencyRatesAdapter
+            currencyRatesAdapter.registerAdapterDataObserver(object :
+                RecyclerView.AdapterDataObserver() {
+                override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
+                    if (positionStart == 0 && itemCount > 0) {
+                            smoothScrollToPosition(0)
+                    }
+                }
+
+                override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) {
+                    val lastPosition = adapter!!.itemCount - 1
+                    if (fromPosition == lastPosition || toPosition == lastPosition) {
+                        smoothScrollToPosition(0)
+                    }
+                }
+            })
         }
     }
 }

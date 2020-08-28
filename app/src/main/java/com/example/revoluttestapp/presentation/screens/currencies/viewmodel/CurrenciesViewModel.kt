@@ -5,7 +5,6 @@ import androidx.lifecycle.ViewModel
 import com.example.revoluttestapp.domain.CodeToCurrencyMapper
 import com.example.revoluttestapp.domain.CurrencyConverter
 import com.example.revoluttestapp.domain.models.currencies.Currency
-import com.example.revoluttestapp.domain.models.currencyrate.CurrencyRate
 import com.example.revoluttestapp.domain.usecases.*
 import com.example.revoluttestapp.domain.utils.RxSchedulers
 import com.example.revoluttestapp.presentation.screens.currencies.models.UiConvertedCurrency
@@ -20,7 +19,6 @@ import kotlin.collections.ArrayList
 
 //TODO: Write tests
 //TODO: Add error handling
-//TODO: Make remember currrent cusror position
 class CurrenciesViewModel(
     private val getCurrencyRatesUseCase: GetCurrencyRatesUseCase,
     private val getSelectedCurrencyUseCase: GetSelectedCurrencyUseCase,
@@ -70,22 +68,12 @@ class CurrenciesViewModel(
                     .doOnNext { currencyToChange = it }
                     .map { currencyConverter.convert(it, rates) }
                     .flatMap { convertedCurrencies ->
-                        loadFlagsForConvertedCurrencies(convertedCurrencies)
+                        loadFlagsForConvertedCurrenciesAndMapToUi(convertedCurrencies)
                     }
                     .flatMap { uiConvertedCurrencies ->
-                        getSelectedCurrencyUseCase.execute()
-                            .flatMap {selectedCurrency->
-                                getFlagForCurrencyUseCase.execute(selectedCurrency)
-                                    .map { currencyRateUiMapper.mapCurrencyToConvert(selectedCurrency, it) }
-                            }.map {
-                                val linkedList = LinkedList<UiCurrencyPlace>()
-                                linkedList.add(it)
-                                linkedList.addAll(uiConvertedCurrencies)
-                                return@map linkedList
-                            }
+                        loadFlagForSelectedCurrencyAndMapToUi()
+                            .map { setCurrencyToConvertToTopOfList(it, uiConvertedCurrencies) }
                     }
-
-
             }
             .observeOn(rxSchedulers.main)
             .doOnNext { isShowLoader.accept(false) }
@@ -95,8 +83,8 @@ class CurrenciesViewModel(
             .also { compositeDisposable.add(it) }
     }
 
-    private fun loadFlagsForConvertedCurrencies(list: List<Currency>): Observable<ArrayList<UiConvertedCurrency>> {
-        return Observable.fromIterable(list)
+    private fun loadFlagsForConvertedCurrenciesAndMapToUi(convertedCurrencies: List<Currency>): Observable<ArrayList<UiConvertedCurrency>> {
+        return Observable.fromIterable(convertedCurrencies)
             .flatMap { currency ->
                 getFlagForCurrencyUseCase.execute(currency)
                     .map { flag ->
@@ -110,14 +98,28 @@ class CurrenciesViewModel(
             .toObservable()
     }
 
-    private fun addSelectedCurrencyToTop() {
-
+    private fun loadFlagForSelectedCurrencyAndMapToUi(): Observable<UiCurrencyToConvertPlace> {
+        return getSelectedCurrencyUseCase.execute()
+            .flatMap { selectedCurrency ->
+                getFlagForCurrencyUseCase.execute(selectedCurrency)
+                    .map { currencyRateUiMapper.mapCurrencyToConvert(selectedCurrency, it) }
+            }
     }
 
     private fun subscribeOnRates() {
         subscribeOnCurrenciesRatesUseCase.execute()
             .subscribe()
             .also { compositeDisposable.add(it) }
+    }
+
+    private fun setCurrencyToConvertToTopOfList(
+        currencyToConvertPlace: UiCurrencyToConvertPlace,
+        uiConvertedCurrencies: List<UiConvertedCurrency>
+    ): List<UiCurrencyPlace> {
+        val linkedList = LinkedList<UiCurrencyPlace>()
+        linkedList.add(currencyToConvertPlace)
+        linkedList.addAll(uiConvertedCurrencies)
+        return linkedList
     }
 
     override fun onCleared() {

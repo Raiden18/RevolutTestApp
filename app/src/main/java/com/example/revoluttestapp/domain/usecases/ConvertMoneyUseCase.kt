@@ -13,7 +13,7 @@ class ConvertMoneyUseCase(
     private val currencyRatesRepository: CurrencyRatesRepository
 ) {
     fun execute(currency: Currency): Observable<List<Currency>> {
-        return currencyRatesRepository.getCurencyRateFromMemory()
+        return currencyRatesRepository.getCurrencyRateFromMemory()
             .map { currencyConverter.convert(currency, it) }
 
     }
