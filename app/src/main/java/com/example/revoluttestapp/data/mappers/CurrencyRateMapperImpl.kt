@@ -1,7 +1,7 @@
 package com.example.revoluttestapp.data.mappers
 
 import com.example.revoluttestapp.data.models.response.CurrencyResponse
-import com.example.revoluttestapp.domain.models.CodeToCurrencyMapper
+import com.example.revoluttestapp.domain.CodeToCurrencyMapper
 import com.example.revoluttestapp.domain.models.currencyrate.CurrencyRate
 import java.util.*
 

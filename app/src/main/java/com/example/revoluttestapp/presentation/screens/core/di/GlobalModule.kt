@@ -4,7 +4,7 @@ import android.app.Application
 import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.example.revoluttestapp.data.mappers.CurrencyRateMapper
 import com.example.revoluttestapp.data.mappers.CurrencyRateMapperImpl
-import com.example.revoluttestapp.domain.models.CodeToCurrencyMapper
+import com.example.revoluttestapp.domain.CodeToCurrencyMapper
 import com.example.revoluttestapp.domain.utils.RxSchedulers
 import com.example.revoluttestapp.presentation.screens.core.RxSchedulersImpl
 import dagger.Module
@@ -20,7 +20,8 @@ class GlobalModule {
     @Singleton
     @Provides
     fun provideCurrencyRateMapper(): CurrencyRateMapper {
-        val codeToCurrencyMapper = CodeToCurrencyMapper()
+        val codeToCurrencyMapper =
+            CodeToCurrencyMapper()
         return CurrencyRateMapperImpl(codeToCurrencyMapper)
     }
 

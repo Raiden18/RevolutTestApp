@@ -4,10 +4,9 @@ import android.os.Bundle
 import androidx.recyclerview.widget.DiffUtil
 import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrencyPlace
 
-//TODO: SET UP
 class CurrencyRatesDiffUtilCallback : DiffUtil.ItemCallback<UiCurrencyPlace>() {
     override fun areItemsTheSame(oldItem: UiCurrencyPlace, newItem: UiCurrencyPlace): Boolean {
-        return oldItem.countryCode == newItem.countryCode
+        return oldItem.currencyCode == newItem.currencyCode
     }
 
     override fun getChangePayload(oldItem: UiCurrencyPlace, newItem: UiCurrencyPlace): Any? {

@@ -2,9 +2,8 @@ package com.example.revoluttestapp.presentation.screens.currencies.di
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
-import com.example.revoluttestapp.domain.models.CodeToCurrencyMapper
-import com.example.revoluttestapp.domain.models.CurrencyConverter
-import com.example.revoluttestapp.domain.repositories.CurrencyRatesRepository
+import com.example.revoluttestapp.domain.CodeToCurrencyMapper
+import com.example.revoluttestapp.domain.CurrencyConverter
 import com.example.revoluttestapp.domain.usecases.*
 import com.example.revoluttestapp.domain.utils.RxSchedulers
 import com.example.revoluttestapp.presentation.screens.currencies.viewmodel.CurrenciesViewModel

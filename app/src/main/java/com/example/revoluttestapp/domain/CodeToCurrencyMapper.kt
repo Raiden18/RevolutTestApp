@@ -1,4 +1,4 @@
-package com.example.revoluttestapp.domain.models
+package com.example.revoluttestapp.domain
 
 import com.example.revoluttestapp.domain.models.currencies.*
 import java.lang.IllegalStateException

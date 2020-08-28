@@ -1,7 +1,7 @@
 package com.example.revoluttestapp.presentation.screens.core.di
 
-import com.example.revoluttestapp.domain.models.CodeToCurrencyMapper
-import com.example.revoluttestapp.domain.models.CurrencyConverter
+import com.example.revoluttestapp.domain.CodeToCurrencyMapper
+import com.example.revoluttestapp.domain.CurrencyConverter
 import com.example.revoluttestapp.domain.repositories.CurrencyRatesRepository
 import com.example.revoluttestapp.domain.repositories.CurrencyRepository
 import com.example.revoluttestapp.domain.usecases.*
@@ -38,8 +38,12 @@ class UseCaseModule {
         currencyRepository: CurrencyRepository,
         currencyRatesRepository: CurrencyRatesRepository
     ): ConvertMoneyUseCase {
-        val codeToCurrencyMapper = CodeToCurrencyMapper()
-        val currencyConverter = CurrencyConverter(codeToCurrencyMapper)
+        val codeToCurrencyMapper =
+            CodeToCurrencyMapper()
+        val currencyConverter =
+            CurrencyConverter(
+                codeToCurrencyMapper
+            )
         return ConvertMoneyUseCase(currencyRepository, currencyConverter, currencyRatesRepository)
     }
 

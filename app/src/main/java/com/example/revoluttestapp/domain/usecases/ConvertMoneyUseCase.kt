@@ -1,6 +1,6 @@
 package com.example.revoluttestapp.domain.usecases
 
-import com.example.revoluttestapp.domain.models.CurrencyConverter
+import com.example.revoluttestapp.domain.CurrencyConverter
 import com.example.revoluttestapp.domain.models.currencies.Currency
 import com.example.revoluttestapp.domain.repositories.CurrencyRatesRepository
 import com.example.revoluttestapp.domain.repositories.CurrencyRepository

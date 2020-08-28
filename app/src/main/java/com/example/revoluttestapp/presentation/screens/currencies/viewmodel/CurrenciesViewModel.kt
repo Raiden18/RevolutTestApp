@@ -1,8 +1,8 @@
 package com.example.revoluttestapp.presentation.screens.currencies.viewmodel
 
 import androidx.lifecycle.ViewModel
-import com.example.revoluttestapp.domain.models.CodeToCurrencyMapper
-import com.example.revoluttestapp.domain.models.CurrencyConverter
+import com.example.revoluttestapp.domain.CodeToCurrencyMapper
+import com.example.revoluttestapp.domain.CurrencyConverter
 import com.example.revoluttestapp.domain.models.currencies.Currency
 import com.example.revoluttestapp.domain.usecases.GetCurrencyRatesUseCase
 import com.example.revoluttestapp.domain.usecases.GetSelectedCurrencyUseCase
@@ -11,10 +11,8 @@ import com.example.revoluttestapp.domain.usecases.SubscribeOnCurrenciesRatesUseC
 import com.example.revoluttestapp.domain.utils.RxSchedulers
 import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrencyPlace
 import com.jakewharton.rxrelay3.BehaviorRelay
-import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
-import timber.log.Timber
 
 //TODO: Write tests
 //TODO: Add error handling
@@ -41,7 +39,7 @@ class CurrenciesViewModel(
     }
 
     fun selectCurrency(uiCurrency: UiCurrencyPlace) {
-        val currency = codeToCurrencyMapper.map(uiCurrency.countryCode)
+        val currency = codeToCurrencyMapper.map(uiCurrency.currencyCode)
         val amountOfMoney = currencyRateUiMapper.mapAmountOfMoneyToDouble(uiCurrency.amountOfMoney)
         val currencyWithAmount = currency.setAmount(amountOfMoney)
         saveCurrencyToMemoryUseCase.execute(currencyWithAmount)

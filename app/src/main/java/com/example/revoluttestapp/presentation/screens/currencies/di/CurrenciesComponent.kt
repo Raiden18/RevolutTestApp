@@ -1,8 +1,7 @@
 package com.example.revoluttestapp.presentation.screens.currencies.di
 
-import com.example.revoluttestapp.domain.models.CodeToCurrencyMapper
-import com.example.revoluttestapp.domain.models.CurrencyConverter
-import com.example.revoluttestapp.domain.repositories.CurrencyRatesRepository
+import com.example.revoluttestapp.domain.CodeToCurrencyMapper
+import com.example.revoluttestapp.domain.CurrencyConverter
 import com.example.revoluttestapp.domain.usecases.*
 import com.example.revoluttestapp.domain.utils.RxSchedulers
 import com.example.revoluttestapp.presentation.screens.core.di.ApplicationComponent
@@ -37,8 +36,12 @@ class CurrenciesModule {
                                           subscribeOnCurrenciesRatesUseCase: SubscribeOnCurrenciesRatesUseCase,
                                           rxSchedulers: RxSchedulers
     ): CurrenciesViewModelFactory {
-        val codeToCurrencyMapper =  CodeToCurrencyMapper()
-        val currencyConverter = CurrencyConverter(codeToCurrencyMapper)
+        val codeToCurrencyMapper =
+            CodeToCurrencyMapper()
+        val currencyConverter =
+            CurrencyConverter(
+                codeToCurrencyMapper
+            )
         val compositeDisposable = CompositeDisposable()
         return CurrenciesViewModelFactory(
             getCurrencyRatesUseCase,

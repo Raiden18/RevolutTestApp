@@ -13,22 +13,23 @@ fun convertedCurrencyAdapterDelegate(
 ) = adapterDelegateLayoutContainer<UiConvertedCurrency, UiCurrencyPlace>(
     R.layout.item_currency_rate
 ) {
+    val amountOfMoneyEditText = itemView.currency_rate_amount_of_money
     itemView.setOnClickListener {
         onCurrencyClick.invoke(item)
     }
     bind { payload ->
         if (payload.isEmpty()){
-            itemView.currency_rate_code.text = item.countryCode
+            itemView.currency_rate_code.text = item.currencyCode
             itemView.currency_rate_name.text = item.countryName
-            itemView.currency_rate_amount_of_money.setText(item.amountOfMoney)
-            itemView.currency_rate_amount_of_money.isEnabled = false
-            itemView.currency_rate_amount_of_money.isFocusable = false
-            itemView.currency_rate_amount_of_money.movementMethod = null
-            itemView.currency_rate_amount_of_money.keyListener = null
+            amountOfMoneyEditText.setText(item.amountOfMoney)
+            amountOfMoneyEditText.isEnabled = false
+            amountOfMoneyEditText.isFocusable = false
+            amountOfMoneyEditText.movementMethod = null
+            amountOfMoneyEditText.keyListener = null
         } else{
             val bundlePayload = payload.first() as Bundle
             if (bundlePayload.getString(AMOUNT_OF_MONEY_PAYLOAD_KEY) != null){
-                itemView.currency_rate_amount_of_money.setText(bundlePayload.getString(AMOUNT_OF_MONEY_PAYLOAD_KEY))
+                amountOfMoneyEditText.setText(bundlePayload.getString(AMOUNT_OF_MONEY_PAYLOAD_KEY))
             }
 
         }

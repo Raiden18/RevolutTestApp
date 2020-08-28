@@ -31,9 +31,7 @@ class CurrenciesActivity : AppCompatActivity() {
         initDagger()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        currency_rates_recycler_view.onCurrencyClick = {
-            viewModel.selectCurrency(it)
-        }
+        currency_rates_recycler_view.onCurrencyClick = viewModel::selectCurrency
         currency_rates_recycler_view.onAmountOfMoneyChanged = viewModel::onAmountOfMoneyChanged
         currency_rates_recycler_view.onHeaderHidden = {
             hideKeyboard()
@@ -52,11 +50,7 @@ class CurrenciesActivity : AppCompatActivity() {
         viewModel.isShowLoader()
             .compose(provider.bindToLifecycle())
             .subscribe({
-                if (it) {
-                    currency_rates_loader_view.visibility = View.VISIBLE
-                } else {
-                    currency_rates_loader_view.visibility = View.GONE
-                }
+                isVisibleLoader(it)
             }, { Timber.e(it) })
 
     }
@@ -70,10 +64,16 @@ class CurrenciesActivity : AppCompatActivity() {
             .inject(this)
     }
 
-    private fun hideKeyboard(){
-        val imm =
-            getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(getWindow().getDecorView().getRootView().getWindowToken()   , 0)
+    private fun hideKeyboard() {
+        val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+        imm.hideSoftInputFromWindow(window.decorView.rootView.windowToken, 0)
+    }
 
+    private fun isVisibleLoader(isVisible: Boolean) {
+        if (isVisible) {
+            currency_rates_loader_view.visibility = View.VISIBLE
+        } else {
+            currency_rates_loader_view.visibility = View.GONE
+        }
     }
 }
