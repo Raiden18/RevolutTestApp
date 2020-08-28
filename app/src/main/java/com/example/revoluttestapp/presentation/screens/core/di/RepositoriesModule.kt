@@ -1,9 +1,11 @@
 package com.example.revoluttestapp.presentation.screens.core.di
 
 import com.example.revoluttestapp.data.mappers.CurrencyRateMapper
+import com.example.revoluttestapp.data.repositories.country.CountryRepositoryImpl
 import com.example.revoluttestapp.data.repositories.currency.CurrencyRepositoryImpl
 import com.example.revoluttestapp.data.repositories.currencyrate.CurrencyRatesRepositoryImpl
 import com.example.revoluttestapp.data.repositories.currencyrate.CurrencyRatesService
+import com.example.revoluttestapp.domain.repositories.CountryRepository
 import com.example.revoluttestapp.domain.repositories.CurrencyRatesRepository
 import com.example.revoluttestapp.domain.repositories.CurrencyRepository
 import com.example.revoluttestapp.domain.utils.RxSchedulers
@@ -32,5 +34,11 @@ class RepositoriesModule {
     @Provides
     fun provideCurrencyRepository(): CurrencyRepository {
         return CurrencyRepositoryImpl()
+    }
+
+    @Singleton
+    @Provides
+    fun provideCountryRepository(): CountryRepository {
+        return CountryRepositoryImpl()
     }
 }

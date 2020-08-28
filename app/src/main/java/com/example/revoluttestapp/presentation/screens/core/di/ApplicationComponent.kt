@@ -3,6 +3,7 @@ package com.example.revoluttestapp.presentation.screens.core.di
 import android.app.Application
 import com.example.revoluttestapp.data.mappers.CurrencyRateMapper
 import com.example.revoluttestapp.data.repositories.currencyrate.CurrencyRatesService
+import com.example.revoluttestapp.domain.repositories.CountryRepository
 import com.example.revoluttestapp.domain.repositories.CurrencyRatesRepository
 import com.example.revoluttestapp.domain.repositories.CurrencyRepository
 import com.example.revoluttestapp.domain.usecases.*
@@ -36,4 +37,5 @@ interface ApplicationComponent {
     fun provideConvertMoneyUseCase(): ConvertMoneyUseCase
     fun provideSubscribeOnCurrenciesRatesUseCase(): SubscribeOnCurrenciesRatesUseCase
     fun provideRxSchedulers(): RxSchedulers
+    fun provideCountryRepository(): CountryRepository
 }
