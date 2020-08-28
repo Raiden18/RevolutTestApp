@@ -34,7 +34,6 @@ class CurrenciesViewModel(
 ) : ViewModel() {
     private val currencies = BehaviorRelay.create<List<UiCurrencyPlace>>()
     private val isShowLoader = BehaviorRelay.create<Boolean>()
-    private lateinit var currencyToChange: Currency
 
     init {
         isShowLoader.accept(true)
@@ -60,12 +59,11 @@ class CurrenciesViewModel(
 
     fun onAmountOfMoneyChanged(amountOfMoney: String) {
         Log.i("HUI", "onAmountOfMoneyChanged")
-        Observable.create<Currency> {
-            val amountOfMoneyDouble = currencyRateUiMapper.mapAmountOfMoneyToDouble(amountOfMoney)
-            val newCurrencyToChange = currencyToChange.setAmount(amountOfMoneyDouble)
-            it.onNext(newCurrencyToChange)
-            it.onComplete()
-        }.flatMapCompletable { saveCurrencyToMemoryUseCase.execute(it) }
+        getSelectedCurrencyUseCase.execute()
+            .map {
+                val amount = currencyRateUiMapper.mapAmountOfMoneyToDouble(amountOfMoney)
+                it.setAmount(amount)
+            }.flatMapCompletable { saveCurrencyToMemoryUseCase.execute(it) }
             .subscribeOn(rxSchedulers.io)
             .subscribe()
             .also { compositeDisposable.add(it) }
@@ -75,20 +73,18 @@ class CurrenciesViewModel(
     fun isShowLoader(): Observable<Boolean> = isShowLoader
 
     private fun subscribeOnCurrencies() {
-        getCurrencyRatesUseCase.execute()
-            .flatMap { rates ->
-                getSelectedCurrencyUseCase.execute()
-                    .doOnNext { currencyToChange = it }
-                    .map { currencyConverter.convert(it, rates) }
-                    .flatMap { convertedCurrencies ->
+        getSelectedCurrencyUseCase.execute()
+            .switchMap { selectedCurrency->
+                getCurrencyRatesUseCase.execute()
+                    .map { currencyConverter.convert(selectedCurrency, it) }
+                    .flatMap {  convertedCurrencies ->
                         loadFlagsForConvertedCurrenciesAndMapToUi(convertedCurrencies)
                     }
                     .flatMap { uiConvertedCurrencies ->
                         loadFlagForSelectedCurrencyAndMapToUi()
                             .map { setCurrencyToConvertToTopOfList(it, uiConvertedCurrencies) }
                     }
-            }
-            .observeOn(rxSchedulers.main)
+            }.observeOn(rxSchedulers.main)
             .doOnNext { isShowLoader.accept(false) }
             .subscribe({
                 currencies.accept(it)
