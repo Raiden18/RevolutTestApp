@@ -1,5 +1,6 @@
 package com.example.revoluttestapp.data.repositories.currency
 
+import android.util.Log
 import com.example.revoluttestapp.domain.models.currencies.Currency
 import com.example.revoluttestapp.domain.models.currencies.Euro
 import com.example.revoluttestapp.domain.models.currencies.RussianRouble
@@ -13,13 +14,19 @@ class CurrencyRepositoryImpl : CurrencyRepository {
         val DEFAULT_CURRENCY = RussianRouble(100.0)
     }
 
-    private val savedCurrency = BehaviorRelay.create<Currency>()
-        .apply { accept(DEFAULT_CURRENCY) }
+    private var savedCurrency: Currency = DEFAULT_CURRENCY
 
     override fun saveToMemoryCurrentCurrency(currency: Currency): Completable {
-        return Completable.fromAction { savedCurrency.accept(currency) }
+        return Completable.fromAction {
+            savedCurrency = currency
+        }
     }
 
-    override fun getCurrentCurrencyFromMemory(): Observable<Currency> = savedCurrency
+    override fun getCurrentCurrencyFromMemory(): Observable<Currency> {
+        return Observable.create {
+            it.onNext(savedCurrency)
+            it.onComplete()
+        }
+    }
 
 }

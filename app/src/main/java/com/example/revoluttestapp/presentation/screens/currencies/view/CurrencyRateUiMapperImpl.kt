@@ -10,15 +10,14 @@ import java.util.*
 
 class CurrencyRateUiMapperImpl : CurrencyRateUiMapper {
 
-    override fun mapCurrencyToConvert(currencyToConvert: Currency, flag: Flag): UiCurrencyToConvertPlace {
-        val amountWithoutDot = currencyToConvert.getAmount()
-            .toString()
-            .replaceAfter(".", "")
-            .replace(".", "")
+    override fun mapCurrencyToConvert(
+        currencyToConvert: Currency,
+        flag: Flag
+    ): UiCurrencyToConvertPlace {
         return UiCurrencyToConvertPlace(
             currencyToConvert.getCode(),
             currencyToConvert.getFullName(),
-            amountWithoutDot,
+            currencyToConvert.getAmount().toString(),
             flag.resId
         )
     }

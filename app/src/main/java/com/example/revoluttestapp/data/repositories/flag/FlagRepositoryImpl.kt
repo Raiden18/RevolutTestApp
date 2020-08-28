@@ -12,7 +12,7 @@ class FlagRepositoryImpl(
 
     override fun getFlagFor(countryCode: String): Observable<Flag> {
         val resId = context.resources.getIdentifier(
-            countryCode.toLowerCase(Locale.US) + "_flag",
+            "ic_"+countryCode.toLowerCase(Locale.US),
             "drawable",
             context.packageName
         )

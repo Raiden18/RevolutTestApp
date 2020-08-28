@@ -15,10 +15,11 @@ class CurrenciesViewModelFactory(
     private val getSelectedCurrencyUseCase: GetSelectedCurrencyUseCase,
     private val saveCurrencyToMemoryUseCase: SaveCurrencyToMemoryUseCase,
     private val getFlagForCurrencyUseCase: GetFlagForCurrencyUseCase,
+    private val forceUpdateCurrencyRatesUseCase: ForceUpdateCurrencyRatesUseCase,
     private val currencyRateUiMapper: CurrencyRateUiMapper,
     private val codeToCurrencyMapper: CodeToCurrencyMapper,
     private val currencyConverter: CurrencyConverter,
-    private val subscribeOnCurrenciesRatesUseCase: SubscribeOnCurrenciesRatesUseCase,
+    private val updateCurrencyRateEverySecondUseCase: UpdateCurrencyRateEverySecondUseCase,
     private val compositeDisposable: CompositeDisposable,
     private val rxSchedulers: RxSchedulers
 ) : ViewModelProvider.Factory {
@@ -28,10 +29,11 @@ class CurrenciesViewModelFactory(
             getSelectedCurrencyUseCase,
             saveCurrencyToMemoryUseCase,
             getFlagForCurrencyUseCase,
+            forceUpdateCurrencyRatesUseCase,
             currencyRateUiMapper,
             codeToCurrencyMapper,
             currencyConverter,
-            subscribeOnCurrenciesRatesUseCase,
+            updateCurrencyRateEverySecondUseCase,
             compositeDisposable,
             rxSchedulers
         ) as T

@@ -1,7 +1,6 @@
 package com.example.revoluttestapp.data.repositories.currencyrate
 
 import com.example.revoluttestapp.data.mappers.CurrencyRateMapper
-import com.example.revoluttestapp.domain.models.currencies.Currency
 import com.example.revoluttestapp.domain.models.currencyrate.CurrencyRate
 import com.example.revoluttestapp.domain.repositories.CurrencyRatesRepository
 import com.example.revoluttestapp.domain.utils.RxSchedulers
@@ -19,7 +18,6 @@ class CurrencyRatesRepositoryImpl(
     override fun getCurrencyRateFromApiFor(currencyCode: String): Observable<List<CurrencyRate>> {
         return currencyRatesService.getCurrencyRates(currencyCode)
             .map { currencyRateMapper.map(it) }
-            .doOnNext { savedCurrencyRates.accept(it) }
             .subscribeOn(rxSchedulers.io)
     }
 

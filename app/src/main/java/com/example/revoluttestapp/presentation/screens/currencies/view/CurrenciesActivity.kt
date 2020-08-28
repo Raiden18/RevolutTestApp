@@ -6,6 +6,7 @@ import android.view.View
 import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
+import androidx.lifecycle.Observer
 import com.example.revoluttestapp.R
 import com.example.revoluttestapp.presentation.screens.core.AppComponentProvider
 import com.example.revoluttestapp.presentation.screens.currencies.di.CurrenciesViewModelFactory
@@ -36,11 +37,9 @@ class CurrenciesActivity : AppCompatActivity() {
     }
 
     private fun subscribeToViewModel() {
-        viewModel.getCurrencies()
-            .compose(provider.bindToLifecycle())
-            .subscribe({
-                currency_rates_recycler_view.updateItems(it)
-            }, Timber::e)
+        viewModel.getCurrencies().observe(this, Observer {
+            currency_rates_recycler_view.updateItems(it)
+        })
         viewModel.isShowLoader()
             .compose(provider.bindToLifecycle())
             .subscribe({

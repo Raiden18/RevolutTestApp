@@ -54,8 +54,8 @@ class UseCaseModule {
         currencyRepository: CurrencyRepository,
         currencyRatesRepository: CurrencyRatesRepository,
         rxSchedulers: RxSchedulers
-    ): SubscribeOnCurrenciesRatesUseCase {
-        return SubscribeOnCurrenciesRatesUseCase(
+    ): UpdateCurrencyRateEverySecondUseCase {
+        return UpdateCurrencyRateEverySecondUseCase(
             currencyRepository,
             currencyRatesRepository,
             rxSchedulers
@@ -66,5 +66,12 @@ class UseCaseModule {
     @Provides
     fun provideGetFlagForCurrency(flagRepository: FlagRepository): GetFlagForCurrencyUseCase {
         return GetFlagForCurrencyUseCase(flagRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideForceUpdateCurrencyRates(currencyRepository: CurrencyRepository,
+                                        currencyRatesRepository: CurrencyRatesRepository): ForceUpdateCurrencyRatesUseCase{
+        return ForceUpdateCurrencyRatesUseCase(currencyRepository, currencyRatesRepository)
     }
 }

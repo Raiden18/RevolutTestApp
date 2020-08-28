@@ -11,6 +11,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.revoluttestapp.R
 import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrencyPlace
+import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrencyToConvertPlace
 
 class CurrencyRatesRecyclerView(
     context: Context,
@@ -37,9 +38,9 @@ class CurrencyRatesRecyclerView(
 
     }
 
-    fun updateItems(items: List<UiCurrencyPlace>) {
+    fun updateItems(items: List<UiCurrencyToConvertPlace>) {
         setAdapter()
-        currencyRatesAdapter.items = items
+        currencyRatesAdapter.submitList(items)
     }
 
     private fun setAdapter() {
@@ -48,16 +49,11 @@ class CurrencyRatesRecyclerView(
             currencyRatesAdapter.registerAdapterDataObserver(object :
                 RecyclerView.AdapterDataObserver() {
                 override fun onItemRangeInserted(positionStart: Int, itemCount: Int) {
-                    if (positionStart == 0 && itemCount > 0) {
-                            smoothScrollToPosition(0)
-                    }
+                    scrollToPosition(0)
                 }
 
                 override fun onItemRangeMoved(fromPosition: Int, toPosition: Int, itemCount: Int) {
-                    val lastPosition = adapter!!.itemCount - 1
-                    if (fromPosition == lastPosition || toPosition == lastPosition) {
-                        smoothScrollToPosition(0)
-                    }
+                    scrollToPosition(0)
                 }
             })
         }

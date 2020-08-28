@@ -35,8 +35,9 @@ interface ApplicationComponent {
     fun provideSaveCurrencyToMemoryUseCase(): SaveCurrencyToMemoryUseCase
     fun provideRetrofit(): Retrofit
     fun provideConvertMoneyUseCase(): ConvertMoneyUseCase
-    fun provideSubscribeOnCurrenciesRatesUseCase(): SubscribeOnCurrenciesRatesUseCase
+    fun provideSubscribeOnCurrenciesRatesUseCase(): UpdateCurrencyRateEverySecondUseCase
     fun provideRxSchedulers(): RxSchedulers
     fun provideCountryRepository(): FlagRepository
     fun provideGetFlagForCurrency(): GetFlagForCurrencyUseCase
+    fun provideForceUpdateCurrencyRatesUseCase(): ForceUpdateCurrencyRatesUseCase
 }

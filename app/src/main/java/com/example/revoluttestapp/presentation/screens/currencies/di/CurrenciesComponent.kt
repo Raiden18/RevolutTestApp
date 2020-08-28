@@ -34,8 +34,9 @@ class CurrenciesModule {
         currencyRateUiMapper: CurrencyRateUiMapper,
         getSelectedCurrencyUseCase: GetSelectedCurrencyUseCase,
         saveCurrencyToMemoryUseCase: SaveCurrencyToMemoryUseCase,
-        subscribeOnCurrenciesRatesUseCase: SubscribeOnCurrenciesRatesUseCase,
+        updateCurrencyRateEverySecondUseCase: UpdateCurrencyRateEverySecondUseCase,
         getFlagForCurrencyUseCase: GetFlagForCurrencyUseCase,
+        forceUpdateCurrencyRatesUseCase: ForceUpdateCurrencyRatesUseCase,
         rxSchedulers: RxSchedulers
     ): CurrenciesViewModelFactory {
         val codeToCurrencyMapper = CodeToCurrencyMapper()
@@ -46,10 +47,11 @@ class CurrenciesModule {
             getSelectedCurrencyUseCase,
             saveCurrencyToMemoryUseCase,
             getFlagForCurrencyUseCase,
+            forceUpdateCurrencyRatesUseCase,
             currencyRateUiMapper,
             codeToCurrencyMapper,
             currencyConverter,
-            subscribeOnCurrenciesRatesUseCase,
+            updateCurrencyRateEverySecondUseCase,
             compositeDisposable,
             rxSchedulers
         )

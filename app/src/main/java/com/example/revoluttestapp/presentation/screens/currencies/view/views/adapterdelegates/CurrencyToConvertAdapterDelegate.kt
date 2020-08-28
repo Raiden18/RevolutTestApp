@@ -16,6 +16,7 @@ fun currencyToConvertAdapterDelegate(
 ) =
     adapterDelegateLayoutContainer<UiCurrencyToConvertPlace, UiCurrencyPlace>(R.layout.item_currency_rate) {
         val amountOfMoneyEditText = itemView.currency_rate_amount_of_money
+
         amountOfMoneyEditText.addTextChangedListener {
             if(amountOfMoneyEditText.isFocused){
                 onAmountOfMoneyChanged.invoke(it.toString())
@@ -28,16 +29,6 @@ fun currencyToConvertAdapterDelegate(
             return@setOnTouchListener false
         }
         bind {
-            if(item.currencyCode != itemView.currency_rate_code.text){
-                itemView.currency_rate_code.text = item.currencyCode
-            }
-            if(item.countryName != itemView.currency_rate_name.text){
-                itemView.currency_rate_name.text = item.countryName
-            }
-            if (amountOfMoneyEditText.text.toString() != item.amountOfMoney){
-                amountOfMoneyEditText.setText(item.amountOfMoney)
-            }
-            amountOfMoneyEditText.setSelection(item.cursorIndex)
-            itemView.item_currency_rate_country_flag.setImageResource(item.imageFlagId)
+
         }
     }

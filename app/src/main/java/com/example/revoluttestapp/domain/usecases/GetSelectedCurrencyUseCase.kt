@@ -9,5 +9,6 @@ class GetSelectedCurrencyUseCase(
 ) {
     fun execute(): Observable<Currency> {
         return currencyRepository.getCurrentCurrencyFromMemory()
+            .distinctUntilChanged()
     }
 }
