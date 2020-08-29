@@ -11,10 +11,14 @@ internal class CurrencyTextWatcher: TextWatcher {
 
     override fun beforeTextChanged(p0: CharSequence?, p1: Int, p2: Int, p3: Int) = Unit
 
-    override fun onTextChanged(text: CharSequence?, p1: Int, p2: Int, p3: Int) {
-        if (text != null){
-            val textString = text.toString()
-            onTextChanged?.invoke(textString)
+    override fun onTextChanged(charSequence: CharSequence?, p1: Int, p2: Int, p3: Int) {
+        if (charSequence != null){
+            convertToStringAndSendCallback(charSequence)
         }
+    }
+
+    private fun convertToStringAndSendCallback(charSequence: CharSequence){
+        val textString = charSequence.toString()
+        onTextChanged?.invoke(textString)
     }
 }

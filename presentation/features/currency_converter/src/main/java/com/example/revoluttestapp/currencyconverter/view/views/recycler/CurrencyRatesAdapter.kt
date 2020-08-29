@@ -32,13 +32,14 @@ internal class CurrencyRatesAdapter(
         position: Int,
         payloads: MutableList<Any>
     ) {
-        super.onBindViewHolder(holder, position, payloads)
         if (payloads.isNotEmpty()) {
             val bundle = payloads.first() as Bundle
             if (bundle.containsKey(AMOUNT_OF_MONEY_PAYLOAD_KEY)) {
                 val amount = bundle.getString(AMOUNT_OF_MONEY_PAYLOAD_KEY)!!
                 holder.updateAmountOfMoneyView(amount)
             }
+        } else{
+            super.onBindViewHolder(holder, position, payloads)
         }
     }
 }

@@ -15,6 +15,7 @@ import com.example.revoluttestapp.currencyconverter.viewmodel.Action
 import com.example.revoluttestapp.currencyconverter.viewmodel.CurrenciesViewModel
 import com.example.revoluttestapp.currencyconverter.viewmodel.State
 import com.example.revoluttestapp.core.mvi.ViewState
+import com.example.revoluttestapp.domain.utils.Logger
 import com.trello.lifecycle4.android.lifecycle.AndroidLifecycle
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
@@ -27,6 +28,9 @@ class CurrenciesActivity : AppCompatActivity() {
 
     @Inject
     lateinit var rxSchedulers: RxSchedulers
+
+    @Inject
+    lateinit var logger: Logger
     private val provider = AndroidLifecycle.createLifecycleProvider(this)
     private val viewModel: CurrenciesViewModel by viewModels { currenciesViewModelFactory }
 
@@ -43,7 +47,7 @@ class CurrenciesActivity : AppCompatActivity() {
         viewModel.dispatch(Action.LoadCurrencies)
     }
 
-    private fun initClickListeners(){
+    private fun initClickListeners() {
         currency_rates_recycler_view.onCurrencyClick = {
             viewModel.dispatch(Action.SelectCurrency(it))
         }
@@ -56,7 +60,7 @@ class CurrenciesActivity : AppCompatActivity() {
         viewModel.observableState
             .observeOn(rxSchedulers.main)
             .compose(provider.bindToLifecycle())
-            .subscribe(::renderState, Timber::e)
+            .subscribe(::renderState, logger::logError)
     }
 
     private fun renderState(state: State) {
@@ -65,19 +69,18 @@ class CurrenciesActivity : AppCompatActivity() {
     }
 
     private fun createViewState(state: State): ViewState {
-        return with(state){
+        return with(state) {
             when {
                 isLoaderShown -> LoaderViewState(this@CurrenciesActivity)
                 error != null -> ErrorViewState(this@CurrenciesActivity, error)
                 else -> CurrenciesViewSates(this@CurrenciesActivity, currencies)
-
             }
         }
     }
 
     private fun initDagger() {
-        val applicationComponent =
-            (application as AppComponentProvider).provideApplicationComponent()
+        val applicationComponent = (application as AppComponentProvider)
+            .provideApplicationComponent()
         DaggerCurrenciesComponent.builder()
             .applicationComponent(applicationComponent)
             .build()

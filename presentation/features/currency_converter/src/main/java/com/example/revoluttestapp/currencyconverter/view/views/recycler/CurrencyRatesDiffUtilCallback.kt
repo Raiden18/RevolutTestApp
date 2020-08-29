@@ -20,7 +20,6 @@ internal class CurrencyRatesDiffUtilCallback : DiffUtil.ItemCallback<UiCurrency>
         return payloads
     }
 
-
     override fun areContentsTheSame(oldItem: UiCurrency, newItem: UiCurrency): Boolean {
         return oldItem.hashCode() == newItem.hashCode()
     }

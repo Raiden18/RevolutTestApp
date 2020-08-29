@@ -6,15 +6,16 @@ import com.example.revoluttestapp.core.mvi.ViewState
 import kotlinx.android.synthetic.main.activity_main.*
 
 internal class LoaderViewState(
-    private val currenciesActivity: CurrenciesActivity
-) : ViewState {
-    private val loader = currenciesActivity.currency_rates_loader_view
-    private val errorMessage = currenciesActivity.currency_rates_error_message
-    private val retryButton = currenciesActivity.retry_button
+    currenciesActivity: CurrenciesActivity
+) : AbstractViewState(currenciesActivity) {
 
     override fun render() {
+        showLoader()
+        hideCurrencies()
+        hideErrorMessage()
+    }
+
+    private fun showLoader(){
         loader.visibility = View.VISIBLE
-        errorMessage.visibility = View.GONE
-        retryButton.visibility = View.GONE
     }
 }

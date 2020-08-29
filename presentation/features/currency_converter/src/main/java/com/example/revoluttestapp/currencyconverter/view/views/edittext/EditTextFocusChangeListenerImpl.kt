@@ -11,15 +11,23 @@ internal class EditTextFocusChangeListenerImpl(
     override fun onFocusChange(view: View, hasFocus: Boolean) {
         view as CurrencyEditText
         if (hasFocus) {
-            view.addTextChangedListener(textWatcher)
-            textWatcher.onTextChanged = {
-                val editTextProxy = EditTextProxyImpl(view)
-                CurrencyEditTextFormatter(editTextProxy).execute(it)
-                onTextChanged.invoke(it)
-            }
+            initTextWatcher(view)
         } else {
-            view.removeTextChangedListener(textWatcher)
-            textWatcher.onTextChanged = null
+            disableTextWatcher(view)
         }
+    }
+
+    private fun initTextWatcher(currencyEditText: CurrencyEditText){
+        currencyEditText.addTextChangedListener(textWatcher)
+        textWatcher.onTextChanged = {
+            val editTextProxy = EditTextProxyImpl(currencyEditText)
+            CurrencyEditTextFormatter(editTextProxy).execute(it)
+            onTextChanged.invoke(it)
+        }
+    }
+
+    private fun disableTextWatcher(currencyEditText: CurrencyEditText){
+        currencyEditText.removeTextChangedListener(textWatcher)
+        textWatcher.onTextChanged = null
     }
 }
