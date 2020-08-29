@@ -18,7 +18,6 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 //TODO: Write tests
-//TODO: Add error handling
 //TODO: RETRY AFTER LOOSING INTERNET CONNECTION
 internal class CurrenciesViewModel(
     private val getCurrencyRatesUseCase: GetCurrencyRatesUseCase,
@@ -55,11 +54,15 @@ internal class CurrenciesViewModel(
         get() = State(isLoaderShown = false, currencies = emptyList(), error = null)
 
     override fun bindActions() {
-        val subscribeOnUpdatingRates: Observable<Change> =
-            updateCurrencyRateEverySecondUseCase.execute()
-                .toObservable<Change>()
-                .map<Change> { Change.DoNothing }
-                .onErrorReturn { Change.ShowError(it) }
+        val subscribeOnUpdatingRates = actions.ofType<Action.SubscribeOnCurrencyRates>()
+            .switchMap {
+                updateCurrencyRateEverySecondUseCase.execute()
+                    .toObservable<Change>()
+                    .map<Change> { Change.DoNothing }
+                    .onErrorReturn { Change.ShowError(it) }
+                    .startWith(Observable.just(Change.ShowLoading))
+            }
+
 
         val amountOfMoneyChanged = actions.ofType<Action.AmountOfMoneyChanged>()
             .map { it.amount }
@@ -94,7 +97,6 @@ internal class CurrenciesViewModel(
                     }
                     .map<Change> { Change.ShowCurrencies(it) }
                     .onErrorReturn { Change.ShowError(it) }
-                    .startWith(Observable.just(Change.ShowLoading))
             }
 
         val selectCurrency = actions.ofType<Action.SelectCurrency>()

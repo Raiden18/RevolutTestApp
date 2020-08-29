@@ -18,7 +18,6 @@ class UpdateCurrencyRateEverySecondUseCase(
                 currencyRepository.getCurrentCurrencyFromMemory()
                     .map { it.getCode() }
                     .distinctUntilChanged()
-                    .throttleLatest(1, TimeUnit.SECONDS)
                     .switchMapCompletable { currency ->
                         currencyRatesRepository.getCurrencyRateFromApiFor(currency)
                             .flatMapCompletable { currencyRatesRepository.saveToMemory(it) }

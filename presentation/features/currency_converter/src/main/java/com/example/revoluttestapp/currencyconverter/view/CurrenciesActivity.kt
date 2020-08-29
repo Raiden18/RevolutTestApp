@@ -39,6 +39,7 @@ class CurrenciesActivity : AppCompatActivity() {
             viewModel.dispatch(Action.AmountOfMoneyChanged(it))
         }
         subscribeToViewModel()
+        viewModel.dispatch(Action.SubscribeOnCurrencyRates)
         viewModel.dispatch(Action.LoadCurrencies)
     }
 
@@ -47,7 +48,7 @@ class CurrenciesActivity : AppCompatActivity() {
             viewModel.dispatch(Action.SelectCurrency(it))
         }
         retry_button.setOnClickListener {
-            viewModel.dispatch(Action.LoadCurrencies)
+            viewModel.dispatch(Action.SubscribeOnCurrencyRates)
         }
     }
 
