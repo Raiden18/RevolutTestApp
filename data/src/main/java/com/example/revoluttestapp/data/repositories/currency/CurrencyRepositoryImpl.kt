@@ -12,8 +12,7 @@ class CurrencyRepositoryImpl : CurrencyRepository {
         val DEFAULT_CURRENCY = RussianRouble(100.toDouble())
     }
 
-    private var savedCurrency: Currency =
-        DEFAULT_CURRENCY
+    private var savedCurrency: Currency = DEFAULT_CURRENCY
 
     override fun saveToMemoryCurrentCurrency(currency: Currency): Completable {
         return Completable.fromAction {
