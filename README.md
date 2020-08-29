@@ -30,4 +30,5 @@ Features are devided into 4 layers:
 4. viewmodel
 
 Diagram that shows dependencies of components of feature you can see underneeth. There are no acycling dependences as well.
+
 <img src="https://github.com/Raiden18/RevolutTestApp/blob/master/feature_components_dependencies_diagram.PNG" data-canonical-src="hhttps://github.com/Raiden18/RevolutTestApp/blob/master/feature_components_dependencies_diagram.PNG" width="415" height="400" />
