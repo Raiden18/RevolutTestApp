@@ -16,7 +16,8 @@ class CurrencyRateUiMapperImpl : CurrencyRateUiMapper {
             currency.getCode(),
             currency.getFullName(),
             currency.getAmount().toString(),
-            flag.resId
+            flag.resId,
+            false
         )
     }
 }

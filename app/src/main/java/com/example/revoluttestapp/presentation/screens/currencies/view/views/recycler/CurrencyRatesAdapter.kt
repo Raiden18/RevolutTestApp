@@ -1,6 +1,7 @@
 package com.example.revoluttestapp.presentation.screens.currencies.view.views.recycler
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.recyclerview.widget.ListAdapter
@@ -22,6 +23,9 @@ class CurrencyRatesAdapter(
     }
 
     override fun onBindViewHolder(holder: CurrencyViewHolder, position: Int) {
+        if(position == 0){
+            val item = getItem(position)
+        }
         val item = getItem(position)
         holder.bind(item)
     }

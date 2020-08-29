@@ -87,7 +87,7 @@ class CurrenciesViewModel(
                 )
                 currency.setAmount(amountOfMoney)
             }
-            .switchMapCompletable { saveCurrencyToMemoryUseCase.execute(it)}
+            .switchMapCompletable { saveCurrencyToMemoryUseCase.execute(it) }
             .andThen(Observable.just(Change.DoNothing))
 
 
@@ -120,6 +120,7 @@ class CurrenciesViewModel(
             .flatMap { selectedCurrency ->
                 getFlagForCurrencyUseCase.execute(selectedCurrency)
                     .map { currencyRateUiMapper.mapToUiCurrency(selectedCurrency, it) }
+                    .map { it.copy(isEditorEnabled = true) }
             }
     }
 
@@ -128,7 +129,8 @@ class CurrenciesViewModel(
         uiConvertedCurrencies: List<UiCurrency>
     ): List<UiCurrency> {
         val linkedList = LinkedList<UiCurrency>()
-        linkedList.add(currencyToConvertPlace)
+        val currencyWithEnabledEditing = currencyToConvertPlace.copy(isEditorEnabled = true)
+        linkedList.add(currencyWithEnabledEditing)
         uiConvertedCurrencies.forEach {
             if (currencyToConvertPlace.currencyCode != it.currencyCode) {
                 linkedList.add(it)

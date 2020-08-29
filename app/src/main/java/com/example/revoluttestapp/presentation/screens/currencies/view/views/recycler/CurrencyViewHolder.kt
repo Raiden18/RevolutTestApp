@@ -1,5 +1,6 @@
 package com.example.revoluttestapp.presentation.screens.currencies.view.views.recycler
 
+import android.util.Log
 import android.view.View
 import androidx.core.widget.addTextChangedListener
 import androidx.recyclerview.widget.RecyclerView
@@ -18,6 +19,7 @@ class CurrencyViewHolder(
     private val amountOfMoneyEditText = containerView.currency_rate_amount_of_money
     init{
         amountOfMoneyEditText.textChanged = onTextChanged
+
     }
     fun bind(item: UiCurrency) = with(containerView) {
         itemView.setOnClickListener {
@@ -30,13 +32,15 @@ class CurrencyViewHolder(
             itemView.item_currency_rate_country_flag.setImageResource(item.imageFlagId)
             itemView.item_currency_rate_country_flag.tag = item.imageFlagId
         }
+        if(!item.isEditorEnabled){
+            amountOfMoneyEditText.setOnTouchListener{_, _->
+                itemView.performClick()
+                false
+            }
+        }
     }
 
     fun updateAmountOfMoneyView(amount: String){
         amountOfMoneyEditText.setText(amount)
-    }
-
-    fun initTextListener(){
-        amountOfMoneyEditText.addTextChangedListener()
     }
 }

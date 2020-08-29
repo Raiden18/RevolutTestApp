@@ -21,4 +21,16 @@ class CurrencyEditText(
         }
     }
 
+    fun enable(){
+        isEnabled = true
+        isFocusable = true
+        requestFocus()
+        isFocusableInTouchMode = true
+    }
+
+    fun disable(){
+        isEnabled = false
+        isFocusable = false
+    }
+
 }
