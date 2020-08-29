@@ -1,4 +1,4 @@
-package com.example.domain.revoluttestapp.presentation.screens.currencies.view.views.edittext.formatter
+package com.example.revoluttestapp.currencyconverter
 
 import io.mockk.clearMocks
 import io.mockk.mockk

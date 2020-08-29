@@ -2,5 +2,5 @@ include ':presentation:features:currency_converter'
 include ':presentation:core'
 include ':domain'
 include ':data'
-include ':app'
+include ':presentation:app'
 rootProject.name = "RevolutTestApp"
