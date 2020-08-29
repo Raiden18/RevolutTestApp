@@ -1,5 +1,6 @@
 package com.example.revoluttestapp.core
 
+import android.util.Log
 import com.example.revoluttestapp.domain.utils.Logger
 import timber.log.Timber
 
@@ -9,6 +10,6 @@ internal class LoggerImpl: Logger {
     }
 
     override fun logText(tag: String, text: String) {
-        Timber.log(1, tag, text)
+        Log.i(tag, text)
     }
 }

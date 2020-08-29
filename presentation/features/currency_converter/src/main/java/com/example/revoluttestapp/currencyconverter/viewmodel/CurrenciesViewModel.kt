@@ -24,7 +24,7 @@ internal class CurrenciesViewModel(
     private val getSelectedCurrencyUseCase: GetSelectedCurrencyUseCase,
     private val saveCurrencyToMemoryUseCase: SaveCurrencyToMemoryUseCase,
     private val getFlagForCurrencyUseCase: GetFlagForCurrencyUseCase,
-    private val forceUpdateCurrencyRatesUseCase: ForceUpdateCurrencyRatesUseCase,
+    private val convertMoneyUseCase: ConvertMoneyUseCase,
     private val currencyRateUiMapper: CurrencyRateUiMapper,
     private val codeToCurrencyMapper: CodeToCurrencyMapper,
     private val currencyConverter: CurrencyConverter,
@@ -73,6 +73,7 @@ internal class CurrenciesViewModel(
                     .map { it.setAmount(convertedAmount) }
             }.switchMap {
                 saveCurrencyToMemoryUseCase.execute(it)
+                    .andThen(convertMoneyUseCase.execute())
                     .andThen(Observable.just(Change.DoNothing))
             }
 
@@ -82,6 +83,7 @@ internal class CurrenciesViewModel(
                     .flatMap { rates ->
                         getSelectedCurrencyUseCase.execute()
                             .map { currencyConverter.convert(it, rates) }
+                            .map { it.map { rate-> rate.currency } }
                             .flatMap { convertedCurrencies ->
                                 loadFlagsForConvertedCurrenciesAndMapToUi(convertedCurrencies)
                             }.flatMap { uiConvertedCurrencies ->

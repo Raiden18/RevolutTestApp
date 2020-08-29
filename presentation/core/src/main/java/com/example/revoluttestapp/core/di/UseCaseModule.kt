@@ -2,7 +2,9 @@ package com.example.revoluttestapp.core.di
 
 import com.example.revoluttestapp.domain.CodeToCurrencyMapper
 import com.example.revoluttestapp.domain.CurrencyConverter
-import com.example.revoluttestapp.domain.repositories.*
+import com.example.revoluttestapp.domain.repositories.CurrencyRatesRepository
+import com.example.revoluttestapp.domain.repositories.CurrencyRepository
+import com.example.revoluttestapp.domain.repositories.FlagRepository
 import com.example.revoluttestapp.domain.usecases.*
 import com.example.revoluttestapp.domain.utils.RxSchedulers
 import dagger.Module
@@ -75,17 +77,6 @@ internal class UseCaseModule {
     fun provideGetFlagForCurrency(flagRepository: FlagRepository): GetFlagForCurrencyUseCase {
         return GetFlagForCurrencyUseCase(
             flagRepository
-        )
-    }
-
-    @Singleton
-    @Provides
-    fun provideForceUpdateCurrencyRates(currencyRepository: CurrencyRepository,
-                                        currencyRatesRepository: CurrencyRatesRepository
-    ): ForceUpdateCurrencyRatesUseCase {
-        return ForceUpdateCurrencyRatesUseCase(
-            currencyRepository,
-            currencyRatesRepository
         )
     }
 }

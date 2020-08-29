@@ -38,6 +38,5 @@ interface ApplicationComponent {
     fun provideRxSchedulers(): RxSchedulers
     fun provideCountryRepository(): FlagRepository
     fun provideGetFlagForCurrency(): GetFlagForCurrencyUseCase
-    fun provideForceUpdateCurrencyRatesUseCase(): ForceUpdateCurrencyRatesUseCase
     fun provideLogger(): Logger
 }

@@ -15,13 +15,14 @@ class CurrencyConverter(
     fun convert(
         baseCurrency: Currency,
         currenciesRates: List<CurrencyRate>
-    ): List<Currency> {
+    ): List<CurrencyRate> {
         return currenciesRates.map {
             val currency = codeToCurrencyMapper.map(it.currency.getCode())
             val newAmount = baseCurrency.getAmount() * it.rate
             val formattedAmount = BigDecimal(newAmount)
                 .setScale(DIGITS_AFTER_COMMA, RoundingMode.CEILING)
-            currency.setAmount(formattedAmount.toDouble())
+            val convertedCurrency = currency.setAmount(formattedAmount.toDouble())
+            it.copy(currency = convertedCurrency)
         }
     }
 }
