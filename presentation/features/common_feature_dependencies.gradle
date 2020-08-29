@@ -1,0 +1,5 @@
+apply from: "$rootDir/presentation/common_presentation_dependencies.gradle"
+
+dependencies{
+    implementation project(":presentation:core")
+}

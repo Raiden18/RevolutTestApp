@@ -14,6 +14,10 @@
             <option value="$PROJECT_DIR$/app" />
             <option value="$PROJECT_DIR$/data" />
             <option value="$PROJECT_DIR$/domain" />
+            <option value="$PROJECT_DIR$/presentation" />
+            <option value="$PROJECT_DIR$/presentation/core" />
+            <option value="$PROJECT_DIR$/presentation/features" />
+            <option value="$PROJECT_DIR$/presentation/features/currency_converter" />
           </set>
         </option>
         <option name="resolveModulePerSourceSet" value="false" />

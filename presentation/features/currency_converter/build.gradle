@@ -1,0 +1,1 @@
+apply from: "$rootDir/presentation/features/common_feature_dependencies.gradle"

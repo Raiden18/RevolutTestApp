@@ -1,3 +1,5 @@
+include ':presentation:features:currency_converter'
+include ':presentation:core'
 include ':domain'
 include ':data'
 include ':app'
