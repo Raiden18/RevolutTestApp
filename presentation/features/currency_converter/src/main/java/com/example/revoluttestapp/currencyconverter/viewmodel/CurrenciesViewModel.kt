@@ -70,13 +70,14 @@ internal class CurrenciesViewModel(
             .map { it.amount }
             .distinctUntilChanged()
             .map { currencyRateUiMapper.mapAmountOfMoneyToDouble(it) }
-            .switchMap { convertedAmount ->
+            .flatMap { convertedAmount ->
                 getSelectedCurrencyUseCase.execute()
                     .map { it.setAmount(convertedAmount) }
-            }.switchMap {
-                saveCurrencyToMemoryUseCase.execute(it)
-                    .andThen(convertMoneyUseCase.execute())
-                    .andThen(Observable.just(Change.DoNothing))
+                    .flatMap {
+                        saveCurrencyToMemoryUseCase.execute(it)
+                            .andThen(convertMoneyUseCase.execute())
+                            .andThen(Observable.just(Change.DoNothing))
+                    }
             }
 
         val currencies = actions.ofType<Action.LoadCurrencies>()
@@ -106,6 +107,7 @@ internal class CurrenciesViewModel(
             .map { it.uiCurrencyPlace }
             .map { uiCurrency ->
                 val currency = codeToCurrencyMapper.map(uiCurrency.currencyCode)
+                Log.i("HUI", uiCurrency.amountOfMoney.toString())
                 val amountOfMoney = currencyRateUiMapper.mapAmountOfMoneyToDouble(
                     uiCurrency.amountOfMoney
                 )

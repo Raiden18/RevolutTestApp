@@ -85,9 +85,8 @@ internal class UseCaseModule {
     @Provides
     fun provideUpdateCurrencySelectedCurrencyAndRates(
         currencyRepository: CurrencyRepository,
-        currencyRatesRepository: CurrencyRatesRepository,
-        logger: Logger
+        currencyRatesRepository: CurrencyRatesRepository
     ): UpdateCurrencySelectedCurrencyAndRates {
-        return UpdateCurrencySelectedCurrencyAndRates(currencyRepository, currencyRatesRepository, logger)
+        return UpdateCurrencySelectedCurrencyAndRates(currencyRepository, currencyRatesRepository)
     }
 }

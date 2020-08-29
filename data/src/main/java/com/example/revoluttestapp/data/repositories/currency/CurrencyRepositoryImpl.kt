@@ -1,5 +1,6 @@
 package com.example.revoluttestapp.data.repositories.currency
 
+import android.util.Log
 import com.example.revoluttestapp.domain.models.currencies.Currency
 import com.example.revoluttestapp.domain.models.currencies.RussianRouble
 import com.example.revoluttestapp.domain.repositories.CurrencyRepository
