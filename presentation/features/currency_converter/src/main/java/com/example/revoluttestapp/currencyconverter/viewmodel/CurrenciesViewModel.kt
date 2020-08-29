@@ -127,6 +127,7 @@ internal class CurrenciesViewModel(
             }
             .collect({ ArrayList<UiCurrency>() }, { collection, item -> collection.add(item) })
             .toObservable()
+            .doOnNext { Log.i("HUI", it.first().amountOfMoney) }
     }
 
     private fun loadFlagForSelectedCurrencyAndMapToUi(): Observable<UiCurrency> {

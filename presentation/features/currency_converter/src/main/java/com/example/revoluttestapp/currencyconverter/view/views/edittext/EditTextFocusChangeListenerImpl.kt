@@ -12,7 +12,6 @@ internal class EditTextFocusChangeListenerImpl(
     override fun onFocusChange(view: View, hasFocus: Boolean) {
         view as CurrencyEditText
         if (hasFocus) {
-            Log.i("HUI", view.text.toString()!!)
             initTextWatcher(view)
         } else {
             disableTextWatcher(view)

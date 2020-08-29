@@ -1,5 +1,6 @@
 package com.example.revoluttestapp.currencyconverter
 
+import android.util.Log
 import com.example.revoluttestapp.currencyconverter.models.UiCurrency
 import com.example.revoluttestapp.currencyconverter.viewmodel.CurrencyRateUiMapper
 import com.example.revoluttestapp.domain.models.Flag
@@ -15,15 +16,9 @@ internal class CurrencyRateUiMapperImpl : CurrencyRateUiMapper {
     }
 
     override fun mapToUiCurrency(currency: Currency, flag: Flag): UiCurrency {
-        val amountString = currency.getAmount().toString()
-        val decimalFormat = DecimalFormat("#")
+        val decimalFormat = DecimalFormat("#0.##")
         decimalFormat.maximumFractionDigits = 2
-        val formattedAmount = try{
-            decimalFormat.format(currency.getAmount())
-        } catch (exeption: Exception){
-            throw IllegalStateException()
-        }
-
+        val formattedAmount = decimalFormat.format(currency.getAmount())
         return UiCurrency(
             currency.getCode(),
             currency.getFullName(),
@@ -31,17 +26,5 @@ internal class CurrencyRateUiMapperImpl : CurrencyRateUiMapper {
             flag.resId,
             false
         )
-    }
-
-    private fun String.isNumberContainsDot(): Boolean{
-        return contains(".")
-    }
-
-    private fun String.isOnlyZerosAfterDot(): Boolean{
-        return split(".").last().all { it == '0' }
-    }
-
-    private fun String.getNumbersBeforeDot(): String {
-        return split(".").first()
     }
 }
