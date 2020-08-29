@@ -1,5 +1,6 @@
 package com.example.revoluttestapp.currencyconverter.view.views.recycler
 
+import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.example.revoluttestapp.currencyconverter.models.UiCurrency
@@ -35,6 +36,7 @@ internal class CurrencyViewHolder(
 
     fun bind(item: UiCurrency) = with(containerView) {
         itemView.setOnClickListener {
+            amountOfMoneyEditText.requestFocus()
             onCurrencyClick.invoke(item)
         }
         currencyCodeView.text = item.currencyCode
@@ -44,12 +46,7 @@ internal class CurrencyViewHolder(
             countryFlagView.setImageResource(item.imageFlagId)
             countryFlagView.tag = item.imageFlagId
         }
-        if (item.isEditorEnabled) {
-            amountOfMoneyEditText.requestInput()
-            amountOfMoneyEditText.setOnTouchListener(null)
-        } else {
-            amountOfMoneyEditText.setOnTouchListener(editTextTouchListener)
-        }
+        amountOfMoneyEditText.setOnTouchListener(editTextTouchListener)
     }
 
     fun updateAmountOfMoneyView(amount: String) {

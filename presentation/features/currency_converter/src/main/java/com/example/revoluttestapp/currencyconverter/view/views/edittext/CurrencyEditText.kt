@@ -8,11 +8,4 @@ class CurrencyEditText(
     context: Context,
     attributeSet: AttributeSet
 ) : AppCompatEditText(context, attributeSet) {
-
-    fun requestInput(){
-        isEnabled = true
-        isFocusable = true
-        requestFocus()
-        isFocusableInTouchMode = true
-    }
 }

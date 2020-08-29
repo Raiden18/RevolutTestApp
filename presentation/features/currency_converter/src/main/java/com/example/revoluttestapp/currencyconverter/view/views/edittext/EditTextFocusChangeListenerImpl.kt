@@ -1,5 +1,6 @@
 package com.example.revoluttestapp.currencyconverter.view.views.edittext
 
+import android.util.Log
 import android.view.View
 import com.example.revoluttestapp.currencyconverter.view.views.edittext.formatter.CurrencyEditTextFormatter
 
@@ -11,6 +12,7 @@ internal class EditTextFocusChangeListenerImpl(
     override fun onFocusChange(view: View, hasFocus: Boolean) {
         view as CurrencyEditText
         if (hasFocus) {
+            Log.i("HUI", view.text.toString()!!)
             initTextWatcher(view)
         } else {
             disableTextWatcher(view)

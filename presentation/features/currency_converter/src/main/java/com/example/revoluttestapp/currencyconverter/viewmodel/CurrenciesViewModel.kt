@@ -1,5 +1,6 @@
 package com.example.revoluttestapp.currencyconverter.viewmodel
 
+import android.util.Log
 import com.example.revoluttestapp.core.mvi.CoreMviViewModel
 import com.example.revoluttestapp.core.mvi.Reducer
 import com.example.revoluttestapp.currencyconverter.models.UiCurrency
@@ -64,7 +65,6 @@ internal class CurrenciesViewModel(
 
         val amountOfMoneyChanged = actions.ofType<Action.AmountOfMoneyChanged>()
             .map { it.amount }
-            .map { it.trim() }
             .distinctUntilChanged()
             .map { currencyRateUiMapper.mapAmountOfMoneyToDouble(it) }
             .switchMap { convertedAmount ->
