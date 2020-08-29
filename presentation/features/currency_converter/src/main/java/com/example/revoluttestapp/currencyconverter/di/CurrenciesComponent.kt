@@ -1,5 +1,6 @@
 package com.example.revoluttestapp.currencyconverter.di
 
+import android.app.Application
 import com.example.revoluttestapp.core.di.ApplicationComponent
 import com.example.revoluttestapp.currencyconverter.view.CurrenciesActivity
 import com.example.revoluttestapp.currencyconverter.CurrencyRateUiMapperImpl
@@ -41,8 +42,8 @@ internal class CurrenciesModule {
         rxSchedulers: RxSchedulers,
         logger: Logger
     ): CurrenciesViewModelFactory {
-        val codeToCurrencyMapper =CodeToCurrencyMapper()
-        val currencyConverter =CurrencyConverter(codeToCurrencyMapper)
+        val codeToCurrencyMapper = CodeToCurrencyMapper()
+        val currencyConverter = CurrencyConverter(codeToCurrencyMapper)
         val compositeDisposable = CompositeDisposable()
         return CurrenciesViewModelFactory(
             getCurrencyRatesUseCase,
@@ -62,7 +63,7 @@ internal class CurrenciesModule {
 
     @CurrenciesScope
     @Provides
-    fun provideCurrencyRateUiMapper(): CurrencyRateUiMapper {
-        return CurrencyRateUiMapperImpl()
+    fun provideCurrencyRateUiMapper(application: Application): CurrencyRateUiMapper {
+        return CurrencyRateUiMapperImpl(application)
     }
 }

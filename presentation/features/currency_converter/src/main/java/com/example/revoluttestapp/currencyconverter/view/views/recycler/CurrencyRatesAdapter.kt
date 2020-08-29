@@ -13,12 +13,12 @@ internal class CurrencyRatesAdapter(
 ) : ListAdapter<UiCurrency, CurrencyViewHolder>(CurrencyRatesDiffUtilCallback()) {
     companion object {
         const val AMOUNT_OF_MONEY_PAYLOAD_KEY = "AMOUNT_OF_MONEY_PAYLOAD_KEY"
+        const val TEXT_COLOR_OF_AMOUNT_OF_MONEY_PAYLOAD_KEY = "TEXT_COLOR_OF_AMOUNT_OF_MONEY_KEY"
     }
 
     override fun onCreateViewHolder(parent: ViewGroup, viewType: Int): CurrencyViewHolder {
         val inflater = LayoutInflater.from(parent.context)
         val itemView = inflater.inflate(R.layout.item_currency_rate, parent, false)
-
         return CurrencyViewHolder(onCurrencyClick, onAmountOfMoneyChanged, itemView)
     }
 
@@ -34,11 +34,12 @@ internal class CurrencyRatesAdapter(
     ) {
         if (payloads.isNotEmpty()) {
             val bundle = payloads.first() as Bundle
-            if (bundle.containsKey(AMOUNT_OF_MONEY_PAYLOAD_KEY)) {
+            if (bundle.containsKey(AMOUNT_OF_MONEY_PAYLOAD_KEY) && bundle.containsKey(TEXT_COLOR_OF_AMOUNT_OF_MONEY_PAYLOAD_KEY)) {
                 val amount = bundle.getString(AMOUNT_OF_MONEY_PAYLOAD_KEY)!!
-                holder.updateAmountOfMoneyView(amount)
+                val color = bundle.getInt(TEXT_COLOR_OF_AMOUNT_OF_MONEY_PAYLOAD_KEY)
+                holder.updateAmountOfMoneyView(amount, color)
             }
-        } else{
+        } else {
             super.onBindViewHolder(holder, position, payloads)
         }
     }

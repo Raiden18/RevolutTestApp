@@ -18,6 +18,7 @@ import java.util.*
 import kotlin.collections.ArrayList
 
 //TODO: white screen after exit by back button
+//TODO: Write unit tests
 internal class CurrenciesViewModel(
     private val getCurrencyRatesUseCase: GetCurrencyRatesUseCase,
     private val getSelectedCurrencyUseCase: GetSelectedCurrencyUseCase,
@@ -127,7 +128,6 @@ internal class CurrenciesViewModel(
             }
             .collect({ ArrayList<UiCurrency>() }, { collection, item -> collection.add(item) })
             .toObservable()
-            .doOnNext { Log.i("HUI", it.first().amountOfMoney) }
     }
 
     private fun loadFlagForSelectedCurrencyAndMapToUi(): Observable<UiCurrency> {

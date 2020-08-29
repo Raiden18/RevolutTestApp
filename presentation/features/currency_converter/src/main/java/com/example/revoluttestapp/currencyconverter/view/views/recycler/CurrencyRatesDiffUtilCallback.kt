@@ -16,6 +16,10 @@ internal class CurrencyRatesDiffUtilCallback : DiffUtil.ItemCallback<UiCurrency>
                 CurrencyRatesAdapter.AMOUNT_OF_MONEY_PAYLOAD_KEY,
                 newItem.amountOfMoney
             )
+            payloads.putInt(
+                CurrencyRatesAdapter.TEXT_COLOR_OF_AMOUNT_OF_MONEY_PAYLOAD_KEY,
+                newItem.textColor
+            )
         }
         return payloads
     }

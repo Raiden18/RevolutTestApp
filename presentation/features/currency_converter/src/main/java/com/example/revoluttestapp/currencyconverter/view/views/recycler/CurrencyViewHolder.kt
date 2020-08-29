@@ -29,8 +29,10 @@ internal class CurrencyViewHolder(
 
     init {
         val currencyTextWatcher = CurrencyTextWatcher()
-        val editTextFocusChangeListener =
-            EditTextFocusChangeListenerImpl(currencyTextWatcher, onTextChanged)
+        val editTextFocusChangeListener = EditTextFocusChangeListenerImpl(
+            currencyTextWatcher,
+            onTextChanged
+        )
         amountOfMoneyEditText.onFocusChangeListener = editTextFocusChangeListener
     }
 
@@ -47,9 +49,11 @@ internal class CurrencyViewHolder(
             countryFlagView.tag = item.imageFlagId
         }
         amountOfMoneyEditText.setOnTouchListener(editTextTouchListener)
+        amountOfMoneyEditText.setTextColor(item.textColor)
     }
 
-    fun updateAmountOfMoneyView(amount: String) {
+    fun updateAmountOfMoneyView(amount: String, color: Int) {
         amountOfMoneyEditText.setText(amount)
+        amountOfMoneyEditText.setTextColor(color)
     }
 }
