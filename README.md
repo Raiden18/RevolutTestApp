@@ -1,6 +1,4 @@
 # RevolutTestApp
-
-[![IMAGE ALT TEXT HERE](https://img.youtube.com/vi/E922JMJcLAc/0.jpg)](https://www.youtube.com/watch?v=E922JMJcLAc)
 ## Used Frameworks
 1. RxJava 3
 2. Dagger 2
