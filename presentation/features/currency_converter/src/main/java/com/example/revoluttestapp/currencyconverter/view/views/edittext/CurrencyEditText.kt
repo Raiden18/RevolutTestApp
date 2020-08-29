@@ -8,4 +8,10 @@ class CurrencyEditText(
     context: Context,
     attributeSet: AttributeSet
 ) : AppCompatEditText(context, attributeSet) {
+
+
+    fun setText(text: String){
+        super.setText(text)
+        setSelection(text.length)
+    }
 }
