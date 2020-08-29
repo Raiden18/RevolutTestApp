@@ -1,0 +1,12 @@
+ext.versions = [
+        rxJava: '3.0.6',
+        rxAdapter: '3.0.0',
+        rxRelay: "3.0.0",
+        rxKotlin: "3.0.0",
+        rxAndroid: "3.0.0",
+        rxLifeCycle: "4.0.0",
+        jUnit: "5.6.2",
+        mockk: "1.10.0",
+        retrofit: "2.6.2"
+
+]

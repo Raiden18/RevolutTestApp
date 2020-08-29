@@ -18,7 +18,7 @@
         app:titleMarginStart="70dp"
         android:elevation="3dp"/>
 
-    <com.example.revoluttestapp.presentation.screens.currencies.view.views.recycler.CurrencyRatesRecyclerView
+    <com.example.domain.revoluttestapp.presentation.screens.currencies.view.views.recycler.CurrencyRatesRecyclerView
         android:id="@+id/currency_rates_recycler_view"
         android:layout_width="match_parent"
         android:layout_height="0dp"

@@ -47,7 +47,7 @@
             tools:text="US Dollar"/>
     </LinearLayout>
 
-    <com.example.revoluttestapp.presentation.screens.currencies.view.views.edittext.CurrencyEditText
+    <com.example.domain.revoluttestapp.presentation.screens.currencies.view.views.edittext.CurrencyEditText
         android:id="@+id/currency_rate_amount_of_money"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"

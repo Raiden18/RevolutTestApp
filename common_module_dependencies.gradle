@@ -1,0 +1,10 @@
+apply from: "$rootDir/versions.gradle"
+
+dependencies{
+    implementation "org.jetbrains.kotlin:kotlin-stdlib:$kotlin_version"
+    implementation "io.reactivex.rxjava3:rxjava:${versions.rxJava}"
+    implementation "com.jakewharton.rxrelay3:rxrelay:${versions.rxRelay}"
+    implementation "io.reactivex.rxjava3:rxkotlin:${versions.rxKotlin}"
+    testImplementation "org.junit.jupiter:junit-jupiter:${versions.jUnit}"
+    testImplementation "io.mockk:mockk:${versions.mockk}"
+}
