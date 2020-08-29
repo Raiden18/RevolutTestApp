@@ -13,21 +13,14 @@ import java.text.DecimalFormat
 
 internal class CurrencyRateUiMapperImpl(
     private val context: Context
-): CurrencyRateUiMapper {
-
+) : CurrencyRateUiMapper {
     override fun mapAmountOfMoneyToDouble(amountOfMoney: String): Double {
         return if (amountOfMoney.isEmpty()) 0.0 else amountOfMoney.toDouble()
     }
 
     override fun mapToUiCurrency(currency: Currency, flag: Flag): UiCurrency {
-        val decimalFormat = DecimalFormat("#0.##")
-        decimalFormat.maximumFractionDigits = 2
-        val formattedAmount = decimalFormat.format(currency.getAmount())
-        val textColor = if(formattedAmount == "0"){
-            ContextCompat.getColor(context, android.R.color.darker_gray)
-        } else{
-            ContextCompat.getColor(context, android.R.color.black)
-        }
+        val formattedAmount = formatAmountOfMoney(currency.getAmount())
+        val textColor = getColorOfText(formattedAmount)
         return UiCurrency(
             currency.getCode(),
             currency.getFullName(),
@@ -36,5 +29,19 @@ internal class CurrencyRateUiMapperImpl(
             false,
             textColor
         )
+    }
+
+    private fun formatAmountOfMoney(amountOfMoney: Double): String {
+        val decimalFormat = DecimalFormat("#0.##")
+        decimalFormat.maximumFractionDigits = 2
+        return decimalFormat.format(amountOfMoney)
+    }
+
+    private fun getColorOfText(formattedAmount: String): Int {
+        return if (formattedAmount == "0") {
+            ContextCompat.getColor(context, android.R.color.darker_gray)
+        } else {
+            ContextCompat.getColor(context, android.R.color.black)
+        }
     }
 }
