@@ -1,6 +1,5 @@
 package com.example.revoluttestapp.currencyconverter.view.views.recycler
 
-import android.util.Log
 import android.view.View
 import androidx.recyclerview.widget.RecyclerView
 import com.example.revoluttestapp.currencyconverter.models.UiCurrency
@@ -11,7 +10,7 @@ import kotlinx.android.synthetic.main.item_currency_rate.view.*
 
 internal class CurrencyViewHolder(
     private val onCurrencyClick: (UiCurrency) -> Unit,
-    private val onTextChanged: (String) -> Unit,
+    editTextFocusChangeListener: EditTextFocusChangeListenerImpl,
     itemView: View
 ) : RecyclerView.ViewHolder(itemView), LayoutContainer {
     override val containerView: View
@@ -28,11 +27,6 @@ internal class CurrencyViewHolder(
     }
 
     init {
-        val currencyTextWatcher = CurrencyTextWatcher()
-        val editTextFocusChangeListener = EditTextFocusChangeListenerImpl(
-            currencyTextWatcher,
-            onTextChanged
-        )
         amountOfMoneyEditText.onFocusChangeListener = editTextFocusChangeListener
     }
 
