@@ -2,7 +2,7 @@ package com.example.revoluttestapp.currencyconverter.di
 
 import com.example.revoluttestapp.core.di.ApplicationComponent
 import com.example.revoluttestapp.currencyconverter.view.CurrenciesActivity
-import com.example.revoluttestapp.currencyconverter.view.CurrencyRateUiMapperImpl
+import com.example.revoluttestapp.currencyconverter.CurrencyRateUiMapperImpl
 import com.example.revoluttestapp.currencyconverter.viewmodel.CurrencyRateUiMapper
 import com.example.revoluttestapp.domain.CodeToCurrencyMapper
 import com.example.revoluttestapp.domain.CurrencyConverter

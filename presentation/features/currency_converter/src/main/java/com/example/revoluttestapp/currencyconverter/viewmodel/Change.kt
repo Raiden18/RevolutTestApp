@@ -6,4 +6,5 @@ internal sealed class Change {
     data class ShowCurrencies(val uiCurrencies: List<UiCurrency>): Change()
     object DoNothing: Change()
     object ShowLoading: Change()
+    data class ShowError(val throwable: Throwable): Change()
 }

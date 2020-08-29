@@ -5,5 +5,6 @@ import com.example.revoluttestapp.currencyconverter.models.UiCurrency
 
 internal data class State(
     val isLoaderShown: Boolean,
-    val currencies: List<UiCurrency>
+    val currencies: List<UiCurrency>,
+    val error: Throwable?
 ) : CoreState

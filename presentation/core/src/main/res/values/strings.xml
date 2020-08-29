@@ -1,4 +1,6 @@
 <resources>
     <string name="app_name">RevolutTestApp</string>
     <string name="currency_converter_title">Rates</string>
+    <string name="no_error_connection_title">No error connection</string>
+    <string name="retry">Retry</string>
 </resources>

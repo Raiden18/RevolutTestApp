@@ -1,7 +1,6 @@
 package com.example.revoluttestapp.currencyconverter.view
 
 import android.os.Bundle
-import android.view.View
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.revoluttestapp.domain.utils.RxSchedulers
@@ -9,9 +8,13 @@ import com.example.revoluttestapp.AppComponentProvider
 import com.example.revoluttestapp.currencyconverter.R
 import com.example.revoluttestapp.currencyconverter.di.CurrenciesViewModelFactory
 import com.example.revoluttestapp.currencyconverter.di.DaggerCurrenciesComponent
+import com.example.revoluttestapp.currencyconverter.view.states.CurrenciesViewSates
+import com.example.revoluttestapp.currencyconverter.view.states.ErrorViewState
+import com.example.revoluttestapp.currencyconverter.view.states.LoaderViewState
 import com.example.revoluttestapp.currencyconverter.viewmodel.Action
 import com.example.revoluttestapp.currencyconverter.viewmodel.CurrenciesViewModel
 import com.example.revoluttestapp.currencyconverter.viewmodel.State
+import com.example.revoluttestapp.mvi.ViewState
 import com.trello.lifecycle4.android.lifecycle.AndroidLifecycle
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber
@@ -31,14 +34,21 @@ class CurrenciesActivity : AppCompatActivity() {
         initDagger()
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        currency_rates_recycler_view.onCurrencyClick = {
-            viewModel.dispatch(Action.SelectCurrency(it))
-        }
+        initClickListeners()
         currency_rates_recycler_view.onAmountOfMoneyChanged = {
             viewModel.dispatch(Action.AmountOfMoneyChanged(it))
         }
         subscribeToViewModel()
         viewModel.dispatch(Action.LoadCurrencies)
+    }
+
+    private fun initClickListeners(){
+        currency_rates_recycler_view.onCurrencyClick = {
+            viewModel.dispatch(Action.SelectCurrency(it))
+        }
+        retry_button.setOnClickListener {
+            viewModel.dispatch(Action.LoadCurrencies)
+        }
     }
 
     private fun subscribeToViewModel() {
@@ -48,17 +58,20 @@ class CurrenciesActivity : AppCompatActivity() {
             .subscribe(::renderState, Timber::e)
     }
 
-    private fun renderState(state: State) = with(state) {
-        when {
-            isLoaderShown -> {
-                currency_rates_loader_view.visibility = View.VISIBLE
-            }
-            else -> {
-                currency_rates_loader_view.visibility = View.GONE
-                currency_rates_recycler_view.updateItems(currencies)
+    private fun renderState(state: State) {
+        val viewState = createViewState(state)
+        viewState.render()
+    }
+
+    private fun createViewState(state: State): ViewState {
+        return with(state){
+            when {
+                isLoaderShown -> LoaderViewState(this@CurrenciesActivity)
+                error != null -> ErrorViewState(this@CurrenciesActivity, error)
+                else -> CurrenciesViewSates(this@CurrenciesActivity, currencies)
+
             }
         }
-        Unit
     }
 
     private fun initDagger() {

@@ -22,12 +22,14 @@ internal class RepositoriesModule {
     fun provideCurrencyRatesRepository(
         currencyRateMapper: CurrencyRateMapper,
         currencyRatesService: CurrencyRatesService,
-        rxSchedulers: RxSchedulers
+        rxSchedulers: RxSchedulers,
+        application: Application
     ): CurrencyRatesRepository {
         return CurrencyRatesRepositoryImpl(
             currencyRateMapper,
             currencyRatesService,
-            rxSchedulers
+            rxSchedulers,
+            application
         )
     }
 

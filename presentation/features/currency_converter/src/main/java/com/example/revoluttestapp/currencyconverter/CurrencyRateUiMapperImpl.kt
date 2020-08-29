@@ -1,4 +1,4 @@
-package com.example.revoluttestapp.currencyconverter.view
+package com.example.revoluttestapp.currencyconverter
 
 import com.example.revoluttestapp.currencyconverter.models.UiCurrency
 import com.example.revoluttestapp.currencyconverter.viewmodel.CurrencyRateUiMapper

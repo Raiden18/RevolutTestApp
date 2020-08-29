@@ -8,6 +8,7 @@ import com.example.revoluttestapp.domain.CodeToCurrencyMapper
 import com.example.revoluttestapp.domain.CurrencyConverter
 import com.example.revoluttestapp.domain.usecases.*
 import com.example.revoluttestapp.domain.utils.RxSchedulers
+import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.ofType
@@ -35,12 +36,14 @@ internal class CurrenciesViewModel(
 
     private val reducer: Reducer<State, Change> = { state, change ->
         when (change) {
-            is Change.ShowLoading -> state.copy(isLoaderShown = true)
+            is Change.ShowLoading -> state.copy(isLoaderShown = true, error = null)
             is Change.ShowCurrencies -> state.copy(
                 isLoaderShown = false,
-                currencies = change.uiCurrencies
+                currencies = change.uiCurrencies,
+                error = null
             )
             is Change.DoNothing -> state
+            is Change.ShowError -> state.copy(isLoaderShown = false, error = change.throwable)
         }
     }
 
@@ -49,12 +52,14 @@ internal class CurrenciesViewModel(
     }
 
     override val initialState: State
-        get() = State(isLoaderShown = false, currencies = emptyList())
+        get() = State(isLoaderShown = false, currencies = emptyList(), error = null)
 
     override fun bindActions() {
-        updateCurrencyRateEverySecondUseCase.execute()
-            .subscribeOn(rxSchedulers.io)
-            .subscribe()
+        val subscribeOnUpdatingRates: Observable<Change> =
+            updateCurrencyRateEverySecondUseCase.execute()
+                .toObservable<Change>()
+                .map<Change> { Change.DoNothing }
+                .onErrorReturn { Change.ShowError(it) }
 
         val amountOfMoneyChanged = actions.ofType<Action.AmountOfMoneyChanged>()
             .map { it.amount }
@@ -68,7 +73,6 @@ internal class CurrenciesViewModel(
                 saveCurrencyToMemoryUseCase.execute(it)
                     .andThen(Observable.just(Change.DoNothing))
             }
-
 
         val currencies = actions.ofType<Action.LoadCurrencies>()
             .switchMap {
@@ -89,6 +93,7 @@ internal class CurrenciesViewModel(
                             }
                     }
                     .map<Change> { Change.ShowCurrencies(it) }
+                    .onErrorReturn { Change.ShowError(it) }
                     .startWith(Observable.just(Change.ShowLoading))
             }
 
@@ -100,21 +105,20 @@ internal class CurrenciesViewModel(
                     uiCurrency.amountOfMoney
                 )
                 currency.setAmount(amountOfMoney)
-            }
-            .switchMapCompletable { saveCurrencyToMemoryUseCase.execute(it) }
+            }.switchMapCompletable { saveCurrencyToMemoryUseCase.execute(it) }
             .andThen(Observable.just(Change.DoNothing))
 
 
         disposables += Observable.merge(
             currencies,
             selectCurrency,
-            amountOfMoneyChanged
+            amountOfMoneyChanged,
+            subscribeOnUpdatingRates
         ).scan(initialState, reducer)
             .distinctUntilChanged()
-            .doOnNext { Log.i("HUI", it.toString()) }
             .subscribeOn(rxSchedulers.io)
+            .doOnNext { Log.i("HUI", it.toString()) }
             .subscribe(state::accept, Timber::e)
-
     }
 
     private fun loadFlagsForConvertedCurrenciesAndMapToUi(convertedCurrencies: List<com.example.revoluttestapp.domain.models.currencies.Currency>): Observable<ArrayList<UiCurrency>> {

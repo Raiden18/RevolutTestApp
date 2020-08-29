@@ -8,7 +8,7 @@ import io.reactivex.rxjava3.core.Observable
 
 class CurrencyRepositoryImpl : CurrencyRepository {
     private companion object {
-        val DEFAULT_CURRENCY = RussianRouble(100.0)
+        val DEFAULT_CURRENCY = RussianRouble(100.toDouble())
     }
 
     private var savedCurrency: Currency =

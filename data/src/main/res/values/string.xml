@@ -1,0 +1,5 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string name="no_internet_connection_message">No internet connection, check your internet connection out and try later.</string>
+    <string name="unknown_error_message">Unknown error, try later.</string>
+</resources>
