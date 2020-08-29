@@ -39,6 +39,7 @@ internal class CurrenciesModule {
         updateCurrencyRateEverySecondUseCase: UpdateCurrencyRateEverySecondUseCase,
         getFlagForCurrencyUseCase: GetFlagForCurrencyUseCase,
         convertMoneyUseCase: ConvertMoneyUseCase,
+        updateCurrencySelectedCurrencyAndRates: UpdateCurrencySelectedCurrencyAndRates,
         rxSchedulers: RxSchedulers,
         logger: Logger
     ): CurrenciesViewModelFactory {
@@ -51,6 +52,7 @@ internal class CurrenciesModule {
             saveCurrencyToMemoryUseCase,
             getFlagForCurrencyUseCase,
             convertMoneyUseCase,
+            updateCurrencySelectedCurrencyAndRates,
             currencyRateUiMapper,
             codeToCurrencyMapper,
             currencyConverter,

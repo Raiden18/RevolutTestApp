@@ -39,4 +39,5 @@ interface ApplicationComponent {
     fun provideCountryRepository(): FlagRepository
     fun provideGetFlagForCurrency(): GetFlagForCurrencyUseCase
     fun provideLogger(): Logger
+    fun provideUpdateCurrencySelectedCurrencyAndRates(): UpdateCurrencySelectedCurrencyAndRates
 }

@@ -6,6 +6,7 @@ import com.example.revoluttestapp.domain.repositories.CurrencyRatesRepository
 import com.example.revoluttestapp.domain.repositories.CurrencyRepository
 import com.example.revoluttestapp.domain.repositories.FlagRepository
 import com.example.revoluttestapp.domain.usecases.*
+import com.example.revoluttestapp.domain.utils.Logger
 import com.example.revoluttestapp.domain.utils.RxSchedulers
 import dagger.Module
 import dagger.Provides
@@ -78,5 +79,15 @@ internal class UseCaseModule {
         return GetFlagForCurrencyUseCase(
             flagRepository
         )
+    }
+
+    @Singleton
+    @Provides
+    fun provideUpdateCurrencySelectedCurrencyAndRates(
+        currencyRepository: CurrencyRepository,
+        currencyRatesRepository: CurrencyRatesRepository,
+        logger: Logger
+    ): UpdateCurrencySelectedCurrencyAndRates {
+        return UpdateCurrencySelectedCurrencyAndRates(currencyRepository, currencyRatesRepository, logger)
     }
 }

@@ -8,7 +8,7 @@ class GetSelectedCurrencyUseCase(
     private val currencyRepository: CurrencyRepository
 ) {
     fun execute(): Observable<Currency> {
-        return currencyRepository.getCurrentCurrencyFromMemory()
+        return currencyRepository.getSelectedCurrencyFromMemory()
             .distinctUntilChanged()
     }
 }

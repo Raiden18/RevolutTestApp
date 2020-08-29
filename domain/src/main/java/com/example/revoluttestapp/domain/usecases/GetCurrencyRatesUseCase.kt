@@ -10,5 +10,6 @@ class GetCurrencyRatesUseCase(
 
     fun execute(): Observable<List<CurrencyRate>> {
         return currencyRatesService.getCurrencyRateFromMemory()
+            .map { it.sortedBy { it.currency.getCode() } }
     }
 }

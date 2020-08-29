@@ -20,7 +20,7 @@ class CurrencyRepositoryImpl : CurrencyRepository {
         }
     }
 
-    override fun getCurrentCurrencyFromMemory(): Observable<Currency> {
+    override fun getSelectedCurrencyFromMemory(): Observable<Currency> {
         return Observable.create {
             it.onNext(savedCurrency)
             it.onComplete()

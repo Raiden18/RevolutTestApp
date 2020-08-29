@@ -6,5 +6,5 @@ import io.reactivex.rxjava3.core.Observable
 
 interface CurrencyRepository {
     fun saveToMemoryCurrentCurrency(currency: Currency): Completable
-    fun getCurrentCurrencyFromMemory(): Observable<Currency>
+    fun getSelectedCurrencyFromMemory(): Observable<Currency>
 }

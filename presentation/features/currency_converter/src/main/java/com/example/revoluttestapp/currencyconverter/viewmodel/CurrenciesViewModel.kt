@@ -24,6 +24,7 @@ internal class CurrenciesViewModel(
     private val getSelectedCurrencyUseCase: GetSelectedCurrencyUseCase,
     private val saveCurrencyToMemoryUseCase: SaveCurrencyToMemoryUseCase,
     private val getFlagForCurrencyUseCase: GetFlagForCurrencyUseCase,
+    private val updateCurrencySelectedCurrencyAndRates: UpdateCurrencySelectedCurrencyAndRates,
     private val convertMoneyUseCase: ConvertMoneyUseCase,
     private val currencyRateUiMapper: CurrencyRateUiMapper,
     private val codeToCurrencyMapper: CodeToCurrencyMapper,
@@ -83,7 +84,7 @@ internal class CurrenciesViewModel(
                     .flatMap { rates ->
                         getSelectedCurrencyUseCase.execute()
                             .map { currencyConverter.convert(it, rates) }
-                            .map { it.map { rate-> rate.currency } }
+                            .map { it.map { rate -> rate.currency } }
                             .flatMap { convertedCurrencies ->
                                 loadFlagsForConvertedCurrenciesAndMapToUi(convertedCurrencies)
                             }.flatMap { uiConvertedCurrencies ->
@@ -108,7 +109,7 @@ internal class CurrenciesViewModel(
                     uiCurrency.amountOfMoney
                 )
                 currency.setAmount(amountOfMoney)
-            }.switchMapCompletable { saveCurrencyToMemoryUseCase.execute(it) }
+            }.switchMapCompletable { updateCurrencySelectedCurrencyAndRates.execute(it) }
             .andThen(Observable.just(Change.DoNothing))
 
         disposables += Observable.merge(
@@ -149,9 +150,7 @@ internal class CurrenciesViewModel(
         val currencyWithEnabledEditing = currencyToConvertPlace.copy(isEditorEnabled = true)
         linkedList.add(currencyWithEnabledEditing)
         uiConvertedCurrencies.forEach {
-            if (currencyToConvertPlace.currencyCode != it.currencyCode) {
-                linkedList.add(it)
-            }
+            linkedList.add(it)
         }
         return linkedList
     }
