@@ -23,8 +23,8 @@ This app follows Clean Architecture approach as well. Full UML diagram you can s
 
 <img src="https://github.com/Raiden18/RevolutTestApp/blob/master/modules_dependency_diagram.PNG" data-canonical-src="https://github.com/Raiden18/RevolutTestApp/blob/master/modules_dependency_diagram.PNG" width="400" height="450" />
 
-MVI was chosen as architecture of presentation layer. 
-Features are devided into 4 layers:
+MVI was chosen as architecture of presentation layer. Features are devided into 4 layers:
+
 1. di - to get and provide deps for feature 
 2. models - to show data on the screen to minimize logic in view layer
 3. view 
