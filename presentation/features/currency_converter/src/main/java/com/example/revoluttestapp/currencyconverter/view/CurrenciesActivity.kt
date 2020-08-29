@@ -4,7 +4,7 @@ import android.os.Bundle
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.revoluttestapp.domain.utils.RxSchedulers
-import com.example.revoluttestapp.AppComponentProvider
+import com.example.revoluttestapp.core.AppComponentProvider
 import com.example.revoluttestapp.currencyconverter.R
 import com.example.revoluttestapp.currencyconverter.di.CurrenciesViewModelFactory
 import com.example.revoluttestapp.currencyconverter.di.DaggerCurrenciesComponent
@@ -14,7 +14,7 @@ import com.example.revoluttestapp.currencyconverter.view.states.LoaderViewState
 import com.example.revoluttestapp.currencyconverter.viewmodel.Action
 import com.example.revoluttestapp.currencyconverter.viewmodel.CurrenciesViewModel
 import com.example.revoluttestapp.currencyconverter.viewmodel.State
-import com.example.revoluttestapp.mvi.ViewState
+import com.example.revoluttestapp.core.mvi.ViewState
 import com.trello.lifecycle4.android.lifecycle.AndroidLifecycle
 import kotlinx.android.synthetic.main.activity_main.*
 import timber.log.Timber

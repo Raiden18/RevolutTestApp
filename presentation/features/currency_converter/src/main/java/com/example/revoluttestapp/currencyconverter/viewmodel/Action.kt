@@ -1,6 +1,6 @@
 package com.example.revoluttestapp.currencyconverter.viewmodel
 
-import com.example.revoluttestapp.mvi.CoreAction
+import com.example.revoluttestapp.core.mvi.CoreAction
 import com.example.revoluttestapp.currencyconverter.models.UiCurrency
 
 internal sealed class Action: CoreAction {

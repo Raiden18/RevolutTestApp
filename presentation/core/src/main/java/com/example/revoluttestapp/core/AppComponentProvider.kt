@@ -1,4 +1,4 @@
-package com.example.revoluttestapp
+package com.example.revoluttestapp.core
 
 import com.example.revoluttestapp.core.di.ApplicationComponent
 

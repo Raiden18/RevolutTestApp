@@ -7,6 +7,7 @@ import com.example.revoluttestapp.currencyconverter.viewmodel.CurrencyRateUiMapp
 import com.example.revoluttestapp.domain.CodeToCurrencyMapper
 import com.example.revoluttestapp.domain.CurrencyConverter
 import com.example.revoluttestapp.domain.usecases.*
+import com.example.revoluttestapp.domain.utils.Logger
 import com.example.revoluttestapp.domain.utils.RxSchedulers
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 
@@ -21,7 +22,8 @@ internal class CurrenciesViewModelFactory(
     private val currencyConverter: CurrencyConverter,
     private val updateCurrencyRateEverySecondUseCase: UpdateCurrencyRateEverySecondUseCase,
     private val compositeDisposable: CompositeDisposable,
-    private val rxSchedulers: RxSchedulers
+    private val rxSchedulers: RxSchedulers,
+    private val logger: Logger
 ) : ViewModelProvider.Factory {
     override fun <T : ViewModel?> create(modelClass: Class<T>): T {
         return CurrenciesViewModel(
@@ -35,7 +37,8 @@ internal class CurrenciesViewModelFactory(
             currencyConverter,
             updateCurrencyRateEverySecondUseCase,
             compositeDisposable,
-            rxSchedulers
+            rxSchedulers,
+            logger
         ) as T
     }
 }

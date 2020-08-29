@@ -1,4 +1,4 @@
-package com.example.revoluttestapp
+package com.example.revoluttestapp.core
 
 import com.example.revoluttestapp.domain.utils.RxSchedulers
 import io.reactivex.rxjava3.android.schedulers.AndroidSchedulers

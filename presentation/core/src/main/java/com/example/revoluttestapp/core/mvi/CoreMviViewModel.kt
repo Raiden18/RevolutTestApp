@@ -1,4 +1,4 @@
-package com.example.revoluttestapp.mvi
+package com.example.revoluttestapp.core.mvi
 
 import androidx.lifecycle.ViewModel
 import com.jakewharton.rxrelay3.BehaviorRelay

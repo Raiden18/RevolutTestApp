@@ -2,7 +2,7 @@ package com.example.revoluttestapp.currencyconverter.view.states
 
 import android.view.View
 import com.example.revoluttestapp.currencyconverter.view.CurrenciesActivity
-import com.example.revoluttestapp.mvi.ViewState
+import com.example.revoluttestapp.core.mvi.ViewState
 import kotlinx.android.synthetic.main.activity_main.*
 
 internal class LoaderViewState(

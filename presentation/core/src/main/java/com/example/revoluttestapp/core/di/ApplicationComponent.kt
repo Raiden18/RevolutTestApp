@@ -5,6 +5,7 @@ import com.example.revoluttestapp.data.mappers.CurrencyRateMapper
 import com.example.revoluttestapp.data.repositories.currencyrate.CurrencyRatesService
 import com.example.revoluttestapp.domain.repositories.*
 import com.example.revoluttestapp.domain.usecases.*
+import com.example.revoluttestapp.domain.utils.Logger
 import com.example.revoluttestapp.domain.utils.RxSchedulers
 import dagger.BindsInstance
 import dagger.Component
@@ -38,4 +39,5 @@ interface ApplicationComponent {
     fun provideCountryRepository(): FlagRepository
     fun provideGetFlagForCurrency(): GetFlagForCurrencyUseCase
     fun provideForceUpdateCurrencyRatesUseCase(): ForceUpdateCurrencyRatesUseCase
+    fun provideLogger(): Logger
 }

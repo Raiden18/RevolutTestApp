@@ -2,11 +2,13 @@ package com.example.revoluttestapp.core.di
 
 import android.app.Application
 import com.chuckerteam.chucker.api.ChuckerInterceptor
+import com.example.revoluttestapp.core.LoggerImpl
 import com.example.revoluttestapp.data.mappers.CurrencyRateMapper
 import com.example.revoluttestapp.data.mappers.CurrencyRateMapperImpl
 import com.example.revoluttestapp.domain.CodeToCurrencyMapper
 import com.example.revoluttestapp.domain.utils.RxSchedulers
-import com.example.revoluttestapp.RxSchedulersImpl
+import com.example.revoluttestapp.core.RxSchedulersImpl
+import com.example.revoluttestapp.domain.utils.Logger
 import dagger.Module
 import dagger.Provides
 import hu.akarnokd.rxjava3.retrofit.RxJava3CallAdapterFactory
@@ -29,7 +31,7 @@ internal class GlobalModule {
 
     @Singleton
     @Provides
-    fun provideRetrofit(application: Application): Retrofit{
+    fun provideRetrofit(application: Application): Retrofit {
         val httpClient = OkHttpClient.Builder()
             .addInterceptor(ChuckerInterceptor(application))
             .build()
@@ -45,5 +47,11 @@ internal class GlobalModule {
     @Provides
     fun provideRxSchedulers(): RxSchedulers {
         return RxSchedulersImpl()
+    }
+
+    @Singleton
+    @Provides
+    fun provideLogger(): Logger {
+        return LoggerImpl()
     }
 }

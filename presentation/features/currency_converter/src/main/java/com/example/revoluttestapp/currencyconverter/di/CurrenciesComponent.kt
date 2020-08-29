@@ -7,6 +7,7 @@ import com.example.revoluttestapp.currencyconverter.viewmodel.CurrencyRateUiMapp
 import com.example.revoluttestapp.domain.CodeToCurrencyMapper
 import com.example.revoluttestapp.domain.CurrencyConverter
 import com.example.revoluttestapp.domain.usecases.*
+import com.example.revoluttestapp.domain.utils.Logger
 import com.example.revoluttestapp.domain.utils.RxSchedulers
 import dagger.Component
 import dagger.Module
@@ -37,7 +38,8 @@ internal class CurrenciesModule {
         updateCurrencyRateEverySecondUseCase: UpdateCurrencyRateEverySecondUseCase,
         getFlagForCurrencyUseCase: GetFlagForCurrencyUseCase,
         forceUpdateCurrencyRatesUseCase: ForceUpdateCurrencyRatesUseCase,
-        rxSchedulers: RxSchedulers
+        rxSchedulers: RxSchedulers,
+        logger: Logger
     ): CurrenciesViewModelFactory {
         val codeToCurrencyMapper =CodeToCurrencyMapper()
         val currencyConverter =CurrencyConverter(codeToCurrencyMapper)
@@ -53,7 +55,8 @@ internal class CurrenciesModule {
             currencyConverter,
             updateCurrencyRateEverySecondUseCase,
             compositeDisposable,
-            rxSchedulers
+            rxSchedulers,
+            logger
         )
     }
 

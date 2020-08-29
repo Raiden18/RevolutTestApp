@@ -1,24 +1,21 @@
 package com.example.revoluttestapp.currencyconverter.viewmodel
 
-import android.util.Log
-import com.example.revoluttestapp.mvi.CoreMviViewModel
-import com.example.revoluttestapp.mvi.Reducer
+import com.example.revoluttestapp.core.mvi.CoreMviViewModel
+import com.example.revoluttestapp.core.mvi.Reducer
 import com.example.revoluttestapp.currencyconverter.models.UiCurrency
 import com.example.revoluttestapp.domain.CodeToCurrencyMapper
 import com.example.revoluttestapp.domain.CurrencyConverter
+import com.example.revoluttestapp.domain.models.currencies.Currency
 import com.example.revoluttestapp.domain.usecases.*
+import com.example.revoluttestapp.domain.utils.Logger
 import com.example.revoluttestapp.domain.utils.RxSchedulers
-import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 import io.reactivex.rxjava3.disposables.CompositeDisposable
 import io.reactivex.rxjava3.kotlin.ofType
 import io.reactivex.rxjava3.kotlin.plusAssign
-import timber.log.Timber
 import java.util.*
 import kotlin.collections.ArrayList
 
-//TODO: Write tests
-//TODO: RETRY AFTER LOOSING INTERNET CONNECTION
 internal class CurrenciesViewModel(
     private val getCurrencyRatesUseCase: GetCurrencyRatesUseCase,
     private val getSelectedCurrencyUseCase: GetSelectedCurrencyUseCase,
@@ -30,7 +27,8 @@ internal class CurrenciesViewModel(
     private val currencyConverter: CurrencyConverter,
     private val updateCurrencyRateEverySecondUseCase: UpdateCurrencyRateEverySecondUseCase,
     private val compositeDisposable: CompositeDisposable,
-    private val rxSchedulers: RxSchedulers
+    private val rxSchedulers: RxSchedulers,
+    private val logger: Logger
 ) : CoreMviViewModel<Action, State>() {
 
     private val reducer: Reducer<State, Change> = { state, change ->
@@ -110,7 +108,6 @@ internal class CurrenciesViewModel(
             }.switchMapCompletable { saveCurrencyToMemoryUseCase.execute(it) }
             .andThen(Observable.just(Change.DoNothing))
 
-
         disposables += Observable.merge(
             currencies,
             selectCurrency,
@@ -119,20 +116,14 @@ internal class CurrenciesViewModel(
         ).scan(initialState, reducer)
             .distinctUntilChanged()
             .subscribeOn(rxSchedulers.io)
-            .doOnNext { Log.i("HUI", it.toString()) }
-            .subscribe(state::accept, Timber::e)
+            .subscribe(state::accept, logger::logError)
     }
 
-    private fun loadFlagsForConvertedCurrenciesAndMapToUi(convertedCurrencies: List<com.example.revoluttestapp.domain.models.currencies.Currency>): Observable<ArrayList<UiCurrency>> {
+    private fun loadFlagsForConvertedCurrenciesAndMapToUi(convertedCurrencies: List<Currency>): Observable<ArrayList<UiCurrency>> {
         return Observable.fromIterable(convertedCurrencies)
             .flatMap { currency ->
                 getFlagForCurrencyUseCase.execute(currency)
-                    .map { flag ->
-                        currencyRateUiMapper.mapToUiCurrency(
-                            currency,
-                            flag
-                        )
-                    }
+                    .map { flag -> currencyRateUiMapper.mapToUiCurrency(currency,flag)}
             }.collect({ ArrayList<UiCurrency>() },
                 { collection, item -> collection.add(item) })
             .toObservable()
