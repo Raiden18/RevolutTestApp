@@ -19,6 +19,7 @@ import kotlin.collections.ArrayList
 
 //TODO: white screen after exit by back button
 //TODO: Write unit tests
+//TODO: fixed currencyamount of money to save after chaning amount of money
 internal class CurrenciesViewModel(
     private val getCurrencyRatesUseCase: GetCurrencyRatesUseCase,
     private val getSelectedCurrencyUseCase: GetSelectedCurrencyUseCase,

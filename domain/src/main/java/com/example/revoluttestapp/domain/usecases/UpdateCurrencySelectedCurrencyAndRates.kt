@@ -39,13 +39,12 @@ class UpdateCurrencySelectedCurrencyAndRates(
             if (currencyRate.currency.getCode() != newSelectedCurrency.getCode()) {
                 newRates.add(currencyRate.copy())
             } else {
-                logger.logText("HUI", currencyRate.rate.toString())
-                val currencyRateForOldSelectedCurrecyValue = 1 / currencyRate.rate
-                val currencyRateForOldSelectedCurrnecy = CurrencyRate(
+                val currencyRateForOldSelectedCurrencyValue = if (currencyRate.rate == 0.0) 0.0 else 1 / currencyRate.rate
+                val currencyRateForOldSelectedCurrency = CurrencyRate(
                     oldSelectedCurrency.setAmount(0.0),
-                    currencyRateForOldSelectedCurrecyValue
+                    currencyRateForOldSelectedCurrencyValue
                 )
-                newRates.add(currencyRateForOldSelectedCurrnecy)
+                newRates.add(currencyRateForOldSelectedCurrency)
             }
         }
         return newRates
