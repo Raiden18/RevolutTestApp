@@ -1,5 +1,6 @@
 package com.example.revoluttestapp.presentation.screens.currencies.viewmodel
 
+import android.util.Log
 import com.example.revoluttestapp.domain.CodeToCurrencyMapper
 import com.example.revoluttestapp.domain.CurrencyConverter
 import com.example.revoluttestapp.domain.models.currencies.Currency
@@ -56,6 +57,20 @@ class CurrenciesViewModel(
             .subscribeOn(rxSchedulers.io)
             .subscribe()
 
+        val amountOfMoneyChanged = actions.ofType<Action.AmountOfMoneyChanged>()
+            .map { it.amount }
+            .map { it.trim() }
+            .distinctUntilChanged()
+            .map { currencyRateUiMapper.mapAmountOfMoneyToDouble(it) }
+            .switchMap { convertedAmount ->
+                getSelectedCurrencyUseCase.execute()
+                    .map { it.setAmount(convertedAmount) }
+            }.switchMap {
+                saveCurrencyToMemoryUseCase.execute(it)
+                    .andThen(Observable.just(Change.DoNothing))
+            }
+
+
         val currencies = actions.ofType<Action.LoadCurrencies>()
             .switchMap {
                 getCurrencyRatesUseCase.execute()
@@ -93,8 +108,11 @@ class CurrenciesViewModel(
 
         disposables += Observable.merge(
             currencies,
-            selectCurrency
+            selectCurrency,
+            amountOfMoneyChanged
         ).scan(initialState, reducer)
+            .distinctUntilChanged()
+            .doOnNext { Log.i("HUI", it.toString()) }
             .subscribeOn(rxSchedulers.io)
             .subscribe(state::accept, Timber::e)
 

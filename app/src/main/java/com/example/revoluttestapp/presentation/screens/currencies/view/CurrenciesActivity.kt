@@ -1,13 +1,9 @@
 package com.example.revoluttestapp.presentation.screens.currencies.view
 
-import android.app.Activity
 import android.os.Bundle
-import android.util.Log
 import android.view.View
-import android.view.inputmethod.InputMethodManager
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
-import androidx.lifecycle.Observer
 import com.example.revoluttestapp.R
 import com.example.revoluttestapp.domain.utils.RxSchedulers
 import com.example.revoluttestapp.presentation.screens.core.AppComponentProvider
@@ -39,10 +35,7 @@ class CurrenciesActivity : AppCompatActivity() {
             viewModel.dispatch(Action.SelectCurrency(it))
         }
         currency_rates_recycler_view.onAmountOfMoneyChanged = {
-
-        }
-        currency_rates_recycler_view.onHeaderHidden = {
-            hideKeyboard()
+            viewModel.dispatch(Action.AmountOfMoneyChanged(it))
         }
         subscribeToViewModel()
         viewModel.dispatch(Action.LoadCurrencies)
@@ -65,11 +58,7 @@ class CurrenciesActivity : AppCompatActivity() {
                 currency_rates_recycler_view.updateItems(currencies)
             }
         }
-    }
-
-    private fun hideKeyboard() {
-        val imm = getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
-        imm.hideSoftInputFromWindow(window.decorView.rootView.windowToken, 0)
+        Unit
     }
 
     private fun initDagger() {

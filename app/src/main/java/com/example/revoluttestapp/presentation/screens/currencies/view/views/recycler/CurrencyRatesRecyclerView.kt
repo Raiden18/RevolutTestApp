@@ -2,6 +2,7 @@ package com.example.revoluttestapp.presentation.screens.currencies.view.views.re
 
 import android.content.Context
 import android.util.AttributeSet
+import android.util.Log
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurrency
@@ -12,7 +13,6 @@ class CurrencyRatesRecyclerView(
 ) : RecyclerView(context, attributeSet) {
     lateinit var onCurrencyClick: (UiCurrency) -> Unit
     lateinit var onAmountOfMoneyChanged: (text: String) -> Unit
-    lateinit var onHeaderHidden: () -> Unit
     private val currencyRatesAdapter: CurrencyRatesAdapter by lazy {
         CurrencyRatesAdapter(
             onCurrencyClick,
@@ -23,15 +23,6 @@ class CurrencyRatesRecyclerView(
 
     init {
         layoutManager = linearLayoutManager
-        addOnScrollListener(object : RecyclerView.OnScrollListener() {
-            override fun onScrolled(recyclerView: RecyclerView, dx: Int, dy: Int) {
-                val isHeaderOutOfScreen = linearLayoutManager.findFirstVisibleItemPosition() != 0
-                if (isHeaderOutOfScreen) {
-                    onHeaderHidden.invoke()
-                }
-            }
-        })
-
     }
 
     fun updateItems(items: List<UiCurrency>) {

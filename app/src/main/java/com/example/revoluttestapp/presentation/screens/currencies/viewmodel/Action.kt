@@ -6,4 +6,5 @@ import com.example.revoluttestapp.presentation.screens.currencies.models.UiCurre
 sealed class Action: CoreAction{
     object LoadCurrencies: Action()
     data class SelectCurrency(val uiCurrencyPlace: UiCurrency): Action()
+    data class AmountOfMoneyChanged(val amount: String): Action()
 }
