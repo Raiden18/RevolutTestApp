@@ -16,6 +16,7 @@ import io.reactivex.rxjava3.kotlin.plusAssign
 import java.util.*
 import kotlin.collections.ArrayList
 
+//TODO: white screen after exit by back button
 internal class CurrenciesViewModel(
     private val getCurrencyRatesUseCase: GetCurrencyRatesUseCase,
     private val getSelectedCurrencyUseCase: GetSelectedCurrencyUseCase,
@@ -60,7 +61,6 @@ internal class CurrenciesViewModel(
                     .onErrorReturn { Change.ShowError(it) }
                     .startWith(Observable.just(Change.ShowLoading))
             }
-
 
         val amountOfMoneyChanged = actions.ofType<Action.AmountOfMoneyChanged>()
             .map { it.amount }
@@ -123,9 +123,9 @@ internal class CurrenciesViewModel(
         return Observable.fromIterable(convertedCurrencies)
             .flatMap { currency ->
                 getFlagForCurrencyUseCase.execute(currency)
-                    .map { flag -> currencyRateUiMapper.mapToUiCurrency(currency,flag)}
-            }.collect({ ArrayList<UiCurrency>() },
-                { collection, item -> collection.add(item) })
+                    .map { flag -> currencyRateUiMapper.mapToUiCurrency(currency, flag) }
+            }
+            .collect({ ArrayList<UiCurrency>() }, { collection, item -> collection.add(item) })
             .toObservable()
     }
 
