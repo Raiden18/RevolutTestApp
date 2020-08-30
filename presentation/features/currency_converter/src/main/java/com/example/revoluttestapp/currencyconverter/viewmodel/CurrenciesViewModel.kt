@@ -38,7 +38,7 @@ internal class CurrenciesViewModel(
     private var blockUiWithLoaderUntilGettingUpdatedData = false
     private val reducer: Reducer<State, Change> = { state, change ->
         when (change) {
-            is Change.ShowLoading -> state.copy(isLoaderShown = true, error = null)
+            is Change.ShowLoading -> state.copy(isLoaderShown = true, currencies = emptyList())
             is Change.ShowCurrencies -> state.copy(
                 isLoaderShown = false,
                 currencies = change.uiCurrencies,
@@ -67,18 +67,21 @@ internal class CurrenciesViewModel(
                 updateCurrencyRateEverySecondUseCase.execute()
                     .map<Change> { Change.DoNothing }
                     .doOnError { isErrorShown = true }
-                    .doOnNext { isErrorShown = false }
+                    .doOnNext {
+                        isErrorShown = false
+                        blockUiWithLoaderUntilGettingUpdatedData = false
+                    }
                     .onErrorReturn { Change.ShowError(it) }
                     .map {
-                        if(blockUiWithLoaderUntilGettingUpdatedData){
+                        if (blockUiWithLoaderUntilGettingUpdatedData) {
                             Change.ShowLoading
-                        } else{
+                        } else {
                             it
                         }
                     }
                 //.startWith(Observable.just(Change.ShowLoading))
                 //.filter { (shouldShowLoader && it is Change.ShowLoading) || it is Change.ShowError || it is Change.DoNothing }
-            }
+            }.startWith(Observable.just(Change.ShowLoading))
 
         val cancelUpdatingRatesEverySecond = actions.ofType<Action.CancelUpdatingRates>()
             .doOnNext { shouldShowLoader = false }
@@ -121,23 +124,29 @@ internal class CurrenciesViewModel(
 
         val selectCurrency = actions.ofType<Action.SelectCurrency>()
             .map { it.uiCurrencyPlace }
+            .flatMap { uiCurrency ->
+                getSelectedCurrencyUseCase.execute()
+                    .flatMap{ oldSelected->
+                        if(oldSelected.getCode() == uiCurrency.currencyCode){
+                            Observable.empty()
+                        } else{
+                            Observable.just(uiCurrency)
+                        }
+                    }
+
+            }
             .map { uiCurrency ->
                 val currency = codeToCurrencyMapper.map(uiCurrency.currencyCode)
                 val amountOfMoney = currencyRateUiMapper.mapAmountOfMoneyToDouble(
                     uiCurrency.amountOfMoney
                 )
                 currency.setAmount(amountOfMoney)
-            }.doOnNext { updateCurrencySelectedCurrencyAndRates.execute(it) }
-            .map<Change> { Change.DoNothing }
-            .map {
-                if (isErrorShown) {
-                    blockUiWithLoaderUntilGettingUpdatedData = true
-                    Change.ShowLoading
-                } else {
-                    it
-                }
             }
-            .doOnNext { change -> Log.i("HUI", change.toString()) }
+            .flatMap {
+                updateCurrencySelectedCurrencyAndRates.execute(it)
+                    .andThen(Observable.just(Change.DoNothing))
+            }.map { if (isErrorShown) Change.ShowLoading else it }
+
 
         val changes = listOf(
             currenciesContent,

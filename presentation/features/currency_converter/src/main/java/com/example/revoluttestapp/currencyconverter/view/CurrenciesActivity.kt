@@ -1,6 +1,7 @@
 package com.example.revoluttestapp.currencyconverter.view
 
 import android.os.Bundle
+import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.revoluttestapp.domain.utils.RxSchedulers
@@ -15,6 +16,7 @@ import com.example.revoluttestapp.currencyconverter.viewmodel.Action
 import com.example.revoluttestapp.currencyconverter.viewmodel.CurrenciesViewModel
 import com.example.revoluttestapp.currencyconverter.viewmodel.State
 import com.example.revoluttestapp.core.mvi.ViewState
+import com.example.revoluttestapp.currencyconverter.view.states.DoNothingState
 import com.example.revoluttestapp.domain.utils.Logger
 import com.trello.lifecycle4.android.lifecycle.AndroidLifecycle
 import kotlinx.android.synthetic.main.activity_main.*
@@ -55,6 +57,7 @@ class CurrenciesActivity : AppCompatActivity() {
         viewModel.dispatch(Action.SubscribeOnCurrencyRates)
         viewModel.dispatch(Action.LoadCurrencies)
     }
+
     override fun onStop() {
         super.onStop()
         viewModel.dispatch(Action.CancelUpdatingRates)
@@ -73,16 +76,36 @@ class CurrenciesActivity : AppCompatActivity() {
     }
 
     private fun createViewState(state: State): ViewState {
-        return with(state) {
-            when {
-                isLoaderShown -> LoaderViewState(this@CurrenciesActivity)
-                error != null -> {
-                    viewModel.dispatch(Action.SubscribeOnCurrencyRates)
-                    CurrenciesWitErrorViewState(this@CurrenciesActivity, error, currencies)
-                }
-                else -> CurrenciesViewSates(this@CurrenciesActivity, currencies)
+        /*return with(state){
+            if (isLoaderShown && error != null) {
+                viewModel.dispatch(Action.SubscribeOnCurrencyRates)
+                LoaderViewState(this@CurrenciesActivity)
+            } else if (isLoaderShown && error == null) {
+                LoaderViewState(this@CurrenciesActivity)
+            }else if (currencies.isNotEmpty() && error != null){
+                viewModel.dispatch(Action.SubscribeOnCurrencyRates)
+                CurrenciesWitErrorViewState(this@CurrenciesActivity, error, currencies)
+            } else if(!isLoaderShown && currencies.isEmpty() && error != null){
+                viewModel.dispatch(Action.SubscribeOnCurrencyRates)
+                DoNothingState()
+            } else{
+                CurrenciesViewSates(this@CurrenciesActivity, currencies)
             }
-        }
+        }*/
+        return with(state) {
+            if(error !=null){
+                viewModel.dispatch(Action.SubscribeOnCurrencyRates)
+            }
+             when {
+                 isLoaderShown  ->{
+                     LoaderViewState(this@CurrenciesActivity)
+                 }
+                 error != null -> {
+                     CurrenciesWitErrorViewState(this@CurrenciesActivity, error, currencies)
+                 }
+                 else -> CurrenciesViewSates(this@CurrenciesActivity, currencies)
+             }
+         }
     }
 
     private fun initDagger() {
