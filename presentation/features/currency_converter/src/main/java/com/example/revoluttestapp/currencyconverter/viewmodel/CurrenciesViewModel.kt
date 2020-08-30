@@ -113,17 +113,7 @@ internal class CurrenciesViewModel(
 
         val selectCurrency = actions.ofType<Action.SelectCurrency>()
             .map { it.uiCurrencyPlace }
-            .flatMap { uiCurrency ->
-                getSelectedCurrencyUseCase.execute()
-                    .flatMap { oldSelected ->
-                        if (oldSelected.getCode() == uiCurrency.currencyCode) {
-                            Observable.empty()
-                        } else {
-                            Observable.just(uiCurrency)
-                        }
-                    }
-
-            }
+            .flatMap { uiCurrency -> checkThatWasSelectedNewCurrency(uiCurrency) }
             .map { uiCurrency ->
                 val currency = codeToCurrencyMapper.map(uiCurrency.currencyCode)
                 val amountOfMoney = currencyRateUiMapper.mapAmountOfMoneyToDouble(
@@ -174,6 +164,17 @@ internal class CurrenciesViewModel(
         linkedList.add(currencyToConvertPlace)
         linkedList.addAll(this)
         return linkedList
+    }
+
+    private fun checkThatWasSelectedNewCurrency(uiCurrency: UiCurrency): Observable<UiCurrency>{
+        return getSelectedCurrencyUseCase.execute()
+            .flatMap { oldSelected ->
+                if (oldSelected.getCode() == uiCurrency.currencyCode) {
+                    Observable.empty()
+                } else {
+                    Observable.just(uiCurrency)
+                }
+            }
     }
 
     public override fun onCleared() {
