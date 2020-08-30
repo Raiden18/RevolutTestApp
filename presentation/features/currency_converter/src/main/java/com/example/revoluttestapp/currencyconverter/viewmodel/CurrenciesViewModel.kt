@@ -69,8 +69,7 @@ internal class CurrenciesViewModel(
                     .doOnError { isErrorShown = true }
                     .doOnNext { isErrorShown = false }
                     .onErrorReturn { Change.ShowError(it) }
-                //.startWith(Observable.just(Change.ShowLoading))
-                //.filter { (shouldShowLoader && it is Change.ShowLoading) || it is Change.ShowError || it is Change.DoNothing }
+                    .filter { (shouldShowLoader && it is Change.ShowLoading) || it is Change.ShowError || it is Change.DoNothing }
             }.startWith(Observable.just(Change.ShowLoading))
 
         val cancelUpdatingRatesEverySecond = actions.ofType<Action.CancelUpdatingRates>()

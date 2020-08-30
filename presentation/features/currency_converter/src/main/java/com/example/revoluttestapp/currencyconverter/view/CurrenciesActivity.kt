@@ -78,23 +78,6 @@ class CurrenciesActivity : AppCompatActivity() {
     }
 
     private fun createViewState(state: State): ViewState {
-        Log.i("HUI", state.toString())
-        /*return with(state){
-            if (isLoaderShown && error != null) {
-                viewModel.dispatch(Action.SubscribeOnCurrencyRates)
-                LoaderViewState(this@CurrenciesActivity)
-            } else if (isLoaderShown && error == null) {
-                LoaderViewState(this@CurrenciesActivity)
-            }else if (currencies.isNotEmpty() && error != null){
-                viewModel.dispatch(Action.SubscribeOnCurrencyRates)
-                CurrenciesWitErrorViewState(this@CurrenciesActivity, error, currencies)
-            } else if(!isLoaderShown && currencies.isEmpty() && error != null){
-                viewModel.dispatch(Action.SubscribeOnCurrencyRates)
-                DoNothingState()
-            } else{
-                CurrenciesViewSates(this@CurrenciesActivity, currencies)
-            }
-        }*/
         return with(state) {
             if (error != null) {
                 viewModel.dispatch(Action.SubscribeOnCurrencyRates)
