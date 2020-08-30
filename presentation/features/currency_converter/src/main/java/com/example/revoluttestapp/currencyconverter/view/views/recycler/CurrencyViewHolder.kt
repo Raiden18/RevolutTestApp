@@ -33,7 +33,8 @@ internal class CurrencyViewHolder(
     fun bind(item: UiCurrency) = with(containerView) {
         itemView.setOnClickListener {
             amountOfMoneyEditText.requestFocus()
-            val itemWithUpdatedAmount = item.copy(amountOfMoney = amountOfMoneyEditText.text!!.toString())
+            val itemWithUpdatedAmount =
+                item.copy(amountOfMoney = amountOfMoneyEditText.text!!.toString())
             onCurrencyClick.invoke(itemWithUpdatedAmount)
         }
         currencyCodeView.text = item.currencyCode

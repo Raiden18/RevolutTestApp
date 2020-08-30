@@ -1,12 +1,16 @@
 package com.example.revoluttestapp.currencyconverter.view.views.edittext.formatter
 
+import android.util.Log
+import java.text.DecimalFormat
+
 /**
  * It was created only in oder to cover this logic with unit tests.
  * I don't want to make this project depends on robolectric because it is too slow to run to follow TDD approach.
  * That practice was taken from the "Effective Working With Legacy Code" book.
  */
 internal class CurrencyEditTextFormatter(
-    private val editTextProxy: EditTextProxy
+    private val editTextProxy: EditTextProxy,
+    private val onTextChanged: (String) -> Unit
 ) {
     private companion object {
         const val DEFAULT_EMPTY_VALUE = "0"
@@ -27,6 +31,7 @@ internal class CurrencyEditTextFormatter(
         } else {
             moveCursorToTheEndAndSetBlackTextColor(text)
         }
+        onTextChanged.invoke(text)
     }
 
     private fun String.isAllZeros(): Boolean {
@@ -59,7 +64,7 @@ internal class CurrencyEditTextFormatter(
         editTextProxy.setGrayTextColor()
     }
 
-    private fun roundDigitsAfterDot(text: String){
+    private fun roundDigitsAfterDot(text: String) {
         val numbersBeforeDot = text.split(".").first()
         val numberAfterDot = text.split(".").last()
         val twoNumbersAfterDots = numberAfterDot.take(2)

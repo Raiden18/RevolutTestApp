@@ -1,6 +1,5 @@
 package com.example.revoluttestapp.currencyconverter.view.views.edittext
 
-import android.util.Log
 import android.view.View
 import com.example.revoluttestapp.currencyconverter.view.views.edittext.formatter.CurrencyEditTextFormatter
 
@@ -22,8 +21,7 @@ internal class EditTextFocusChangeListenerImpl(
         currencyEditText.addTextChangedListener(textWatcher)
         textWatcher.onTextChanged = {
             val editTextProxy = EditTextProxyImpl(currencyEditText)
-            CurrencyEditTextFormatter(editTextProxy).execute(it)
-            onTextChanged.invoke(it)
+            CurrencyEditTextFormatter(editTextProxy, onTextChanged).execute(it)
         }
     }
 
