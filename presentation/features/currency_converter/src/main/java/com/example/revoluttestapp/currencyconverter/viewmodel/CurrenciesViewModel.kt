@@ -1,5 +1,6 @@
 package com.example.revoluttestapp.currencyconverter.viewmodel
 
+import android.util.Log
 import com.example.revoluttestapp.core.mvi.CoreMviViewModel
 import com.example.revoluttestapp.core.mvi.Reducer
 import com.example.revoluttestapp.currencyconverter.models.UiCurrency
@@ -32,8 +33,9 @@ internal class CurrenciesViewModel(
     private val rxSchedulers: RxSchedulers,
     private val logger: Logger
 ) : CoreMviViewModel<Action, State>() {
-
     private var shouldShowLoader = true
+    private var isErrorShown = false
+    private var blockUiWithLoaderUntilGettingUpdatedData = false
     private val reducer: Reducer<State, Change> = { state, change ->
         when (change) {
             is Change.ShowLoading -> state.copy(isLoaderShown = true, error = null)
@@ -44,6 +46,11 @@ internal class CurrenciesViewModel(
             )
             is Change.DoNothing -> state
             is Change.ShowError -> state.copy(isLoaderShown = false, error = change.throwable)
+            is Change.ShowLoaderUntilGettingUpdatedData -> state.copy(
+                isLoaderShown = true,
+                currencies = listOf(),
+                error = null
+            )
         }
     }
 
@@ -59,9 +66,18 @@ internal class CurrenciesViewModel(
             .switchMap {
                 updateCurrencyRateEverySecondUseCase.execute()
                     .map<Change> { Change.DoNothing }
+                    .doOnError { isErrorShown = true }
+                    .doOnNext { isErrorShown = false }
                     .onErrorReturn { Change.ShowError(it) }
-                    //.startWith(Observable.just(Change.ShowLoading))
-                    //.filter { (shouldShowLoader && it is Change.ShowLoading) || it is Change.ShowError || it is Change.DoNothing }
+                    .map {
+                        if(blockUiWithLoaderUntilGettingUpdatedData){
+                            Change.ShowLoading
+                        } else{
+                            it
+                        }
+                    }
+                //.startWith(Observable.just(Change.ShowLoading))
+                //.filter { (shouldShowLoader && it is Change.ShowLoading) || it is Change.ShowError || it is Change.DoNothing }
             }
 
         val cancelUpdatingRatesEverySecond = actions.ofType<Action.CancelUpdatingRates>()
@@ -111,8 +127,17 @@ internal class CurrenciesViewModel(
                     uiCurrency.amountOfMoney
                 )
                 currency.setAmount(amountOfMoney)
-            }.switchMapCompletable { updateCurrencySelectedCurrencyAndRates.execute(it) }
-            .andThen(Observable.just(Change.DoNothing))
+            }.doOnNext { updateCurrencySelectedCurrencyAndRates.execute(it) }
+            .map<Change> { Change.DoNothing }
+            .map {
+                if (isErrorShown) {
+                    blockUiWithLoaderUntilGettingUpdatedData = true
+                    Change.ShowLoading
+                } else {
+                    it
+                }
+            }
+            .doOnNext { change -> Log.i("HUI", change.toString()) }
 
         val changes = listOf(
             currenciesContent,
