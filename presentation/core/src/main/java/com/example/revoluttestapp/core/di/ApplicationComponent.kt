@@ -40,6 +40,4 @@ interface ApplicationComponent {
     fun provideGetFlagForCurrency(): GetFlagForCurrencyUseCase
     fun provideLogger(): Logger
     fun provideUpdateCurrencySelectedCurrencyAndRates(): UpdateCurrencySelectedCurrencyAndRates
-    fun provideCheckInternetConnectionUseCase(): CheckInternetConnectionUseCase
-    fun provideInternetConnectionRepository(): InternetConnectionRepository
 }

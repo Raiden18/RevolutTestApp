@@ -2,7 +2,6 @@ package com.example.revoluttestapp.core.di
 
 import android.app.Application
 import com.example.revoluttestapp.data.mappers.CurrencyRateMapper
-import com.example.revoluttestapp.data.repositories.InternetConnectionRepositoryImpl
 import com.example.revoluttestapp.data.repositories.flag.FlagRepositoryImpl
 import com.example.revoluttestapp.data.repositories.currency.CurrencyRepositoryImpl
 import com.example.revoluttestapp.data.repositories.currencyrate.CurrencyRatesRepositoryImpl
@@ -10,7 +9,6 @@ import com.example.revoluttestapp.data.repositories.currencyrate.CurrencyRatesSe
 import com.example.revoluttestapp.domain.repositories.CurrencyRatesRepository
 import com.example.revoluttestapp.domain.repositories.CurrencyRepository
 import com.example.revoluttestapp.domain.repositories.FlagRepository
-import com.example.revoluttestapp.domain.repositories.InternetConnectionRepository
 import com.example.revoluttestapp.domain.utils.RxSchedulers
 import dagger.Module
 import dagger.Provides
@@ -45,11 +43,5 @@ internal class RepositoriesModule {
     @Provides
     fun provideCountryRepository(application: Application): FlagRepository {
         return FlagRepositoryImpl(application)
-    }
-
-    @Singleton
-    @Provides
-    fun provideInternetConnectionRepository(): InternetConnectionRepository {
-        return InternetConnectionRepositoryImpl()
     }
 }
