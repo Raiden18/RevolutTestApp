@@ -56,7 +56,6 @@ internal class CurrenciesViewModel(
 
     override fun bindActions() {
         val updateRatesEverySeconds = actions.ofType<Action.SubscribeOnCurrencyRates>()
-            .doOnNext{Log.i("HUI", "UPDATE EVERY SECOND")}
             .switchMap {
                 updateCurrencyRateEverySecondUseCase.execute()
                     .toObservable<Change>()
@@ -129,7 +128,6 @@ internal class CurrenciesViewModel(
         disposables += Observable.merge(changes)
             .scan(initialState, reducer)
             .distinctUntilChanged()
-            .doOnNext { Log.i("HUI", it.toString()) }
             .subscribeOn(rxSchedulers.io)
             .subscribe(state::accept, logger::logError)
     }
