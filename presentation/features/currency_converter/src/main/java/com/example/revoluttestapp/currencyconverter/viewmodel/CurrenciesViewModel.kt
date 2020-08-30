@@ -147,7 +147,6 @@ internal class CurrenciesViewModel(
             .flatMap { selectedCurrency ->
                 getFlagForCurrencyUseCase.execute(selectedCurrency)
                     .map { currencyRateUiMapper.mapToUiCurrency(selectedCurrency, it) }
-                    .map { it.copy(isEditorEnabled = true) }
             }
     }
 
@@ -155,9 +154,8 @@ internal class CurrenciesViewModel(
         currencyToConvertPlace: UiCurrency,
         uiConvertedCurrencies: List<UiCurrency>
     ): List<UiCurrency> {
-        val currencyWithEnabledEditing = currencyToConvertPlace.copy(isEditorEnabled = true)
         val linkedList = LinkedList<UiCurrency>()
-        linkedList.add(currencyWithEnabledEditing)
+        linkedList.add(currencyToConvertPlace)
         linkedList.addAll(uiConvertedCurrencies)
         return linkedList
     }

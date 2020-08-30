@@ -1,6 +1,8 @@
 package com.example.revoluttestapp.currencyconverter.view.views.recycler
 
+import android.annotation.SuppressLint
 import android.view.View
+import android.view.ViewParent
 import androidx.recyclerview.widget.RecyclerView
 import com.example.revoluttestapp.currencyconverter.models.UiCurrency
 import com.example.revoluttestapp.currencyconverter.view.views.edittext.CurrencyTextWatcher
@@ -21,8 +23,9 @@ internal class CurrencyViewHolder(
     private val currencyNameView = itemView.currency_rate_name
     private val countryFlagView = itemView.item_currency_rate_country_flag
 
-    private val editTextTouchListener = View.OnTouchListener { _, _ ->
-        itemView.performClick()
+    @SuppressLint("ClickableViewAccessibility")
+    private val editTextTouchListener = View.OnTouchListener { _, event ->
+        itemView.onTouchEvent(event)
         false
     }
 
@@ -46,10 +49,12 @@ internal class CurrencyViewHolder(
         }
         amountOfMoneyEditText.setOnTouchListener(editTextTouchListener)
         amountOfMoneyEditText.setTextColor(item.textColor)
+
     }
 
     fun updateAmountOfMoneyView(amount: String, color: Int) {
         amountOfMoneyEditText.setText(amount)
         amountOfMoneyEditText.setTextColor(color)
     }
+
 }

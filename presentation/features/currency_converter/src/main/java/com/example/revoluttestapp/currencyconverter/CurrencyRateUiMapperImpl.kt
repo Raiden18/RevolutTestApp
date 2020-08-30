@@ -26,7 +26,6 @@ internal class CurrencyRateUiMapperImpl(
             currency.getFullName(),
             formattedAmount,
             flag.resId,
-            false,
             textColor
         )
     }

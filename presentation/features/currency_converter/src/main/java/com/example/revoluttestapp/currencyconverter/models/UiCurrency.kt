@@ -12,6 +12,5 @@ internal data class UiCurrency(
     val currencyName: String,
     val amountOfMoney: String,
     val imageFlagId: Int,
-    val isEditorEnabled: Boolean,
     val textColor: Int
 )
