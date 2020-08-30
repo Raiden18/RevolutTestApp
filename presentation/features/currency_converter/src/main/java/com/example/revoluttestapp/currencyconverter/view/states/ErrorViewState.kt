@@ -16,7 +16,6 @@ internal class ErrorViewState(
         showErrorMessage()
     }
 
-
     private fun showErrorMessage(){
         errorMessage.text = throwable.message
         errorMessage.visibility = View.VISIBLE

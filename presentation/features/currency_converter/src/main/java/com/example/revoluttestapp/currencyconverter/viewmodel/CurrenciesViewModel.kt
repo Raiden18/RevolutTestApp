@@ -107,7 +107,6 @@ internal class CurrenciesViewModel(
             .map { it.uiCurrencyPlace }
             .map { uiCurrency ->
                 val currency = codeToCurrencyMapper.map(uiCurrency.currencyCode)
-                Log.i("HUI", uiCurrency.amountOfMoney.toString())
                 val amountOfMoney = currencyRateUiMapper.mapAmountOfMoneyToDouble(
                     uiCurrency.amountOfMoney
                 )

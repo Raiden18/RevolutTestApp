@@ -10,9 +10,9 @@ internal class LoaderViewState(
 ) : AbstractViewState(currenciesActivity) {
 
     override fun render() {
-        showLoader()
         hideCurrencies()
         hideErrorMessage()
+        showLoader()
     }
 
     private fun showLoader(){

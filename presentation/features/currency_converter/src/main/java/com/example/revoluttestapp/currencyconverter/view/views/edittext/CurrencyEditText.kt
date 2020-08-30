@@ -12,6 +12,6 @@ class CurrencyEditText(
 
     fun setText(text: String){
         super.setText(text)
-        setSelection(text.length)
+        setSelection(getText().toString().length)
     }
 }
