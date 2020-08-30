@@ -12,6 +12,7 @@ internal abstract class AbstractViewState(currenciesActivity: CurrenciesActivity
 
     protected fun hideErrorMessage() {
         errorMessage.visibility = View.GONE
+        errorMessage.alpha = 0f
     }
 
     protected fun hideLoader() {

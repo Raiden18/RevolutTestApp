@@ -25,6 +25,13 @@ internal class CurrenciesWitErrorViewState(
 
     private fun showErrorMessage(){
         errorMessage.text = throwable.message
-        errorMessage.visibility = View.VISIBLE
+        if(errorMessage.alpha != 1f){
+            errorMessage.visibility = View.VISIBLE
+            errorMessage.alpha = 0f
+            errorMessage.animate()
+                .alpha(1f)
+                .setDuration(300)
+                .start()
+        }
     }
 }
