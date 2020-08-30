@@ -9,7 +9,7 @@ import com.example.revoluttestapp.currencyconverter.R
 import com.example.revoluttestapp.currencyconverter.di.CurrenciesViewModelFactory
 import com.example.revoluttestapp.currencyconverter.di.DaggerCurrenciesComponent
 import com.example.revoluttestapp.currencyconverter.view.states.CurrenciesViewSates
-import com.example.revoluttestapp.currencyconverter.view.states.ErrorViewState
+import com.example.revoluttestapp.currencyconverter.view.states.CurrenciesWitErrorViewState
 import com.example.revoluttestapp.currencyconverter.view.states.LoaderViewState
 import com.example.revoluttestapp.currencyconverter.viewmodel.Action
 import com.example.revoluttestapp.currencyconverter.viewmodel.CurrenciesViewModel
@@ -18,7 +18,6 @@ import com.example.revoluttestapp.core.mvi.ViewState
 import com.example.revoluttestapp.domain.utils.Logger
 import com.trello.lifecycle4.android.lifecycle.AndroidLifecycle
 import kotlinx.android.synthetic.main.activity_main.*
-import timber.log.Timber
 import javax.inject.Inject
 
 
@@ -49,9 +48,6 @@ class CurrenciesActivity : AppCompatActivity() {
         currency_rates_recycler_view.onCurrencyClick = {
             viewModel.dispatch(Action.SelectCurrency(it))
         }
-        retry_button.setOnClickListener {
-            viewModel.dispatch(Action.SubscribeOnCurrencyRates)
-        }
     }
 
     override fun onStart() {
@@ -80,7 +76,10 @@ class CurrenciesActivity : AppCompatActivity() {
         return with(state) {
             when {
                 isLoaderShown -> LoaderViewState(this@CurrenciesActivity)
-                error != null -> ErrorViewState(this@CurrenciesActivity, error)
+                error != null -> {
+                    viewModel.dispatch(Action.SubscribeOnCurrencyRates)
+                    CurrenciesWitErrorViewState(this@CurrenciesActivity, error, currencies)
+                }
                 else -> CurrenciesViewSates(this@CurrenciesActivity, currencies)
             }
         }

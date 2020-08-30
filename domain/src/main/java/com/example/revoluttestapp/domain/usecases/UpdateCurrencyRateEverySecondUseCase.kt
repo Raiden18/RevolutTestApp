@@ -1,11 +1,13 @@
 package com.example.revoluttestapp.domain.usecases
 
 import com.example.revoluttestapp.domain.models.currencies.Currency
+import com.example.revoluttestapp.domain.models.currencyrate.CurrencyRate
 import com.example.revoluttestapp.domain.repositories.CurrencyRatesRepository
 import com.example.revoluttestapp.domain.repositories.CurrencyRepository
 import com.example.revoluttestapp.domain.utils.RxSchedulers
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
+import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
 class UpdateCurrencyRateEverySecondUseCase(
@@ -15,17 +17,16 @@ class UpdateCurrencyRateEverySecondUseCase(
 ) {
     private var shouldRun: Boolean = true
 
-    fun execute(): Completable {
+    fun execute(): Observable<Unit> {
         shouldRun = true
         return Observable.interval(1, TimeUnit.SECONDS, rxSchedulers.computation)
             .filter { shouldRun }
-            .switchMapCompletable {
+            .switchMap {
                 currencyRepository.getSelectedCurrencyFromMemory()
                     .distinctUntilChanged()
-                    .switchMapCompletable { oldSelectedCurrency ->
+                    .switchMap { oldSelectedCurrency ->
                         updateCurrencyRates(oldSelectedCurrency)
                     }
-            }.retry { error -> error is Throwable
             }
     }
 
@@ -35,9 +36,10 @@ class UpdateCurrencyRateEverySecondUseCase(
 
     private fun updateCurrencyRates(oldSelectedCurrency: Currency) =
         currencyRatesRepository.getCurrencyRateFromApiFor(oldSelectedCurrency.getCode())
-            .flatMapCompletable { updatedCurrencyRates ->
+            .flatMap { updatedCurrencyRates ->
                 checkThatSelectedCurrencyWasNotChanged(oldSelectedCurrency)
                     .flatMapCompletable { currencyRatesRepository.saveToMemory(updatedCurrencyRates) }
+                    .andThen(Observable.just(Unit))
             }
 
     private fun checkThatSelectedCurrencyWasNotChanged(

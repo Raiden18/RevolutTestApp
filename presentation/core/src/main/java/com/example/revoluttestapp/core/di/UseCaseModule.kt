@@ -5,6 +5,7 @@ import com.example.revoluttestapp.domain.CurrencyConverter
 import com.example.revoluttestapp.domain.repositories.CurrencyRatesRepository
 import com.example.revoluttestapp.domain.repositories.CurrencyRepository
 import com.example.revoluttestapp.domain.repositories.FlagRepository
+import com.example.revoluttestapp.domain.repositories.InternetConnectionRepository
 import com.example.revoluttestapp.domain.usecases.*
 import com.example.revoluttestapp.domain.utils.Logger
 import com.example.revoluttestapp.domain.utils.RxSchedulers
@@ -88,5 +89,11 @@ internal class UseCaseModule {
         currencyRatesRepository: CurrencyRatesRepository
     ): UpdateCurrencySelectedCurrencyAndRates {
         return UpdateCurrencySelectedCurrencyAndRates(currencyRepository, currencyRatesRepository)
+    }
+
+    @Singleton
+    @Provides
+    fun provideCheckInternetConnectionUseCase(internetConnectionRepository: InternetConnectionRepository): CheckInternetConnectionUseCase {
+        return CheckInternetConnectionUseCase(internetConnectionRepository)
     }
 }

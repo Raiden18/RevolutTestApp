@@ -8,12 +8,10 @@ import kotlinx.android.synthetic.main.activity_main.*
 internal abstract class AbstractViewState(currenciesActivity: CurrenciesActivity) : ViewState {
     protected val loader = currenciesActivity.currency_rates_loader_view!!
     protected val errorMessage = currenciesActivity.currency_rates_error_message!!
-    protected val retryButton = currenciesActivity.retry_button!!
     protected val currenciesRecyclerView = currenciesActivity.currency_rates_recycler_view!!
 
     protected fun hideErrorMessage() {
         errorMessage.visibility = View.GONE
-        retryButton.visibility = View.GONE
     }
 
     protected fun hideLoader() {

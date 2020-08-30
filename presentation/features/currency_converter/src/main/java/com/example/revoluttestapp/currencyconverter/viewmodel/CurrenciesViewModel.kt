@@ -5,6 +5,7 @@ import com.example.revoluttestapp.core.mvi.Reducer
 import com.example.revoluttestapp.currencyconverter.models.UiCurrency
 import com.example.revoluttestapp.domain.CodeToCurrencyMapper
 import com.example.revoluttestapp.domain.CurrencyConverter
+import com.example.revoluttestapp.domain.exceptions.NoInternetConnectionException
 import com.example.revoluttestapp.domain.models.currencies.Currency
 import com.example.revoluttestapp.domain.usecases.*
 import com.example.revoluttestapp.domain.utils.Logger
@@ -57,12 +58,10 @@ internal class CurrenciesViewModel(
         val updateRatesEverySeconds = actions.ofType<Action.SubscribeOnCurrencyRates>()
             .switchMap {
                 updateCurrencyRateEverySecondUseCase.execute()
-                    .toObservable<Change>()
                     .map<Change> { Change.DoNothing }
                     .onErrorReturn { Change.ShowError(it) }
-                    .startWith(Observable.just(Change.ShowLoading))
-                    .filter { (shouldShowLoader && it is Change.ShowLoading) || it is Change.ShowError || it is Change.DoNothing }
-
+                    //.startWith(Observable.just(Change.ShowLoading))
+                    //.filter { (shouldShowLoader && it is Change.ShowLoading) || it is Change.ShowError || it is Change.DoNothing }
             }
 
         val cancelUpdatingRatesEverySecond = actions.ofType<Action.CancelUpdatingRates>()
