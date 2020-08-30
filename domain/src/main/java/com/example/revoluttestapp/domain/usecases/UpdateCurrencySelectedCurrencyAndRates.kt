@@ -39,7 +39,7 @@ class UpdateCurrencySelectedCurrencyAndRates(
     ): List<CurrencyRate> {
         val newRates = LinkedList<CurrencyRate>()
         savedRates.forEach { currencyRate ->
-            if (currencyRate.currency.getCode() != newSelectedCurrency.getCode()) {
+            if (currencyRate.currencyCode != newSelectedCurrency.getCode()) {
                 newRates.add(currencyRate.copy())
             } else {
                 val currencyRateForOldSelectedCurrencyValue =

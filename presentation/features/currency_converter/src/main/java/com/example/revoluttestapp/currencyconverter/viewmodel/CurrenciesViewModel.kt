@@ -17,9 +17,7 @@ import io.reactivex.rxjava3.kotlin.plusAssign
 import java.util.*
 import kotlin.collections.ArrayList
 
-//TODO: white screen after exit by back button
 //TODO: Write unit tests
-//TODO: Fix changing amount of money after error
 internal class CurrenciesViewModel(
     private val getCurrencyRatesUseCase: GetCurrencyRatesUseCase,
     private val getSelectedCurrencyUseCase: GetSelectedCurrencyUseCase,
@@ -35,7 +33,7 @@ internal class CurrenciesViewModel(
     private val rxSchedulers: RxSchedulers,
     private val logger: Logger
 ) : CoreMviViewModel<Action, State>() {
-
+    private var shouldShowLoader = true
     private val reducer: Reducer<State, Change> = { state, change ->
         when (change) {
             is Change.ShowLoading -> state.copy(isLoaderShown = true, error = null)
@@ -57,16 +55,26 @@ internal class CurrenciesViewModel(
         get() = State(isLoaderShown = false, currencies = emptyList(), error = null)
 
     override fun bindActions() {
-        val subscribeOnUpdatingRates = actions.ofType<Action.SubscribeOnCurrencyRates>()
+        val updateRatesEverySeconds = actions.ofType<Action.SubscribeOnCurrencyRates>()
+            .doOnNext{Log.i("HUI", "UPDATE EVERY SECOND")}
             .switchMap {
                 updateCurrencyRateEverySecondUseCase.execute()
                     .toObservable<Change>()
                     .map<Change> { Change.DoNothing }
                     .onErrorReturn { Change.ShowError(it) }
                     .startWith(Observable.just(Change.ShowLoading))
+                    .filter { (shouldShowLoader && it is Change.ShowLoading) || it is Change.ShowError || it is Change.DoNothing }
+
             }
 
-        val amountOfMoneyChanged = actions.ofType<Action.AmountOfMoneyChanged>()
+        val cancelUpdatingRatesEverySecond = actions.ofType<Action.CancelUpdatingRates>()
+            .doOnNext { shouldShowLoader = false }
+            .switchMap {
+                updateCurrencyRateEverySecondUseCase.unExecute(false)
+                    .toObservable<Change>()
+            }
+
+        val amountOfMoneyChangedOfBaseCurrency = actions.ofType<Action.AmountOfMoneyChanged>()
             .map { it.amount }
             .distinctUntilChanged()
             .map { currencyRateUiMapper.mapAmountOfMoneyToDouble(it) }
@@ -80,7 +88,7 @@ internal class CurrenciesViewModel(
                     }
             }
 
-        val currencies = actions.ofType<Action.LoadCurrencies>()
+        val currenciesContent = actions.ofType<Action.LoadCurrencies>()
             .switchMap {
                 getCurrencyRatesUseCase.execute()
                     .flatMap { rates ->
@@ -92,10 +100,7 @@ internal class CurrenciesViewModel(
                             }.flatMap { uiConvertedCurrencies ->
                                 loadFlagForSelectedCurrencyAndMapToUi()
                                     .map {
-                                        setCurrencyToConvertToTopOfList(
-                                            it,
-                                            uiConvertedCurrencies
-                                        )
+                                        setCurrencyToConvertToTopOfList(it, uiConvertedCurrencies)
                                     }
                             }
                     }
@@ -114,13 +119,17 @@ internal class CurrenciesViewModel(
             }.switchMapCompletable { updateCurrencySelectedCurrencyAndRates.execute(it) }
             .andThen(Observable.just(Change.DoNothing))
 
-        disposables += Observable.merge(
-            currencies,
+        val changes = listOf(
+            currenciesContent,
             selectCurrency,
-            amountOfMoneyChanged,
-            subscribeOnUpdatingRates
-        ).scan(initialState, reducer)
+            amountOfMoneyChangedOfBaseCurrency,
+            updateRatesEverySeconds,
+            cancelUpdatingRatesEverySecond
+        )
+        disposables += Observable.merge(changes)
+            .scan(initialState, reducer)
             .distinctUntilChanged()
+            .doOnNext { Log.i("HUI", it.toString()) }
             .subscribeOn(rxSchedulers.io)
             .subscribe(state::accept, logger::logError)
     }
@@ -148,12 +157,10 @@ internal class CurrenciesViewModel(
         currencyToConvertPlace: UiCurrency,
         uiConvertedCurrencies: List<UiCurrency>
     ): List<UiCurrency> {
-        val linkedList = LinkedList<UiCurrency>()
         val currencyWithEnabledEditing = currencyToConvertPlace.copy(isEditorEnabled = true)
+        val linkedList = LinkedList<UiCurrency>()
         linkedList.add(currencyWithEnabledEditing)
-        uiConvertedCurrencies.forEach {
-            linkedList.add(it)
-        }
+        linkedList.addAll(uiConvertedCurrencies)
         return linkedList
     }
 

@@ -13,8 +13,12 @@ class UpdateCurrencyRateEverySecondUseCase(
     private val currencyRatesRepository: CurrencyRatesRepository,
     private val rxSchedulers: RxSchedulers
 ) {
+    private var shouldRun: Boolean = true
+
     fun execute(): Completable {
+        shouldRun = true
         return Observable.interval(1, TimeUnit.SECONDS, rxSchedulers.computation)
+            .filter { shouldRun }
             .switchMapCompletable {
                 currencyRepository.getSelectedCurrencyFromMemory()
                     .distinctUntilChanged()
@@ -24,13 +28,19 @@ class UpdateCurrencyRateEverySecondUseCase(
             }
     }
 
-    private fun updateCurrencyRates(oldSelectedCurrency: Currency) = currencyRatesRepository.getCurrencyRateFromApiFor(oldSelectedCurrency.getCode())
-        .flatMapCompletable { updatedCurrencyRates->
-            checkThatSelectedCurrencyWasNotChanged(oldSelectedCurrency)
-                .flatMapCompletable { currencyRatesRepository.saveToMemory(updatedCurrencyRates) }
-        }
+    fun unExecute(shouldRun: Boolean): Completable {
+        return Completable.fromAction { this.shouldRun = shouldRun }
+    }
+
+    private fun updateCurrencyRates(oldSelectedCurrency: Currency) =
+        currencyRatesRepository.getCurrencyRateFromApiFor(oldSelectedCurrency.getCode())
+            .flatMapCompletable { updatedCurrencyRates ->
+                checkThatSelectedCurrencyWasNotChanged(oldSelectedCurrency)
+                    .flatMapCompletable { currencyRatesRepository.saveToMemory(updatedCurrencyRates) }
+            }
 
     private fun checkThatSelectedCurrencyWasNotChanged(
-        oldSelectedCurrency: Currency)= currencyRepository.getSelectedCurrencyFromMemory()
-            .filter { newSelectedCurrency->  oldSelectedCurrency.getCode() == newSelectedCurrency.getCode()}
+        oldSelectedCurrency: Currency
+    ) = currencyRepository.getSelectedCurrencyFromMemory()
+        .filter { newSelectedCurrency -> oldSelectedCurrency.getCode() == newSelectedCurrency.getCode() }
 }

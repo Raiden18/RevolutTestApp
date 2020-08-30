@@ -43,8 +43,6 @@ class CurrenciesActivity : AppCompatActivity() {
             viewModel.dispatch(Action.AmountOfMoneyChanged(it))
         }
         subscribeToViewModel()
-        viewModel.dispatch(Action.SubscribeOnCurrencyRates)
-        viewModel.dispatch(Action.LoadCurrencies)
     }
 
     private fun initClickListeners() {
@@ -54,6 +52,16 @@ class CurrenciesActivity : AppCompatActivity() {
         retry_button.setOnClickListener {
             viewModel.dispatch(Action.SubscribeOnCurrencyRates)
         }
+    }
+
+    override fun onStart() {
+        super.onStart()
+        viewModel.dispatch(Action.SubscribeOnCurrencyRates)
+        viewModel.dispatch(Action.LoadCurrencies)
+    }
+    override fun onStop() {
+        super.onStop()
+        viewModel.dispatch(Action.CancelUpdatingRates)
     }
 
     private fun subscribeToViewModel() {
