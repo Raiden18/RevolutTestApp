@@ -98,9 +98,7 @@ internal class CurrenciesViewModel(
                                 loadFlagsForConvertedCurrenciesAndMapToUi(convertedCurrencies)
                             }.flatMap { uiConvertedCurrencies ->
                                 loadFlagForSelectedCurrencyAndMapToUi()
-                                    .map {
-                                        setCurrencyToConvertToTopOfList(it, uiConvertedCurrencies)
-                                    }
+                                    .map { uiConvertedCurrencies.addAtTheTop(it) }
                             }
                     }
                     .map<Change> { Change.ShowCurrencies(it) }
@@ -150,13 +148,10 @@ internal class CurrenciesViewModel(
             }
     }
 
-    private fun setCurrencyToConvertToTopOfList(
-        currencyToConvertPlace: UiCurrency,
-        uiConvertedCurrencies: List<UiCurrency>
-    ): List<UiCurrency> {
+    private fun List<UiCurrency>.addAtTheTop(currencyToConvertPlace: UiCurrency): List<UiCurrency> {
         val linkedList = LinkedList<UiCurrency>()
         linkedList.add(currencyToConvertPlace)
-        linkedList.addAll(uiConvertedCurrencies)
+        linkedList.addAll(this)
         return linkedList
     }
 
