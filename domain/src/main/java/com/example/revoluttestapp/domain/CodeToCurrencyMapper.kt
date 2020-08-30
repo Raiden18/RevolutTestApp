@@ -10,9 +10,7 @@ class CodeToCurrencyMapper {
     }
     fun map(code: String): Currency {
         return when (code) {
-            Euro.CODE -> Euro(
-                0.0
-            )
+            Euro.CODE -> Euro(EMPTY_ZERO_VALUE)
             AustralianDollar.CODE -> AustralianDollar(EMPTY_ZERO_VALUE)
             BrazilianReal.CODE -> BrazilianReal(EMPTY_ZERO_VALUE)
             BulgarianLev.CODE -> BulgarianLev(EMPTY_ZERO_VALUE)

@@ -37,7 +37,7 @@ internal class GlobalModule {
             .build()
         return Retrofit.Builder()
             .client(httpClient)
-            .baseUrl("https://hiring.revolut.codes/api/android/") //TODO: MOVE TO build.gradle
+            .baseUrl("https://hiring.revolut.codes/api/android/")
             .addConverterFactory(GsonConverterFactory.create())
             .addCallAdapterFactory(RxJava3CallAdapterFactory.create())
             .build()

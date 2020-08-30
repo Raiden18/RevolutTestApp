@@ -7,4 +7,8 @@ internal data class State(
     val isLoaderShown: Boolean,
     val currencies: List<UiCurrency>,
     val error: Throwable?
-) : CoreState
+) : CoreState{
+    companion object{
+        fun createEmpty() = State(false, emptyList(), null)
+    }
+}

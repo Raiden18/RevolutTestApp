@@ -1,6 +1,5 @@
 package com.example.revoluttestapp.currencyconverter.viewmodel
 
-import android.util.Log
 import com.example.revoluttestapp.core.mvi.CoreMviViewModel
 import com.example.revoluttestapp.core.mvi.Reducer
 import com.example.revoluttestapp.currencyconverter.models.UiCurrency
@@ -33,6 +32,7 @@ internal class CurrenciesViewModel(
     private val rxSchedulers: RxSchedulers,
     private val logger: Logger
 ) : CoreMviViewModel<Action, State>() {
+
     private var shouldShowLoader = true
     private val reducer: Reducer<State, Change> = { state, change ->
         when (change) {
@@ -52,7 +52,7 @@ internal class CurrenciesViewModel(
     }
 
     override val initialState: State
-        get() = State(isLoaderShown = false, currencies = emptyList(), error = null)
+        get() = State.createEmpty()
 
     override fun bindActions() {
         val updateRatesEverySeconds = actions.ofType<Action.SubscribeOnCurrencyRates>()
@@ -155,7 +155,7 @@ internal class CurrenciesViewModel(
         return linkedList
     }
 
-    override fun onCleared() {
+    public override fun onCleared() {
         compositeDisposable.clear()
         super.onCleared()
     }

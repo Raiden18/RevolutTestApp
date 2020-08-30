@@ -18,9 +18,8 @@ class UpdateCurrencySelectedCurrencyAndRates(
             .switchMapCompletable { oldSelectedCurrency ->
                 currencyRatesRepository.getCurrencyRateFromMemory()
                     .take(1)
-                    .map { savedRates ->
-                        removeNewSelectedCurrencyFromRatesAndAddThereOldSelectedCurrency(
-                            savedRates,
+                    .map {
+                        it.removeNewSelectedCurrencyFromRatesAndAddThereOldSelectedCurrency(
                             newSelectedCurrency,
                             oldSelectedCurrency
                         )
@@ -32,13 +31,12 @@ class UpdateCurrencySelectedCurrencyAndRates(
             }
     }
 
-    private fun removeNewSelectedCurrencyFromRatesAndAddThereOldSelectedCurrency(
-        savedRates: List<CurrencyRate>,
+    private fun List<CurrencyRate>.removeNewSelectedCurrencyFromRatesAndAddThereOldSelectedCurrency(
         newSelectedCurrency: Currency,
         oldSelectedCurrency: Currency
     ): List<CurrencyRate> {
         val newRates = LinkedList<CurrencyRate>()
-        savedRates.forEach { currencyRate ->
+        forEach { currencyRate ->
             if (currencyRate.currencyCode != newSelectedCurrency.getCode()) {
                 newRates.add(currencyRate.copy())
             } else {
@@ -55,8 +53,7 @@ class UpdateCurrencySelectedCurrencyAndRates(
     }
 
     private fun Double.round(places: Int): Double {
-        var bigDecimal: BigDecimal = BigDecimal.valueOf(this)
-        bigDecimal = bigDecimal.setScale(places, RoundingMode.HALF_UP)
-        return bigDecimal.toDouble()
+        val bigDecimal: BigDecimal = BigDecimal.valueOf(this)
+        return bigDecimal.setScale(places, RoundingMode.HALF_UP).toDouble()
     }
 }
