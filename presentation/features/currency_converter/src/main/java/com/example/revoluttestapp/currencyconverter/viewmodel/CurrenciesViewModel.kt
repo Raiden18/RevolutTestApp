@@ -16,7 +16,6 @@ import io.reactivex.rxjava3.kotlin.plusAssign
 import java.util.*
 import kotlin.collections.ArrayList
 
-//TODO: Write unit tests
 internal class CurrenciesViewModel(
     private val getCurrencyRatesUseCase: GetCurrencyRatesUseCase,
     private val getSelectedCurrencyUseCase: GetSelectedCurrencyUseCase,
