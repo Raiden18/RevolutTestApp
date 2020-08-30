@@ -25,6 +25,7 @@ class UpdateCurrencyRateEverySecondUseCase(
                     .switchMapCompletable { oldSelectedCurrency ->
                         updateCurrencyRates(oldSelectedCurrency)
                     }
+            }.retry { error -> error is Throwable
             }
     }
 
