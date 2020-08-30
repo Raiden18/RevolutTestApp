@@ -18,13 +18,13 @@ internal class CurrenciesWitErrorViewState(
         showErrorMessage()
     }
 
-    private fun showErrorMessage(){
-        errorMessage.text = throwable.message
-        errorMessage.visibility = View.VISIBLE
-    }
-
     private fun showCurrencies(){
         currenciesRecyclerView.visibility = View.VISIBLE
         currenciesRecyclerView.updateItems(currencies)
+    }
+
+    private fun showErrorMessage(){
+        errorMessage.text = throwable.message
+        errorMessage.visibility = View.VISIBLE
     }
 }

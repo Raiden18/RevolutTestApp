@@ -35,7 +35,7 @@ internal class CurrenciesViewModel(
 ) : CoreMviViewModel<Action, State>() {
     private var shouldShowLoader = true
     private var isErrorShown = false
-    private var blockUiWithLoaderUntilGettingUpdatedData = false
+
     private val reducer: Reducer<State, Change> = { state, change ->
         when (change) {
             is Change.ShowLoading -> state.copy(isLoaderShown = true, currencies = emptyList())
@@ -67,18 +67,8 @@ internal class CurrenciesViewModel(
                 updateCurrencyRateEverySecondUseCase.execute()
                     .map<Change> { Change.DoNothing }
                     .doOnError { isErrorShown = true }
-                    .doOnNext {
-                        isErrorShown = false
-                        blockUiWithLoaderUntilGettingUpdatedData = false
-                    }
+                    .doOnNext { isErrorShown = false }
                     .onErrorReturn { Change.ShowError(it) }
-                    .map {
-                        if (blockUiWithLoaderUntilGettingUpdatedData) {
-                            Change.ShowLoading
-                        } else {
-                            it
-                        }
-                    }
                 //.startWith(Observable.just(Change.ShowLoading))
                 //.filter { (shouldShowLoader && it is Change.ShowLoading) || it is Change.ShowError || it is Change.DoNothing }
             }.startWith(Observable.just(Change.ShowLoading))
@@ -126,10 +116,10 @@ internal class CurrenciesViewModel(
             .map { it.uiCurrencyPlace }
             .flatMap { uiCurrency ->
                 getSelectedCurrencyUseCase.execute()
-                    .flatMap{ oldSelected->
-                        if(oldSelected.getCode() == uiCurrency.currencyCode){
+                    .flatMap { oldSelected ->
+                        if (oldSelected.getCode() == uiCurrency.currencyCode) {
                             Observable.empty()
-                        } else{
+                        } else {
                             Observable.just(uiCurrency)
                         }
                     }
