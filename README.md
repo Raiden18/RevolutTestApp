@@ -31,3 +31,6 @@ MVI was chosen as architecture of presentation layer. Features are devided into 
 Diagram that shows dependencies of components of feature you can see underneeth. There are no acycling dependences as well.
 
 <img src="https://github.com/Raiden18/RevolutTestApp/blob/master/feature_components_dependencies_diagram.PNG" data-canonical-src="hhttps://github.com/Raiden18/RevolutTestApp/blob/master/feature_components_dependencies_diagram.PNG" width="415" height="400" />
+
+## About performance
+<img src="https://github.com/Raiden18/RevolutTestApp/blob/master/overdraw.jpg" data-canonical-src="https://github.com/Raiden18/RevolutTestApp/blob/master/overdraw.jpg" width="400" height="450" />
