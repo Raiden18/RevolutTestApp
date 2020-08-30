@@ -18,7 +18,7 @@ This app folows three-tier architecture that was described by Martin Fowler. So 
 
 On the other hand, presentation layer was devided into several moduels in order to support features that can be independed on each other.
 
-This app follows Clean Architecture approach as well. Full UML diagram you can see bellow. This diagram shows dependencies of modules. You can see that there are no acycling dependencies between modules.
+The app follows Clean Architecture approach as well. Full UML diagram you can see bellow. The diagram shows dependencies of modules. You can see that there are no acycling dependencies.
 
 <img src="https://github.com/Raiden18/RevolutTestApp/blob/master/modules_dependency_diagram.PNG" data-canonical-src="https://github.com/Raiden18/RevolutTestApp/blob/master/modules_dependency_diagram.PNG" width="400" height="450" />
 
