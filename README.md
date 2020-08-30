@@ -5,10 +5,9 @@
 3. Retrofit 2
 4. Junit5
 5. MockK
-5. Glide
-6. RxRelay
-7. RxLifeCycle 4
-8. DiffUtils and Payloads
+5. RxRelay
+6. RxLifeCycle 4
+7. DiffUtils and Payloads
 
 ## About architecture
 This app folows three-tier architecture that was described by Martin Fowler. So that there are 3 top-level layers:
