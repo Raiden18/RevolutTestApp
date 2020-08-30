@@ -16,7 +16,9 @@ internal class CurrencyEditTextFormatter(
         const val DEFAULT_EMPTY_VALUE = "0"
     }
 
+    private var formattedString: String = ""
     fun execute(text: String) {
+        formattedString = text
         if (text.isEmpty()) {
             setTextAndCursorToTheEndForZeroValue()
         } else if (text.length > 1 && text.isAllZeros()) {
@@ -31,7 +33,8 @@ internal class CurrencyEditTextFormatter(
         } else {
             moveCursorToTheEndAndSetBlackTextColor(text)
         }
-        onTextChanged.invoke(text)
+
+        onTextChanged.invoke(formattedString)
     }
 
     private fun String.isAllZeros(): Boolean {
@@ -54,11 +57,13 @@ internal class CurrencyEditTextFormatter(
     private fun clearZerosBeforeNumberAndSetBlackTextColor(text: String) {
         val firstNotZeroValue = text.indexOfFirst { it != '0' }
         val resultValue = text.removeRange(0, firstNotZeroValue)
+        formattedString = resultValue
         editTextProxy.setText(resultValue)
         editTextProxy.setBlackTextColor()
     }
 
     private fun setTextAndCursorToTheEndForZeroValue() {
+        formattedString = DEFAULT_EMPTY_VALUE
         editTextProxy.setText(DEFAULT_EMPTY_VALUE)
         editTextProxy.setCursorToPosition(DEFAULT_EMPTY_VALUE.length)
         editTextProxy.setGrayTextColor()
@@ -69,6 +74,7 @@ internal class CurrencyEditTextFormatter(
         val numberAfterDot = text.split(".").last()
         val twoNumbersAfterDots = numberAfterDot.take(2)
         val resultNumber = "$numbersBeforeDot.$twoNumbersAfterDots"
+        formattedString = resultNumber
         editTextProxy.setText(resultNumber)
     }
 

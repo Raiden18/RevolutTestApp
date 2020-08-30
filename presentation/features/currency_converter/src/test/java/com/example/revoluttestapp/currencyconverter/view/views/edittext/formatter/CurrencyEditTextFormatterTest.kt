@@ -1,20 +1,20 @@
-package com.example.revoluttestapp.currencyconverter
+package com.example.revoluttestapp.currencyconverter.view.views.edittext.formatter
 
 import io.mockk.clearMocks
 import io.mockk.mockk
 import io.mockk.verify
 import org.junit.jupiter.api.BeforeEach
-
 import org.junit.jupiter.api.Test
 
 internal class CurrencyEditTextFormatterTest {
     private lateinit var currencyEditTextFormatter: CurrencyEditTextFormatter
     private val editTextProxy: EditTextProxy = mockk(relaxed = true)
+    private val onTextChanged: (String) -> Unit = mockk(relaxed = true)
 
     @BeforeEach
     fun setUp() {
         clearMocks(editTextProxy)
-        currencyEditTextFormatter = CurrencyEditTextFormatter(editTextProxy)
+        currencyEditTextFormatter = CurrencyEditTextFormatter(editTextProxy, onTextChanged)
     }
 
     @Test
@@ -100,6 +100,15 @@ internal class CurrencyEditTextFormatterTest {
         currencyEditTextFormatter.execute("123.123")
         verify(exactly = 1) {
             editTextProxy.setText("123.12")
+        }
+    }
+
+    @Test
+    fun `Should send formatted callbacks for zero`(){
+        currencyEditTextFormatter.execute("0")
+        currencyEditTextFormatter.execute("0.0")
+        verify(exactly = 2) {
+            onTextChanged.invoke("0")
         }
     }
 }
