@@ -35,17 +35,15 @@ internal class CurrenciesViewModel(
     private val reducer: Reducer<State, Change> = { state, change ->
         when (change) {
             is Change.ShowLoading -> state.copy(isLoaderShown = true, currencies = emptyList())
-            is Change.ShowCurrencies -> state.copy(
+            is Change.ShowCurrenciesWithoutError -> state.copy(
                 isLoaderShown = false,
                 currencies = change.uiCurrencies,
                 error = null
             )
             is Change.DoNothing -> state
             is Change.ShowError -> state.copy(isLoaderShown = false, error = change.throwable)
-            is Change.ShowLoaderUntilGettingUpdatedData -> state.copy(
-                isLoaderShown = true,
-                currencies = listOf(),
-                error = null
+            is Change.ShowPreviousStateErrorAndCurrencies -> state.copy(
+                isLoaderShown = false
             )
         }
     }
@@ -66,6 +64,7 @@ internal class CurrenciesViewModel(
                     .doOnNext { isErrorShown = false }
                     .onErrorReturn { Change.ShowError(it) }
                     .filter { (shouldShowLoader && it is Change.ShowLoading) || it is Change.ShowError || it is Change.DoNothing }
+                    .repeatUntil { false }
             }.startWith(Observable.just(Change.ShowLoading))
 
         val cancelUpdatingRatesEverySecond = actions.ofType<Action.CancelUpdatingRates>()
@@ -103,9 +102,16 @@ internal class CurrenciesViewModel(
                                     .map { uiConvertedCurrencies.addAtTheTop(it) }
                             }
                     }
-                    .map<Change> { Change.ShowCurrencies(it) }
-                    .onErrorReturn { Change.ShowError(it) }
+                    .map<Change> {
+                        if (isErrorShown) {
+                            Change.ShowPreviousStateErrorAndCurrencies(it)
+                        } else {
+                            Change.ShowCurrenciesWithoutError(it)
+                        }
+                    }
+
             }
+
 
         val selectCurrency = actions.ofType<Action.SelectCurrency>()
             .map { it.uiCurrencyPlace }
@@ -132,7 +138,6 @@ internal class CurrenciesViewModel(
             .scan(initialState, reducer)
             .distinctUntilChanged()
             .subscribeOn(rxSchedulers.io)
-            .doOnNext(::checkIfNeedRetrySubscriptionAndDoIt)
             .subscribe(state::accept, logger::logError)
     }
 
@@ -170,12 +175,6 @@ internal class CurrenciesViewModel(
                     Observable.just(uiCurrency)
                 }
             }
-    }
-
-    private fun checkIfNeedRetrySubscriptionAndDoIt(state: State) {
-        if (state.error != null) {
-            dispatch(Action.SubscribeOnCurrencyRates)
-        }
     }
 
     public override fun onCleared() {
