@@ -5,7 +5,6 @@ import com.example.revoluttestapp.core.di.ApplicationComponent
 import com.example.revoluttestapp.currencyconverter.view.CurrenciesActivity
 import com.example.revoluttestapp.currencyconverter.CurrencyRateUiMapperImpl
 import com.example.revoluttestapp.currencyconverter.viewmodel.CurrencyRateUiMapper
-import com.example.revoluttestapp.domain.CurrencyConverter
 import com.example.revoluttestapp.domain.usecases.*
 import com.example.revoluttestapp.domain.utils.Logger
 import com.example.revoluttestapp.domain.utils.RxSchedulers
@@ -42,7 +41,6 @@ internal class CurrenciesModule {
         rxSchedulers: RxSchedulers,
         logger: Logger
     ): CurrenciesViewModelFactory {
-        val currencyConverter = CurrencyConverter()
         val compositeDisposable = CompositeDisposable()
         return CurrenciesViewModelFactory(
             getCurrencyRatesUseCase,
@@ -52,7 +50,6 @@ internal class CurrenciesModule {
             convertMoneyUseCase,
             updateCurrencySelectedCurrencyAndRates,
             currencyRateUiMapper,
-            currencyConverter,
             updateCurrencyRateEverySecondUseCase,
             compositeDisposable,
             rxSchedulers,

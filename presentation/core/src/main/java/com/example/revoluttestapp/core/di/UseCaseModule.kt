@@ -1,6 +1,5 @@
 package com.example.revoluttestapp.core.di
 
-import com.example.revoluttestapp.domain.CurrencyConverter
 import com.example.revoluttestapp.domain.repositories.CurrencyRatesRepository
 import com.example.revoluttestapp.domain.repositories.CurrencyRepository
 import com.example.revoluttestapp.domain.repositories.FlagRepository
@@ -44,10 +43,8 @@ internal class UseCaseModule {
         currencyRepository: CurrencyRepository,
         currencyRatesRepository: CurrencyRatesRepository
     ): ConvertMoneyUseCase {
-        val currencyConverter =CurrencyConverter()
         return ConvertMoneyUseCase(
             currencyRepository,
-            currencyConverter,
             currencyRatesRepository
         )
     }

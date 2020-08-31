@@ -4,7 +4,6 @@ import android.util.Log
 import com.example.revoluttestapp.core.mvi.CoreMviViewModel
 import com.example.revoluttestapp.core.mvi.Reducer
 import com.example.revoluttestapp.currencyconverter.models.UiCurrency
-import com.example.revoluttestapp.domain.CurrencyConverter
 import com.example.revoluttestapp.domain.models.currencies.Currency
 import com.example.revoluttestapp.domain.usecases.*
 import com.example.revoluttestapp.domain.utils.Logger
@@ -24,7 +23,6 @@ internal class CurrenciesViewModel(
     private val updateCurrencySelectedCurrencyAndRates: UpdateCurrencySelectedCurrencyAndRates,
     private val convertMoneyUseCase: ConvertMoneyUseCase,
     private val currencyRateUiMapper: CurrencyRateUiMapper,
-    private val currencyConverter: CurrencyConverter,
     private val updateCurrencyRateEverySecondUseCase: UpdateCurrencyRateEverySecondUseCase,
     private val compositeDisposable: CompositeDisposable,
     private val rxSchedulers: RxSchedulers,
@@ -95,7 +93,9 @@ internal class CurrenciesViewModel(
                 getCurrencyRatesUseCase.execute()
                     .flatMap { rates ->
                         getSelectedCurrencyUseCase.execute()
-                            .map { currencyConverter.convert(it, rates) }
+                            .map { selectedCurrency ->
+                                rates.map { it.convertCurrencyFrom(selectedCurrency) }
+                            }
                             .map { it.map { rate -> rate.currency } }
                             .flatMap { convertedCurrencies ->
                                 loadFlagsForConvertedCurrenciesAndMapToUi(convertedCurrencies)
