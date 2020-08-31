@@ -23,6 +23,12 @@ This app folows three-tier architecture. So that there are 3 top-level layers:
 2. Domain
 3. Presentation
 
+Kotlin does't have package-private access modifier, but it has internal access modifier. So I chose three-tier architecture at the top level modules to explisitly show that:
+1. Business logic is pure Kotlin and doesn't have any ui or data dependencies
+2. UI knows nothing about what frameworks data uses
+3. Data knows nothing about ui framerowks.
+So it's impossible to make features depends on data or data on feature accidentally.
+
 On the other hand, presentation layer was devided into several moduels in order to support features that can be independed on each other.
 
 The app follows Clean Architecture approach as well. Full UML diagram you can see bellow. The diagram shows dependencies of modules. You can see that there are no acycling dependencies.
