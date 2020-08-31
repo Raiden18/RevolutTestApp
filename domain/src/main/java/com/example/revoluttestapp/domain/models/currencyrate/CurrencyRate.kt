@@ -16,24 +16,29 @@ data class CurrencyRate(
         get() = currency.code
 
     fun convertCurrencyFrom(baseCurrency: Currency): CurrencyRate {
-        val convertedAmount = baseCurrency.amount * rate
-        val formattedAmount = BigDecimal(convertedAmount)
-            .setScale(DIGITS_AFTER_COMMA, RoundingMode.CEILING)
+        val rateBigDecimal = BigDecimal(rate)
+        val amountBigDecimal = BigDecimal(baseCurrency.amount)
+        val convertedAmount = amountBigDecimal.multiply(rateBigDecimal)
+        val formattedAmount = convertedAmount.setScale(DIGITS_AFTER_COMMA, RoundingMode.HALF_UP)
         val convertedCurrency = currency.copy(amount = formattedAmount.toDouble())
         return copy(currency = convertedCurrency)
     }
 
-    fun calculateCurrencyRateFrom(baseCurrency: Currency): CurrencyRate{
-        val currencyRateForOldSelectedCurrencyValue =
-            if (rate == 0.0) 0.0 else 1 / rate
+    fun calculateCurrencyRateFrom(baseCurrency: Currency): CurrencyRate {
+        val zeroBigDecimal = BigDecimal(0)
+        val oneBigDecimal = BigDecimal(1)
+        val rateBigDecimal = BigDecimal(rate)
+        val currencyRateForOldSelectedCurrencyValue = if (rate == 0.0) {
+            zeroBigDecimal
+        } else {
+            oneBigDecimal.divide(rateBigDecimal, DIGITS_AFTER_COMMA, RoundingMode.HALF_UP)
+        }
         return CurrencyRate(
             baseCurrency.copy(amount = 0.0),
-            currencyRateForOldSelectedCurrencyValue.round(2)
+            currencyRateForOldSelectedCurrencyValue.setScale(
+                DIGITS_AFTER_COMMA,
+                RoundingMode.HALF_UP
+            ).toDouble()
         )
-    }
-
-    private fun Double.round(places: Int): Double {
-        val bigDecimal: BigDecimal = BigDecimal.valueOf(this)
-        return bigDecimal.setScale(places, RoundingMode.HALF_UP).toDouble()
     }
 }
