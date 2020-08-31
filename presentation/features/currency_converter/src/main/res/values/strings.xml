@@ -1,4 +1,4 @@
 <resources>
     <string name="currency_rates_selection_currency_message">You can\'t choose new currency while device has no internet connection</string>
-    <string name="got_it">got_it</string>
+    <string name="got_it">got it</string>
 </resources>
