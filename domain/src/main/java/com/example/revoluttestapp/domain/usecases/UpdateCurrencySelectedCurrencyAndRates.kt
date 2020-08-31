@@ -40,20 +40,12 @@ class UpdateCurrencySelectedCurrencyAndRates(
             if (currencyRate.currencyCode != newSelectedCurrency.code) {
                 newRates.add(currencyRate.copy())
             } else {
-                val currencyRateForOldSelectedCurrencyValue =
-                    if (currencyRate.rate == 0.0) 0.0 else 1 / currencyRate.rate
-                val currencyRateForOldSelectedCurrency = CurrencyRate(
-                    oldSelectedCurrency.copy(amount = 0.0),
-                    currencyRateForOldSelectedCurrencyValue.round(2)
-                )
+                val currencyRateForOldSelectedCurrency = currencyRate.calculateCurrencyRateFrom(oldSelectedCurrency)
                 newRates.add(currencyRateForOldSelectedCurrency)
             }
         }
         return newRates
     }
 
-    private fun Double.round(places: Int): Double {
-        val bigDecimal: BigDecimal = BigDecimal.valueOf(this)
-        return bigDecimal.setScale(places, RoundingMode.HALF_UP).toDouble()
-    }
+
 }
