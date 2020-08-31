@@ -24,8 +24,8 @@ class CurrencyConverter {
         currencyRate: CurrencyRate
     ): CurrencyRate {
         val currency = currencyRate.currency
-        val newAmount = baseCurrency.amount * currencyRate.rate
-        val formattedAmount = BigDecimal(newAmount)
+        val convertedAmount = baseCurrency.amount * currencyRate.rate
+        val formattedAmount = BigDecimal(convertedAmount)
             .setScale(DIGITS_AFTER_COMMA, RoundingMode.CEILING)
         val convertedCurrency = currency.copy(amount = formattedAmount.toDouble())
         return currencyRate.copy(currency = convertedCurrency)
