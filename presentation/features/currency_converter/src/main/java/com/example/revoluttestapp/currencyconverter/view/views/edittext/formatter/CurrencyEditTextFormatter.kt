@@ -17,6 +17,7 @@ internal class CurrencyEditTextFormatter(
     }
 
     private var formattedString: String = ""
+
     fun execute(text: String) {
         formattedString = text
         if (text.isEmpty()) {
@@ -33,7 +34,6 @@ internal class CurrencyEditTextFormatter(
         } else {
             moveCursorToTheEndAndSetBlackTextColor(text)
         }
-
         onTextChanged.invoke(formattedString)
     }
 
