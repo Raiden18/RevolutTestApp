@@ -10,7 +10,7 @@
 7. DiffUtils and Payloads
 
 ## About architecture
-This app folows three-tier architecture that was described by Martin Fowler. So that there are 3 top-level layers:
+This app folows three-tier architecture. So that there are 3 top-level layers:
 1. Data
 2. Domain
 3. Presentation
