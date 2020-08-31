@@ -11,6 +11,7 @@ import java.text.DecimalFormat
 internal class CurrencyRateUiMapperImpl(
     private val context: Context
 ) : CurrencyRateUiMapper {
+
     override fun mapAmountOfMoneyToDouble(amountOfMoney: String): Double {
         return if (amountOfMoney.isEmpty()) 0.0 else amountOfMoney.toDouble()
     }
@@ -25,6 +26,12 @@ internal class CurrencyRateUiMapperImpl(
             flag.resId,
             textColor
         )
+    }
+
+    override fun convertUiCurrencyToDomain(uiCurrency: UiCurrency): Currency {
+        val uiAmount = uiCurrency.amountOfMoney
+        val amount = mapAmountOfMoneyToDouble(uiAmount)
+        return Currency(amount, uiCurrency.currencyCode)
     }
 
     private fun formatAmountOfMoney(amountOfMoney: Double): String {

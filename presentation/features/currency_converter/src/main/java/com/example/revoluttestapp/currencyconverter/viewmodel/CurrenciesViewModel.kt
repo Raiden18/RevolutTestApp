@@ -117,11 +117,7 @@ internal class CurrenciesViewModel(
         val selectCurrency = actions.ofType<Action.SelectCurrency>()
             .map { it.uiCurrencyPlace }
             .flatMap { uiCurrency -> checkThatWasSelectedNewCurrency(uiCurrency) }
-            .map { uiCurrency ->
-                val uiAmount = uiCurrency.amountOfMoney
-                val amount = currencyRateUiMapper.mapAmountOfMoneyToDouble(uiAmount)
-                Currency(amount, uiCurrency.currencyCode)
-            }
+            .map { uiCurrency -> currencyRateUiMapper.convertUiCurrencyToDomain(uiCurrency) }
             .flatMap {
                 updateCurrencySelectedCurrencyAndRates.execute(it)
                     .andThen(Observable.just(Change.DoNothing))
