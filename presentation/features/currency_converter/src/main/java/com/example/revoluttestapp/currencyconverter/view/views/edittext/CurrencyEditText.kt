@@ -10,7 +10,7 @@ class CurrencyEditText(
 ) : AppCompatEditText(context, attributeSet) {
 
 
-    fun setText(text: String){
+    fun setTextAndMoveCursorToTheEnd(text: String){
         super.setText(text)
         setSelection(getText().toString().length)
     }

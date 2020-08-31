@@ -2,10 +2,8 @@ package com.example.revoluttestapp.currencyconverter.view.views.recycler
 
 import android.annotation.SuppressLint
 import android.view.View
-import android.view.ViewParent
 import androidx.recyclerview.widget.RecyclerView
 import com.example.revoluttestapp.currencyconverter.models.UiCurrency
-import com.example.revoluttestapp.currencyconverter.view.views.edittext.CurrencyTextWatcher
 import com.example.revoluttestapp.currencyconverter.view.views.edittext.EditTextFocusChangeListenerImpl
 import kotlinx.android.extensions.LayoutContainer
 import kotlinx.android.synthetic.main.item_currency_rate.view.*
@@ -42,7 +40,7 @@ internal class CurrencyViewHolder(
         }
         currencyCodeView.text = item.currencyCode
         currencyNameView.text = item.currencyName
-        amountOfMoneyEditText.setText(item.amountOfMoney)
+        amountOfMoneyEditText.setTextAndMoveCursorToTheEnd(item.amountOfMoney)
         if (countryFlagView.tag != item.imageFlagId) {
             countryFlagView.setImageResource(item.imageFlagId)
             countryFlagView.tag = item.imageFlagId
@@ -53,7 +51,7 @@ internal class CurrencyViewHolder(
     }
 
     fun updateAmountOfMoneyView(amount: String, color: Int) {
-        amountOfMoneyEditText.setText(amount)
+        amountOfMoneyEditText.setTextAndMoveCursorToTheEnd(amount)
         amountOfMoneyEditText.setTextColor(color)
     }
 

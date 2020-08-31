@@ -5,7 +5,7 @@ import com.example.revoluttestapp.currencyconverter.view.views.edittext.formatte
 
 internal class EditTextProxyImpl(private val currencyEditText: CurrencyEditText): EditTextProxy {
     override fun setText(text: String) {
-        currencyEditText.setText(text)
+        currencyEditText.setTextAndMoveCursorToTheEnd(text)
     }
 
     override fun setCursorToPosition(position: Int) {
