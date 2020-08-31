@@ -1,5 +1,6 @@
 package com.example.revoluttestapp.currencyconverter.viewmodel
 
+import android.util.Log
 import com.example.revoluttestapp.core.mvi.CoreMviViewModel
 import com.example.revoluttestapp.core.mvi.Reducer
 import com.example.revoluttestapp.currencyconverter.models.UiCurrency
@@ -43,7 +44,8 @@ internal class CurrenciesViewModel(
             is Change.DoNothing -> state
             is Change.ShowError -> state.copy(isLoaderShown = false, error = change.throwable)
             is Change.ShowPreviousStateErrorAndCurrencies -> state.copy(
-                isLoaderShown = false
+                isLoaderShown = false,
+                currencies = change.uiCurrencies
             )
         }
     }
@@ -76,6 +78,7 @@ internal class CurrenciesViewModel(
 
         val amountOfMoneyChangedOfBaseCurrency = actions.ofType<Action.AmountOfMoneyChanged>()
             .map { it.amount }
+            .doOnNext { Log.i("HUI-change", it.toString()) }
             .distinctUntilChanged()
             .map { currencyRateUiMapper.mapAmountOfMoneyToDouble(it) }
             .flatMap { convertedAmount ->
@@ -112,7 +115,6 @@ internal class CurrenciesViewModel(
 
             }
 
-
         val selectCurrency = actions.ofType<Action.SelectCurrency>()
             .map { it.uiCurrencyPlace }
             .flatMap { uiCurrency -> checkThatWasSelectedNewCurrency(uiCurrency) }
@@ -136,7 +138,7 @@ internal class CurrenciesViewModel(
         )
         disposables += Observable.merge(changes)
             .scan(initialState, reducer)
-            .distinctUntilChanged()
+            .doOnNext { Log.i("HUI", it.toString()) }
             .subscribeOn(rxSchedulers.io)
             .subscribe(state::accept, logger::logError)
     }
