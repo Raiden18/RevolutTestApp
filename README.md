@@ -1,4 +1,6 @@
 # RevolutTestApp
+Please read read me at first, especially part about Currency domain object. 
+
 ## How app works
 When app is launched at the first time it downloads data from api and saves it in memory cache which is the single sourse of true. App updates cache every second.
 
