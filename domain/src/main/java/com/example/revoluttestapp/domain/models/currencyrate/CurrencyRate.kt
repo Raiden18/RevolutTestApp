@@ -8,6 +8,4 @@ data class CurrencyRate(
 ) {
     val currencyCode
         get() = currency.code
-
-    fun currencyCodesEquals(currency: Currency) = this.currency.code == currency.code
 }
