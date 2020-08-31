@@ -78,7 +78,6 @@ internal class CurrenciesViewModel(
 
         val amountOfMoneyChangedOfBaseCurrency = actions.ofType<Action.AmountOfMoneyChanged>()
             .map { it.amount }
-            .doOnNext { Log.i("HUI-change", it.toString()) }
             .distinctUntilChanged()
             .map { currencyRateUiMapper.mapAmountOfMoneyToDouble(it) }
             .flatMap { convertedAmount ->
