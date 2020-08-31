@@ -27,7 +27,6 @@ class UpdateCurrencySelectedCurrencyAndRates(
                         currencyRepository.saveToMemoryCurrentCurrency(newSelectedCurrency)
                             .andThen(currencyRatesRepository.saveToMemory(it))
                     }
-
             }
     }
 
@@ -35,16 +34,13 @@ class UpdateCurrencySelectedCurrencyAndRates(
         newSelectedCurrency: Currency,
         oldSelectedCurrency: Currency
     ): List<CurrencyRate> {
-        val newRates = LinkedList<CurrencyRate>()
-        forEach { currencyRate ->
-            if (currencyRate.currencyCode != newSelectedCurrency.code) {
-                newRates.add(currencyRate.copy())
+        return map {
+            if (it.currencyCode != newSelectedCurrency.code) {
+                it.copy()
             } else {
-                val currencyRateForOldSelectedCurrency = currencyRate.calculateCurrencyRateFrom(oldSelectedCurrency)
-                newRates.add(currencyRateForOldSelectedCurrency)
+                it.calculateCurrencyRateFrom(oldSelectedCurrency)
             }
         }
-        return newRates
     }
 
 
