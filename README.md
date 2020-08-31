@@ -1,4 +1,12 @@
 # RevolutTestApp
+## How app works
+When app is launched at the first time it downloads data from api and saves it in memory cache. Memory cache is the single sourse of true. App updates cache every second.
+
+When app is put in background, updating of cache stops until user puts app in the foreground. 
+
+When device has problems with internet connection, application can be used in offline mode so than user can convert currencies but could not select another currency.
+If user selects another currency in offline mode, app shows error about internenet connection and tryes to update data. When internet connection is estableshed user gets new currency rates with base currency that user selected during offline mode.
+
 ## Used Frameworks
 1. RxJava 3
 2. Dagger 2
@@ -10,7 +18,7 @@
 7. DiffUtils and Payloads
 
 ## About architecture
-This app folows three-tier architecture that was described by Martin Fowler. So that there are 3 top-level layers:
+This app folows three-tier architecture. So that there are 3 top-level layers:
 1. Data
 2. Domain
 3. Presentation
