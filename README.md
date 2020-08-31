@@ -1,6 +1,6 @@
 # RevolutTestApp
 ## How app works
-When app is launched at the first time it downloads data from api and saves it in memory cache. Memory cache is the single sourse of true. App updates cache every second.
+When app is launched at the first time it downloads data from api and saves it in memory cache which is the single sourse of true. App updates cache every second.
 
 When app is put in background, updating of cache stops until user puts app in the foreground. 
 
