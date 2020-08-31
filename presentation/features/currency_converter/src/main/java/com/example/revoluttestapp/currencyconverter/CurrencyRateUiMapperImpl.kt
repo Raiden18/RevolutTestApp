@@ -1,14 +1,11 @@
 package com.example.revoluttestapp.currencyconverter
 
 import android.content.Context
-import android.util.Log
 import androidx.core.content.ContextCompat
 import com.example.revoluttestapp.currencyconverter.models.UiCurrency
 import com.example.revoluttestapp.currencyconverter.viewmodel.CurrencyRateUiMapper
 import com.example.revoluttestapp.domain.models.Flag
 import com.example.revoluttestapp.domain.models.currencies.Currency
-import java.lang.Exception
-import java.lang.IllegalStateException
 import java.text.DecimalFormat
 
 internal class CurrencyRateUiMapperImpl(
@@ -19,11 +16,11 @@ internal class CurrencyRateUiMapperImpl(
     }
 
     override fun mapToUiCurrency(currency: Currency, flag: Flag): UiCurrency {
-        val formattedAmount = formatAmountOfMoney(currency.getAmount())
+        val formattedAmount = formatAmountOfMoney(currency.amount)
         val textColor = getColorOfText(formattedAmount)
         return UiCurrency(
-            currency.getCode(),
-            currency.getFullName(),
+            currency.code,
+            currency.fullName,
             formattedAmount,
             flag.resId,
             textColor

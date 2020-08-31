@@ -19,12 +19,15 @@ class CurrencyConverter {
         }
     }
 
-    private fun convertSingleCurrencyRate(baseCurrency: Currency, currencyRate: CurrencyRate): CurrencyRate{
+    private fun convertSingleCurrencyRate(
+        baseCurrency: Currency,
+        currencyRate: CurrencyRate
+    ): CurrencyRate {
         val currency = currencyRate.currency
-        val newAmount = baseCurrency.getAmount() * currencyRate.rate
+        val newAmount = baseCurrency.amount * currencyRate.rate
         val formattedAmount = BigDecimal(newAmount)
             .setScale(DIGITS_AFTER_COMMA, RoundingMode.CEILING)
-        val convertedCurrency = currency.setAmount(formattedAmount.toDouble())
+        val convertedCurrency = currency.copy(amount = formattedAmount.toDouble())
         return currencyRate.copy(currency = convertedCurrency)
     }
 }

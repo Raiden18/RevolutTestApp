@@ -10,6 +10,6 @@ class GetFlagForCurrencyUseCase(
 ) {
 
     fun execute(currency: Currency): Observable<Flag> {
-        return flagRepository.getFlagFor(currency.getCode())
+        return flagRepository.getFlagFor(currency.code)
     }
 }

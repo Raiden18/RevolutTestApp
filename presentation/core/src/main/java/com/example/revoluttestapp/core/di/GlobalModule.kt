@@ -5,7 +5,6 @@ import com.chuckerteam.chucker.api.ChuckerInterceptor
 import com.example.revoluttestapp.core.LoggerImpl
 import com.example.revoluttestapp.data.mappers.CurrencyRateMapper
 import com.example.revoluttestapp.data.mappers.CurrencyRateMapperImpl
-import com.example.revoluttestapp.domain.CodeToCurrencyMapper
 import com.example.revoluttestapp.domain.utils.RxSchedulers
 import com.example.revoluttestapp.core.RxSchedulersImpl
 import com.example.revoluttestapp.domain.utils.Logger
@@ -22,11 +21,7 @@ internal class GlobalModule {
     @Singleton
     @Provides
     fun provideCurrencyRateMapper(): CurrencyRateMapper {
-        val codeToCurrencyMapper =
-            CodeToCurrencyMapper()
-        return CurrencyRateMapperImpl(
-            codeToCurrencyMapper
-        )
+        return CurrencyRateMapperImpl()
     }
 
     @Singleton

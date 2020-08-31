@@ -1,13 +1,11 @@
 package com.example.revoluttestapp.domain.usecases
 
 import com.example.revoluttestapp.domain.models.currencies.Currency
-import com.example.revoluttestapp.domain.models.currencyrate.CurrencyRate
 import com.example.revoluttestapp.domain.repositories.CurrencyRatesRepository
 import com.example.revoluttestapp.domain.repositories.CurrencyRepository
 import com.example.revoluttestapp.domain.utils.RxSchedulers
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
-import java.lang.Exception
 import java.util.concurrent.TimeUnit
 
 class UpdateCurrencyRateEverySecondUseCase(
@@ -35,7 +33,7 @@ class UpdateCurrencyRateEverySecondUseCase(
     }
 
     private fun updateCurrencyRates(oldSelectedCurrency: Currency) =
-        currencyRatesRepository.getCurrencyRateFromApiFor(oldSelectedCurrency.getCode())
+        currencyRatesRepository.getCurrencyRateFromApiFor(oldSelectedCurrency.code)
             .flatMap { updatedCurrencyRates ->
                 checkThatSelectedCurrencyWasNotChanged(oldSelectedCurrency)
                     .flatMapCompletable { currencyRatesRepository.saveToMemory(updatedCurrencyRates) }
@@ -45,5 +43,5 @@ class UpdateCurrencyRateEverySecondUseCase(
     private fun checkThatSelectedCurrencyWasNotChanged(
         oldSelectedCurrency: Currency
     ) = currencyRepository.getSelectedCurrencyFromMemory()
-        .filter { newSelectedCurrency -> oldSelectedCurrency.getCode() == newSelectedCurrency.getCode() }
+        .filter { newSelectedCurrency -> oldSelectedCurrency.isCodesEquals(newSelectedCurrency) }
 }

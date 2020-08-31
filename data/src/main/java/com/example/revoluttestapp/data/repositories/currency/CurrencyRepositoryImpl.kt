@@ -1,15 +1,13 @@
 package com.example.revoluttestapp.data.repositories.currency
 
-import android.util.Log
 import com.example.revoluttestapp.domain.models.currencies.Currency
-import com.example.revoluttestapp.domain.models.currencies.RussianRouble
 import com.example.revoluttestapp.domain.repositories.CurrencyRepository
 import io.reactivex.rxjava3.core.Completable
 import io.reactivex.rxjava3.core.Observable
 
 class CurrencyRepositoryImpl : CurrencyRepository {
     private companion object {
-        val DEFAULT_CURRENCY = RussianRouble(100.toDouble())
+        val DEFAULT_CURRENCY = Currency(100.toDouble(), "EUR")
     }
 
     private var savedCurrency: Currency = DEFAULT_CURRENCY

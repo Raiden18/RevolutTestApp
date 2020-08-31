@@ -3,7 +3,6 @@ package com.example.revoluttestapp.currencyconverter.viewmodel
 import com.example.revoluttestapp.core.mvi.CoreMviViewModel
 import com.example.revoluttestapp.core.mvi.Reducer
 import com.example.revoluttestapp.currencyconverter.models.UiCurrency
-import com.example.revoluttestapp.domain.CodeToCurrencyMapper
 import com.example.revoluttestapp.domain.CurrencyConverter
 import com.example.revoluttestapp.domain.models.currencies.Currency
 import com.example.revoluttestapp.domain.usecases.*
@@ -24,7 +23,6 @@ internal class CurrenciesViewModel(
     private val updateCurrencySelectedCurrencyAndRates: UpdateCurrencySelectedCurrencyAndRates,
     private val convertMoneyUseCase: ConvertMoneyUseCase,
     private val currencyRateUiMapper: CurrencyRateUiMapper,
-    private val codeToCurrencyMapper: CodeToCurrencyMapper,
     private val currencyConverter: CurrencyConverter,
     private val updateCurrencyRateEverySecondUseCase: UpdateCurrencyRateEverySecondUseCase,
     private val compositeDisposable: CompositeDisposable,
@@ -83,7 +81,7 @@ internal class CurrenciesViewModel(
             .map { currencyRateUiMapper.mapAmountOfMoneyToDouble(it) }
             .flatMap { convertedAmount ->
                 getSelectedCurrencyUseCase.execute()
-                    .map { it.setAmount(convertedAmount) }
+                    .map { it.copy(amount = convertedAmount) }
                     .flatMap {
                         saveCurrencyToMemoryUseCase.execute(it)
                             .andThen(convertMoneyUseCase.execute())
@@ -113,11 +111,9 @@ internal class CurrenciesViewModel(
             .map { it.uiCurrencyPlace }
             .flatMap { uiCurrency -> checkThatWasSelectedNewCurrency(uiCurrency) }
             .map { uiCurrency ->
-                val currency = codeToCurrencyMapper.map(uiCurrency.currencyCode)
-                val amountOfMoney = currencyRateUiMapper.mapAmountOfMoneyToDouble(
-                    uiCurrency.amountOfMoney
-                )
-                currency.setAmount(amountOfMoney)
+                val uiAmount = uiCurrency.amountOfMoney
+                val amount = currencyRateUiMapper.mapAmountOfMoneyToDouble(uiAmount)
+                Currency(amount, uiCurrency.currencyCode)
             }
             .flatMap {
                 updateCurrencySelectedCurrencyAndRates.execute(it)
@@ -165,10 +161,10 @@ internal class CurrenciesViewModel(
         return linkedList
     }
 
-    private fun checkThatWasSelectedNewCurrency(uiCurrency: UiCurrency): Observable<UiCurrency>{
+    private fun checkThatWasSelectedNewCurrency(uiCurrency: UiCurrency): Observable<UiCurrency> {
         return getSelectedCurrencyUseCase.execute()
             .flatMap { oldSelected ->
-                if (oldSelected.getCode() == uiCurrency.currencyCode) {
+                if (oldSelected.code == uiCurrency.currencyCode) {
                     Observable.empty()
                 } else {
                     Observable.just(uiCurrency)
@@ -176,7 +172,7 @@ internal class CurrenciesViewModel(
             }
     }
 
-    private fun checkIfNeedRetrySubscriptionAndDoIt(state: State){
+    private fun checkIfNeedRetrySubscriptionAndDoIt(state: State) {
         if (state.error != null) {
             dispatch(Action.SubscribeOnCurrencyRates)
         }

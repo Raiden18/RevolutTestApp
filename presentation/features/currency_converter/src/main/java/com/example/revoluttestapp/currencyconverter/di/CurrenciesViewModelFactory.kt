@@ -4,7 +4,6 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.ViewModelProvider
 import com.example.revoluttestapp.currencyconverter.viewmodel.CurrenciesViewModel
 import com.example.revoluttestapp.currencyconverter.viewmodel.CurrencyRateUiMapper
-import com.example.revoluttestapp.domain.CodeToCurrencyMapper
 import com.example.revoluttestapp.domain.CurrencyConverter
 import com.example.revoluttestapp.domain.usecases.*
 import com.example.revoluttestapp.domain.utils.Logger
@@ -19,7 +18,6 @@ internal class CurrenciesViewModelFactory(
     private val convertMoneyUseCase: ConvertMoneyUseCase,
     private val updateCurrencySelectedCurrencyAndRates: UpdateCurrencySelectedCurrencyAndRates,
     private val currencyRateUiMapper: CurrencyRateUiMapper,
-    private val codeToCurrencyMapper: CodeToCurrencyMapper,
     private val currencyConverter: CurrencyConverter,
     private val updateCurrencyRateEverySecondUseCase: UpdateCurrencyRateEverySecondUseCase,
     private val compositeDisposable: CompositeDisposable,
@@ -35,7 +33,6 @@ internal class CurrenciesViewModelFactory(
             updateCurrencySelectedCurrencyAndRates,
             convertMoneyUseCase,
             currencyRateUiMapper,
-            codeToCurrencyMapper,
             currencyConverter,
             updateCurrencyRateEverySecondUseCase,
             compositeDisposable,

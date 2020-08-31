@@ -7,5 +7,7 @@ data class CurrencyRate(
     val rate: Double
 ) {
     val currencyCode
-        get() = currency.getCode()
+        get() = currency.code
+
+    fun currencyCodesEquals(currency: Currency) = this.currency.code == currency.code
 }
