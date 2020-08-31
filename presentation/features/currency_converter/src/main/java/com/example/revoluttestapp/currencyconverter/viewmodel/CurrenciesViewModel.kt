@@ -33,18 +33,27 @@ internal class CurrenciesViewModel(
 
     private val reducer: Reducer<State, Change> = { state, change ->
         when (change) {
-            is Change.ShowLoading -> state.copy(isLoaderShown = true, currencies = emptyList())
+            is Change.ShowLoading -> state.copy(
+                isLoaderShown = true, currencies = emptyList()
+            )
             is Change.ShowCurrenciesWithoutError -> state.copy(
                 isLoaderShown = false,
                 currencies = change.uiCurrencies,
                 error = null
             )
             is Change.DoNothing -> state
-            is Change.ShowError -> state.copy(isLoaderShown = false, error = change.throwable)
+            is Change.ShowError -> state.copy(
+                isLoaderShown = false,
+                error = change.throwable
+            )
             is Change.ShowPreviousStateErrorAndCurrencies -> state.copy(
                 isLoaderShown = false,
                 currencies = change.uiCurrencies
             )
+            is Change.ShowCantSelectNewCurrency -> state.copy(
+                isShowCantSelectNewCurrency = true
+            )
+            is Change.HideCantSelectNewCurrency -> state.copy(isShowCantSelectNewCurrency = false)
         }
     }
 
@@ -114,26 +123,49 @@ internal class CurrenciesViewModel(
 
             }
 
-        val selectCurrency = actions.ofType<Action.SelectCurrency>()
+        val newSelectCurrency = actions.ofType<Action.SelectCurrency>()
             .map { it.uiCurrencyPlace }
-            .flatMap { uiCurrency -> checkThatWasSelectedNewCurrency(uiCurrency) }
-            .map { uiCurrency -> currencyRateUiMapper.convertUiCurrencyToDomain(uiCurrency) }
-            .flatMap {
-                updateCurrencySelectedCurrencyAndRates.execute(it)
-                    .andThen(Observable.just(Change.DoNothing))
-            }.map { if (isErrorShown) Change.ShowLoading else it }
+            .flatMap { uiCurrency ->
+                getSelectedCurrencyUseCase.execute()
+                    .flatMap { oldSelected ->
+                        if (oldSelected.code == uiCurrency.currencyCode) {
+                            Observable.empty()
+                        } else {
+                            Observable.just(uiCurrency)
+                                .map { currencyRateUiMapper.convertUiCurrencyToDomain(it) }
+                                .switchMap {
+                                    if (!isErrorShown) {
+                                        updateCurrencySelectedCurrencyAndRates.execute(it)
+                                            .andThen(Observable.just(Change.DoNothing))
+                                    } else {
+                                        Observable.just(Change.ShowCantSelectNewCurrency)
+                                    }
+                                }
+                        }
+                    }
+            }
+
+
+        val hideCantSelectCurrency = actions.ofType<Action.HideCantSelectCurrency>()
+            .map<Change> { Change.HideCantSelectNewCurrency }
 
 
         val changes = listOf(
             currenciesContent,
-            selectCurrency,
+            newSelectCurrency,
             amountOfMoneyChangedOfBaseCurrency,
             updateRatesEverySeconds,
-            cancelUpdatingRatesEverySecond
+            cancelUpdatingRatesEverySecond,
+            hideCantSelectCurrency
         )
         disposables += Observable.merge(changes)
             .scan(initialState, reducer)
             .subscribeOn(rxSchedulers.io)
+            .doOnNext {
+                val string =
+                    it.error.toString() + " " + it.isLoaderShown.toString() + " " + it.isShowCantSelectNewCurrency
+                //Log.i("HUI", string)
+            }
             .subscribe(state::accept, logger::logError)
     }
 
@@ -160,17 +192,6 @@ internal class CurrenciesViewModel(
         linkedList.add(currencyToConvertPlace)
         linkedList.addAll(this)
         return linkedList
-    }
-
-    private fun checkThatWasSelectedNewCurrency(uiCurrency: UiCurrency): Observable<UiCurrency> {
-        return getSelectedCurrencyUseCase.execute()
-            .flatMap { oldSelected ->
-                if (oldSelected.code == uiCurrency.currencyCode) {
-                    Observable.empty()
-                } else {
-                    Observable.just(uiCurrency)
-                }
-            }
     }
 
     public override fun onCleared() {

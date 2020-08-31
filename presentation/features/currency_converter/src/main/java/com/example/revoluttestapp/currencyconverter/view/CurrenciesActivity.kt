@@ -12,6 +12,8 @@ import com.example.revoluttestapp.currencyconverter.viewmodel.Action
 import com.example.revoluttestapp.currencyconverter.viewmodel.CurrenciesViewModel
 import com.example.revoluttestapp.currencyconverter.viewmodel.State
 import com.example.revoluttestapp.core.mvi.ViewState
+import com.example.revoluttestapp.currencyconverter.view.states.*
+import com.example.revoluttestapp.currencyconverter.view.states.CantSelectNewCurrencyMessageViewState
 import com.example.revoluttestapp.currencyconverter.view.states.CurrenciesViewSates
 import com.example.revoluttestapp.currencyconverter.view.states.CurrenciesWitErrorViewState
 import com.example.revoluttestapp.currencyconverter.view.states.ErrorViewState
@@ -46,6 +48,9 @@ class CurrenciesActivity : AppCompatActivity() {
         currency_rates_recycler_view.onCurrencyClick = {
             viewModel.dispatch(Action.SelectCurrency(it))
         }
+        currency_rates_selection_currency_button.setOnClickListener {
+            viewModel.dispatch(Action.HideCantSelectCurrency)
+        }
         currency_rates_recycler_view.onAmountOfMoneyChanged = {
             viewModel.dispatch(Action.AmountOfMoneyChanged(it))
         }
@@ -77,6 +82,7 @@ class CurrenciesActivity : AppCompatActivity() {
     private fun createViewState(state: State): ViewState {
         return with(state) {
             when {
+                isShowCantSelectNewCurrency -> CantSelectNewCurrencyMessageViewState(this@CurrenciesActivity)
                 isLoaderShown -> LoaderViewState(this@CurrenciesActivity)
                 error != null && currencies.isNotEmpty() -> CurrenciesWitErrorViewState(
                     this@CurrenciesActivity,

@@ -9,4 +9,5 @@ internal sealed class Action: CoreAction {
     object CancelUpdatingRates: Action()
     data class SelectCurrency(val uiCurrencyPlace: UiCurrency): Action()
     data class AmountOfMoneyChanged(val amount: String): Action()
+    object HideCantSelectCurrency: Action()
 }

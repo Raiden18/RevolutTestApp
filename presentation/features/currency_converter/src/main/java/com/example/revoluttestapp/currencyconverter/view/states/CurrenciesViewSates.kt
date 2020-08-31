@@ -14,6 +14,7 @@ internal class CurrenciesViewSates(
     override fun render() {
         hideLoader()
         hideErrorMessage()
+        hideCantSelectCurrencyButton()
         showCurrencies()
     }
 

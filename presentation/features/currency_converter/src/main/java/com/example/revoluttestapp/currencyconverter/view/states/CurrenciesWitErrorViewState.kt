@@ -15,6 +15,7 @@ internal class CurrenciesWitErrorViewState(
     override fun render() {
         hideLoader()
         showCurrencies()
+        hideCantSelectCurrencyButton()
         showErrorMessage()
     }
 

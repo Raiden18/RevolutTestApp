@@ -11,6 +11,7 @@ internal class ErrorViewState(
     override fun render() {
         hideCurrencies()
         hideLoader()
+        hideCantSelectCurrencyButton()
         showErrorMessage()
     }
 
