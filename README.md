@@ -27,6 +27,7 @@ Kotlin does't have package-private access modifier, but it has internal access m
 1. Business logic is pure Kotlin and doesn't have any ui or data dependencies
 2. UI knows nothing about what frameworks data uses
 3. Data knows nothing about ui framerowks.
+
 So it's impossible to make features depends on data or data on feature accidentally.
 
 On the other hand, presentation layer was devided into several moduels in order to support features that can be independed on each other.
