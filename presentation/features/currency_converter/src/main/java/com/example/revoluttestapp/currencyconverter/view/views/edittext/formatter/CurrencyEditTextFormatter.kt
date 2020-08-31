@@ -1,8 +1,5 @@
 package com.example.revoluttestapp.currencyconverter.view.views.edittext.formatter
 
-import android.util.Log
-import java.text.DecimalFormat
-
 /**
  * It was created only in oder to cover this logic with unit tests.
  * I don't want to make this project depends on robolectric because it is too slow to run to follow TDD approach.
