@@ -137,7 +137,6 @@ internal class CurrenciesViewModel(
         )
         disposables += Observable.merge(changes)
             .scan(initialState, reducer)
-            .doOnNext { Log.i("HUI", it.toString()) }
             .subscribeOn(rxSchedulers.io)
             .subscribe(state::accept, logger::logError)
     }
