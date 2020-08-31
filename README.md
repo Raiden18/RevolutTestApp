@@ -68,4 +68,4 @@ This class has descriptor "code". According to Polymorphism of GRASP patterns an
 
 I followed this practice at first. But when I finished the project I realized that for this test project that practice doesn't make sense because every specific instance of specific currency has the same behavior. And that best practice does nothing and I just had code that wasn't even used (But I can't say the same thing for unit tests. That practice was extremely useful for them). So that I make data class from Currency interface and got rid of implementations of that interface. 
 
-And, of course, making Currency data class violates DDD approach. So that when we talk about currencies we have to translate a business object let's say Rouble to the specific instance of Currency class. This is not convenient and requires additional mental working.
+And, of course, making Currency data class violates DDD approach. So that when we talk about currencies we have to translate a business object let's say Rouble to the specific instance of Currency class. Developers doesn't have the same terminology with the business. This is not convenient and requires additional mental working.
