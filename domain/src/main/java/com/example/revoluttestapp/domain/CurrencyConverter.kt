@@ -5,9 +5,7 @@ import com.example.revoluttestapp.domain.models.currencyrate.CurrencyRate
 import java.math.BigDecimal
 import java.math.RoundingMode
 
-class CurrencyConverter(
-    private val codeToCurrencyMapper: CodeToCurrencyMapper
-) {
+class CurrencyConverter {
     private companion object {
         const val DIGITS_AFTER_COMMA = 2
     }
@@ -17,12 +15,16 @@ class CurrencyConverter(
         currenciesRates: List<CurrencyRate>
     ): List<CurrencyRate> {
         return currenciesRates.map {
-            val currency = codeToCurrencyMapper.map(it.currency.getCode())
-            val newAmount = baseCurrency.getAmount() * it.rate
-            val formattedAmount = BigDecimal(newAmount)
-                .setScale(DIGITS_AFTER_COMMA, RoundingMode.CEILING)
-            val convertedCurrency = currency.setAmount(formattedAmount.toDouble())
-            it.copy(currency = convertedCurrency)
+            convertSingleCurrencyRate(baseCurrency, it)
         }
+    }
+
+    private fun convertSingleCurrencyRate(baseCurrency: Currency, currencyRate: CurrencyRate): CurrencyRate{
+        val currency = currencyRate.currency
+        val newAmount = baseCurrency.getAmount() * currencyRate.rate
+        val formattedAmount = BigDecimal(newAmount)
+            .setScale(DIGITS_AFTER_COMMA, RoundingMode.CEILING)
+        val convertedCurrency = currency.setAmount(formattedAmount.toDouble())
+        return currencyRate.copy(currency = convertedCurrency)
     }
 }

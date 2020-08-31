@@ -1,12 +1,10 @@
 package com.example.revoluttestapp.currencyconverter.viewmodel
 
-import android.util.Log
 import com.example.revoluttestapp.core.mvi.CoreMviViewModel
 import com.example.revoluttestapp.core.mvi.Reducer
 import com.example.revoluttestapp.currencyconverter.models.UiCurrency
 import com.example.revoluttestapp.domain.CodeToCurrencyMapper
 import com.example.revoluttestapp.domain.CurrencyConverter
-import com.example.revoluttestapp.domain.exceptions.NoInternetConnectionException
 import com.example.revoluttestapp.domain.models.currencies.Currency
 import com.example.revoluttestapp.domain.usecases.*
 import com.example.revoluttestapp.domain.utils.Logger
@@ -138,6 +136,7 @@ internal class CurrenciesViewModel(
             .scan(initialState, reducer)
             .distinctUntilChanged()
             .subscribeOn(rxSchedulers.io)
+            .doOnNext(::checkIfNeedRetrySubscriptionAndDoIt)
             .subscribe(state::accept, logger::logError)
     }
 
@@ -175,6 +174,12 @@ internal class CurrenciesViewModel(
                     Observable.just(uiCurrency)
                 }
             }
+    }
+
+    private fun checkIfNeedRetrySubscriptionAndDoIt(state: State){
+        if (state.error != null) {
+            dispatch(Action.SubscribeOnCurrencyRates)
+        }
     }
 
     public override fun onCleared() {

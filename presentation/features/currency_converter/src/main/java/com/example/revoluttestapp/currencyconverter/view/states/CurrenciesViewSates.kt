@@ -11,7 +11,6 @@ internal class CurrenciesViewSates(
     private val currencies: List<UiCurrency>
 ): AbstractViewState(currenciesActivity) {
 
-
     override fun render() {
         hideLoader()
         hideErrorMessage()

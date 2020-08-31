@@ -1,7 +1,6 @@
 package com.example.revoluttestapp.currencyconverter.view
 
 import android.os.Bundle
-import android.util.Log
 import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import com.example.revoluttestapp.domain.utils.RxSchedulers
@@ -13,7 +12,6 @@ import com.example.revoluttestapp.currencyconverter.viewmodel.Action
 import com.example.revoluttestapp.currencyconverter.viewmodel.CurrenciesViewModel
 import com.example.revoluttestapp.currencyconverter.viewmodel.State
 import com.example.revoluttestapp.core.mvi.ViewState
-import com.example.revoluttestapp.currencyconverter.view.states.*
 import com.example.revoluttestapp.currencyconverter.view.states.CurrenciesViewSates
 import com.example.revoluttestapp.currencyconverter.view.states.CurrenciesWitErrorViewState
 import com.example.revoluttestapp.currencyconverter.view.states.ErrorViewState
@@ -21,7 +19,6 @@ import com.example.revoluttestapp.currencyconverter.view.states.LoaderViewState
 import com.example.revoluttestapp.domain.utils.Logger
 import com.trello.lifecycle4.android.lifecycle.AndroidLifecycle
 import kotlinx.android.synthetic.main.activity_main.*
-import java.lang.IllegalStateException
 import javax.inject.Inject
 
 
@@ -38,19 +35,19 @@ class CurrenciesActivity : AppCompatActivity() {
     private val viewModel: CurrenciesViewModel by viewModels { currenciesViewModelFactory }
 
     override fun onCreate(savedInstanceState: Bundle?) {
-        initDagger()
         super.onCreate(savedInstanceState)
+        initDagger()
         setContentView(R.layout.activity_main)
-        initClickListeners()
-        currency_rates_recycler_view.onAmountOfMoneyChanged = {
-            viewModel.dispatch(Action.AmountOfMoneyChanged(it))
-        }
+        initListeners()
         subscribeToViewModel()
     }
 
-    private fun initClickListeners() {
+    private fun initListeners() {
         currency_rates_recycler_view.onCurrencyClick = {
             viewModel.dispatch(Action.SelectCurrency(it))
+        }
+        currency_rates_recycler_view.onAmountOfMoneyChanged = {
+            viewModel.dispatch(Action.AmountOfMoneyChanged(it))
         }
     }
 
@@ -79,9 +76,6 @@ class CurrenciesActivity : AppCompatActivity() {
 
     private fun createViewState(state: State): ViewState {
         return with(state) {
-            if (error != null) {
-                viewModel.dispatch(Action.SubscribeOnCurrencyRates)
-            }
             when {
                 isLoaderShown -> LoaderViewState(this@CurrenciesActivity)
                 error != null && currencies.isNotEmpty() -> CurrenciesWitErrorViewState(
@@ -94,7 +88,6 @@ class CurrenciesActivity : AppCompatActivity() {
                     currencies
                 )
                 else -> ErrorViewState(this@CurrenciesActivity, error)
-
             }
         }
     }

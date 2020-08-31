@@ -44,7 +44,7 @@ internal class CurrenciesModule {
         logger: Logger
     ): CurrenciesViewModelFactory {
         val codeToCurrencyMapper = CodeToCurrencyMapper()
-        val currencyConverter = CurrencyConverter(codeToCurrencyMapper)
+        val currencyConverter = CurrencyConverter()
         val compositeDisposable = CompositeDisposable()
         return CurrenciesViewModelFactory(
             getCurrencyRatesUseCase,
