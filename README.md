@@ -53,15 +53,10 @@ Diagram that shows dependencies of components of feature you can see underneeth.
 It looks like that:
 ```Kotlin
 data class Currency(
-    val amount: Double, // Should be Bigdecimal. If you read this before I fix it, it means that I didn't have time to fix. I realized that mistake after the moment when I sent this repository.
+    val amount: Double,
     val code: String //descriptor
 ) {
-    private val javaCurrency = JavaCurrency.getInstance(code)
-
-    val fullName: String
-        get() = javaCurrency.displayName
-
-    fun isCodesEquals(currency: Currency) = code == currency.code
+    //Rest of code ...
 }
 ```
 Here is what I want to say:
