@@ -1,4 +1,4 @@
-package com.example.revoluttestapp.currencyconverter.view.states
+package com.example.revoluttestapp.currencyconverter.view.animations
 
 import android.view.View
 

@@ -1,6 +1,7 @@
 package com.example.revoluttestapp.currencyconverter.view.states
 
 import com.example.revoluttestapp.currencyconverter.view.CurrenciesActivity
+import com.example.revoluttestapp.currencyconverter.view.animations.animateAppearanceWithAlphaIfItIsHidden
 
 internal class CantSelectNewCurrencyMessageViewState(
     currenciesActivity: CurrenciesActivity

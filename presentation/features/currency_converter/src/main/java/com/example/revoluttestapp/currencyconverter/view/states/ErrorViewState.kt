@@ -1,7 +1,7 @@
 package com.example.revoluttestapp.currencyconverter.view.states
 
-import android.view.View
 import com.example.revoluttestapp.currencyconverter.view.CurrenciesActivity
+import com.example.revoluttestapp.currencyconverter.view.animations.animateAppearanceWithAlphaIfItIsHidden
 
 internal class ErrorViewState(
     currenciesActivity: CurrenciesActivity,
