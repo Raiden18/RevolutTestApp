@@ -1,5 +1,5 @@
 # RevolutTestApp
-**Please read README.md at first, especially part about Currency domain object.**
+**Please read README.md at first, especially part about Currency domain class.**
 
 ## How app works
 When app is launched at the first time it downloads data from api and saves it in memory cache which is the single sourse of true. App updates cache every second.
@@ -49,7 +49,7 @@ Diagram that shows dependencies of components of feature you can see underneeth.
 
 <img src="https://github.com/Raiden18/RevolutTestApp/blob/master/feature_components_dependencies_diagram.PNG" data-canonical-src="hhttps://github.com/Raiden18/RevolutTestApp/blob/master/feature_components_dependencies_diagram.PNG" width="415" height="400" />
 
-## Special topic about Currency domain object
+## Special topic about Currency domain class
 It looks like that:
 ```Kotlin
 data class Currency(
@@ -63,7 +63,7 @@ Here is what I want to say:
 
 This class has descriptor "code". According to Polymorphism of GRASP patterns and "Effective Java" this is not good practice because this class represents every specific currency such as Rouble, Dollar, Euro etc. So that this class should be an interface and this interface should be implemented by classes for every specific currency.
 
-I followed this practice at first. But eventually I realized that for this test project that practice doesn't make sense because every specific instance of specific currency has the same behavior. And that best practice does nothing and I just had code that wasn't even used (But I can't say the same thing for unit tests. That practice was extremely useful for them). So that I make data class from Currency interface and got rid of implementations of that interface. 
+I followed this practice at first. But eventually I realized that for this test project that practice doesn't make sense because every specific instance of specific currency has the same behavior. And that best practice does nothing and I just had code that wasn't even used (But I can't say the same thing for unit tests. That practice was extremely useful for them). So that I made data class from Currency interface and got rid of implementations of that interface. 
 
 And, of course, turning Currency interface into data class violates DDD approach. So that when we talk about currencies we have to translate a business object let's say Rouble to the specific instance of Currency class. Developer doesn't have the same terminology with the business. This is not convenient and requires additional mental working.
 
