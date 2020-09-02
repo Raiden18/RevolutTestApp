@@ -1,5 +1,5 @@
 # RevolutTestApp
-**Please read README.md at first, especially part about Currency domain object.**
+**Please read README.md at first, especially part about Currency domain class.**
 
 ## How app works
 When app is launched at the first time it downloads data from api and saves it in memory cache which is the single sourse of true. App updates cache every second.
@@ -49,7 +49,7 @@ Diagram that shows dependencies of components of feature you can see underneeth.
 
 <img src="https://github.com/Raiden18/RevolutTestApp/blob/master/feature_components_dependencies_diagram.PNG" data-canonical-src="hhttps://github.com/Raiden18/RevolutTestApp/blob/master/feature_components_dependencies_diagram.PNG" width="415" height="400" />
 
-## Special topic about Currency domain object
+## Special topic about Currency domain class
 It looks like that:
 ```Kotlin
 data class Currency(
